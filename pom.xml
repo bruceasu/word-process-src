@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <artifactId>asu-word-process</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerId>eclipse</compilerId>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <artifactId>plexus-compiler-eclipse</artifactId>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <version>2.8.5</version>
+                    </dependency>
+                </dependencies>
+                <version>3.8.1</version>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <artifactId>asu-util</artifactId>
+            <groupId>me.asu</groupId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>asu-commands</artifactId>
+            <groupId>me.asu</groupId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>lombok</artifactId>
+            <groupId>org.projectlombok</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>slf4j-api</artifactId>
+            <groupId>org.slf4j</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>slf4j-simple</artifactId>
+            <groupId>org.slf4j</groupId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <dependency>
+            <artifactId>commons-cli</artifactId>
+            <groupId>commons-cli</groupId>
+            <version>1.4</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.java-websocket</groupId>-->
+        <!--<artifactId>Java-WebSocket</artifactId>-->
+        <!--<version>1.4.0</version>-->
+        <!--</dependency>-->
+    </dependencies>
+    <groupId>me.asu</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>asu-build</artifactId>
+        <groupId>me.asu</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <properties>
+
+    </properties>
+    <version>1.0.0-SNAPSHOT</version>
+</project>

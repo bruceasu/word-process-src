@@ -1,0 +1,45 @@
+---config@码表分类=主码-2
+---config@码表别名=直通车
+---config@允许编辑=是
+$ddcmd(run(D:\green\Snapshot.exe),[截图])	oss#序13600
+$ddcmd(run(D:\green\HandInput\handinput.exe),[手写])	oh#序13600
+$ddcmd(run(cmd.exe),[命令提示行])	com#序13600
+$ddcmd(run(::{20D04FE0-3AEA-1069-A2D8-08002B30309D}),[我的电脑])	odn#序13776
+$ddcmd(run(C:\\Program Files),[程序文件夹])	owj#序13749
+$ddcmd(run(%apppath%\\),[安装目录])	oaz#序13785
+$ddcmd(run(http://www.baidu.com/s?wd=<last.0>),[百度]：<last.0>)	obd#序13784
+$ddcmd(run(http://www.zdic.net/sousuo/?q=<last.1>),[汉典]：<last.1>)	ohd#序13768
+
+$ddcmd(config(/do anjianshezhi),[按键设置])	oaj#序13786
+$ddcmd(config(/do 常用),[常用项])	oiy#序13777
+$ddcmd(config(/do 剪贴板反查),[剪贴板反查])	ofc#序13773
+$ddcmd(config(/do 输出反查),[反查]：<last.1>)	ofc#序13772
+$ddcmd(config(/do 高级),[高级项])	ogj#序13770
+$ddcmd(config(/do about),[关于项])	ogy#序13769
+$ddcmd(config(/do 在线加词),[在线加词])	ojc#序13765
+$ddcmd(config(/do 界面),[界面项])	ojm#序13764
+$ddcmd(config(/do 码表),[码表项])	omb#序13761
+
+$ddcmd(set([-IME设置-],检索次显码表=否),[关闭])	osp#序13752
+$ddcmd(set([-IME设置-],检索次显码表=是),[+ 生僻字表])	osp#序13751
+$ddcmd(set([-IME设置-],隐藏候选窗口=切换),[显隐候选窗])	occ#序13783
+$ddcmd(set([-IME设置-],输入方案=主),[根形])	opy#序13760
+$ddcmd(set([-IME设置-],输入方案=主+辅),[根形+胡音])	opy#序13759
+
+$ddcmd(convert(中英文标点,切换),[中英文标点切换])	ozy#序13747
+$ddcmd(convert(繁体输出,切换),[繁简切换])	ofj#序13771
+$ddcmd(convert(全半角,切换),[全半角切换])	oqb#序13758
+
+$ddcmd(set([-DME设置-],显示码表词语码长=1),[字词模式])	odz#序13775
+$ddcmd(set([-DME设置-],显示码表词语码长=12),[单字模式])	odz#序13774
+
+$ddcmd(help(keyboardmap.html,600,500),[键盘图])	ojp#序13763
+$ddcmd(help(),[使用入门])	orm#序13757
+
+$ddcmd(<date.YYYY>年<date.M>月<date.D>日,<date.YYYY>年<date.M>月<date.D>日)	ori#序13756
+$ddcmd(<date.yyyy>-<date.mm>-<date.dd>,<date.yyyy>-<date.mm>-<date.dd>)	ori#序13755
+$ddcmd(<date.yyyy>年<date.m>月<date.d>日,<date.yyyy>年<date.m>月<date.d>日)	ori#序13754
+$ddcmd(<date.z> <time.h>:<time.mm>,<date.z> <time.h>:<time.mm>)	osj#序13753
+$ddcmd(keyboard(<35><36+Shift><46><36>),[删当前行])	osc#序13750
+$ddcmd(keyboard(<35><36+Shift><46>),[删当前行])	ocs#序13766
+
