@@ -26,7 +26,7 @@ public class Hyly {
         // List<String> oneSet = ResourcesFiles.readLinesInResources("zrm_1_2.txt");
 
 //        Map<String, List<String>> xm = loadAsMapList("qy.txt");
-        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");
+        Map<String, List<String>> xm = loadAsMapList("kuaishou.less.txt");
 
         List<Word> merged = Merge.merge(he, xm);
 //        List<String> oneSet = new ArrayList<>();
