@@ -1,7 +1,7 @@
 package me.asu.word.wubi;
 
 
-import static me.asu.cli.command.Orders.searchSimplifiedOrder;
+import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
 import java.io.IOException;
 import java.util.*;

@@ -1,12 +1,12 @@
 package me.asu.word;
 
-import static me.asu.cli.command.Orders.searchSimplifiedOrder;
+import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 import static me.asu.word.ResourcesFiles.loadAsMapList;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
-import me.asu.util.io.Streams;
+import me.asu.util.Streams;
 
 public class Merge {
 

@@ -2,7 +2,7 @@ package me.asu.word;
 
 import java.io.File;
 import java.util.*;
-import me.asu.util.io.Files;
+import me.asu.util.Files;
 
 /**
  * Created by suk on 2019/6/2.

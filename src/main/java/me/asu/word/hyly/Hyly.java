@@ -9,7 +9,7 @@ import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import me.asu.util.io.Streams;
+import me.asu.util.Streams;
 import me.asu.word.Merge;
 import me.asu.word.ResourcesFiles;
 import me.asu.word.Word;
@@ -38,22 +38,26 @@ public class Hyly {
 
     protected static void save(String name, Map<String, List<Word>> results) throws IOException
     {
-        File       outFile = new File("out", name + "-out.txt");
+        File outdir=  new File("out");
+        if (!outdir.exists()) {
+            outdir.mkdirs();
+        }
+        File       outFile = new File(outdir, name + "-out.txt");
         List<Word> result  = results.get("result");
         writeTo(result, outFile, 60000);
         System.out.println("保存到：" + outFile.getAbsolutePath());
 
-        File       outFile2 = new File("out", name + "-out2.txt");
+        File       outFile2 = new File(outdir, name + "-out2.txt");
         List<Word> result2  = results.get("result2");
         writeTo(result2, outFile2, 30000);
         System.out.println("保存到：" + outFile2.getAbsolutePath());
 
-        File outFullFile = new File("out", name + "-full.txt");
+        File outFullFile = new File(outdir, name + "-full.txt");
         List<Word> full = results.get("full");
         writeFullTo(full, outFullFile, 20000);
         System.out.println("保存到：" + outFullFile.getAbsolutePath());
 
-        File outOtherFile = new File("out", name + "-other.txt");
+        File outOtherFile = new File(outdir, name + "-other.txt");
         List<Word> sp = results.get("uncommon");
         writeSpTo(sp, outOtherFile, 10000);
         System.out.println("保存到：" + outOtherFile.getAbsolutePath());

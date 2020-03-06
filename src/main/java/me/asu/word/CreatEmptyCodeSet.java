@@ -4,8 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import me.asu.util.io.Files;
-import me.asu.util.io.Streams;
+import me.asu.util.Files;
+import me.asu.util.Streams;
 import org.apache.commons.cli.*;
 
 /**

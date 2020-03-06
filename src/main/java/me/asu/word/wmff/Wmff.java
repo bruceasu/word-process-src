@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;
-import me.asu.util.io.Streams;
+import me.asu.util.Streams;
 import me.asu.word.ResourcesFiles;
 import me.asu.word.Word;
 import me.asu.word.shortern.MergedMakeShort;

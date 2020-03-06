@@ -1,6 +1,6 @@
 package me.asu.word.shortern;
 
-import static me.asu.cli.command.Orders.searchSimplifiedOrder;
+import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;

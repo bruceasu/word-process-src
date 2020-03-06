@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import me.asu.util.io.Streams;
+import me.asu.util.Streams;
 import me.asu.word.ResourcesFiles;
 import me.asu.word.Word;
 

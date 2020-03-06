@@ -3,54 +3,137 @@
         xmlns="http://maven.apache.org/POM/4.0.0"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>asu-build</artifactId>
+        <groupId>me.asu</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>me.asu</groupId>
     <artifactId>asu-word-process</artifactId>
-
+    <version>1.0.0-SNAPSHOT</version>
+    <properties>
+        <!-- MAVEN 配置 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.test.skip>true</maven.test.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <checkstyle.skip>true</checkstyle.skip>
+        <fastjson.version>1.2.44</fastjson.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+        <lombok.version>1.16.20</lombok.version>
+        <junit.version>4.12</junit.version>
+        <commons-cli.version>1.4</commons-cli.version>
+    </properties>
     <build>
         <plugins>
+            <!-- lombok -->
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.16.10.0</version>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- compiler -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <compilerId>eclipse</compilerId>
+                    <fork>true</fork>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                        <!--<arg>-XX:MaxPermSize=512M</arg>-->
+                        <!--<arg>-verbose</arg>-->
+                        <!--<arg>-Xlint:unchecked</arg>-->
+                        <!--<arg>-Xlint:deprecation</arg>-->
+                        <!--<arg>-bootclasspath</arg>-->
+                        <!--<arg>${env.JAVA_HOME}/jre/lib/rt.jar</arg>-->
+                        <!--<arg>-extdirs</arg>-->
+                        <!--<arg>${project.basedir}/src/main/webapp/WEB-INF/lib</arg>-->
+                    </compilerArgs>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <artifactId>plexus-compiler-eclipse</artifactId>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <version>2.8.5</version>
-                    </dependency>
-                </dependencies>
                 <version>3.8.1</version>
             </plugin>
+            <!-- dependency -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
     </build>
     <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>${lombok.version}</version>
+        </dependency>
         <dependency>
             <artifactId>asu-util</artifactId>
             <groupId>me.asu</groupId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.3-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}\lib\asu-util-1.0.3-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <artifactId>asu-commands</artifactId>
             <groupId>me.asu</groupId>
             <version>1.0.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}\lib\asu-commands-1.0.0-SNAPSHOT.jar</systemPath>
         </dependency>
+
+        <!-- junit -->
         <dependency>
-            <artifactId>lombok</artifactId>
-            <groupId>org.projectlombok</groupId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
         </dependency>
+        <!-- slf4j -->
         <dependency>
             <artifactId>slf4j-api</artifactId>
             <groupId>org.slf4j</groupId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <artifactId>slf4j-simple</artifactId>
             <groupId>org.slf4j</groupId>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
         <dependency>
             <artifactId>commons-cli</artifactId>
             <groupId>commons-cli</groupId>
-            <version>1.4</version>
+            <version>${commons-cli.version}</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>org.java-websocket</groupId>-->
@@ -58,15 +141,5 @@
         <!--<version>1.4.0</version>-->
         <!--</dependency>-->
     </dependencies>
-    <groupId>me.asu</groupId>
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>asu-build</artifactId>
-        <groupId>me.asu</groupId>
-        <version>1.0.0</version>
-    </parent>
-    <properties>
 
-    </properties>
-    <version>1.0.0-SNAPSHOT</version>
 </project>
