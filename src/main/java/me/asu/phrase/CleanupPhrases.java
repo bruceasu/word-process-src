@@ -9,7 +9,7 @@ import java.util.Set;
 import me.asu.word.ResourcesFiles;
 
 /**
- * Created by gw-meet1-0 on 2020/3/6.
+ * @author suk
  */
 public class CleanupPhrases
 {
@@ -28,9 +28,12 @@ public class CleanupPhrases
 			}
 			String[] kv = line.trim().split("\\s+");
 			codeSet.add(kv[1]);
-			int lenWord = kv[0].length();
-			int lenCode = kv[1].length();
-			if ((lenCode == 2 || w500.contains(kv[0])) && lenWord == 1) {
+			int     lenWord              = kv[0].length();
+			int     lenCode              = kv[1].length();
+			boolean isLen2               = lenCode == 2;
+			boolean isIn500              = w500.contains(kv[0]);
+			boolean isSingleWordWithLen2 = isLen2 && lenWord == 1;
+			if (isIn500 || isSingleWordWithLen2) {
 				freqWords.add(kv[0]);
 			}
 			if (lenWord == 1) {
@@ -82,6 +85,24 @@ public class CleanupPhrases
 		System.out.println("Done!");
 	}
 
+	private static void cleanupPhrases3(Set<String> codeSet,
+	                                    Set<String> phraseCodeSet,
+	                                    Set<String> nounsSet,
+	                                    FileWriter fw1,
+	                                    FileWriter fw2)
+	{
+		List<String> phrases3 = ResourcesFiles.readLinesInResources("phrases-3.txt");
+		phrases3.forEach(line -> {
+			if (line.trim().isEmpty()) {
+				return;
+			}
+			String[] kv     = line.trim().split("\\s+");
+			boolean  isNoun = nounsSet.contains(kv[0]);
+			boolean  isDup  = codeSet.contains(kv[1]);
+			outputWithRule(fw1, fw2, kv, isNoun, isDup, phraseCodeSet);
+		});
+	}
+
 	private static void outputWithRule(FileWriter fw1,
 	                                   FileWriter fw2,
 	                                   String[] kv,
@@ -113,23 +134,5 @@ public class CleanupPhrases
 			}
 
 		}
-	}
-
-	private static void cleanupPhrases3(Set<String> codeSet,
-	                                    Set<String> phraseCodeSet,
-	                                    Set<String> nounsSet,
-	                                    FileWriter fw1,
-	                                    FileWriter fw2)
-	{
-		List<String> phrases3 = ResourcesFiles.readLinesInResources("phrases-3.txt");
-		phrases3.forEach(line -> {
-			if (line.trim().isEmpty()) {
-				return;
-			}
-			String[] kv     = line.trim().split("\\s+");
-			boolean  isNoun = nounsSet.contains(kv[0]);
-			boolean  isDup  = codeSet.contains(kv[1]);
-			outputWithRule(fw1, fw2, kv, isNoun, isDup, phraseCodeSet);
-		});
 	}
 }

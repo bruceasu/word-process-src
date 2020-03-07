@@ -95,24 +95,23 @@ public class MergedMakeShort2
 		    .function(1, w -> w.getCode().substring(0, 1));
 		opts.predicate(2, w -> gv.isNotInCodeSet(w.getCode().substring(0, 2)))
 		    .function(2, Word::getCode);
+		//		opts.predicate(3, w -> {
+		//			String  code3 = w.getCode() + w.getCodeExt().substring(0, 1);
+		//			boolean in500 = gv.isIn500Set(w.getWord());
+		//			boolean notIn = gv.isNotInCodeSet(code3);
+		//			return in500 || notIn;
+		//		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(3, w -> {
 			String  code3 = w.getCode() + w.getCodeExt().substring(0, 1);
-			boolean in500 = gv.isIn500Set(w.getWord());
 			boolean notIn = gv.isNotInCodeSet(code3);
-			return in500 || notIn;
+			return notIn;
 		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
-
 		opts.predicate(4, w -> {
 			boolean in3800 = gv.isIn3800Set(w.getWord());
 			boolean notIn  = gv.isNotInCodeSet(w.getCode() + w.getCodeExt());
 			return in3800 && notIn;
 		}).function(4, w -> w.getCode() + w.getCodeExt());
 
-		opts.predicate(3, w -> {
-			String  code3 = w.getCode() + w.getCodeExt().substring(0, 1);
-			boolean notIn = gv.isNotInCodeSet(code3);
-			return notIn;
-		});
 		List<Word> group500 = new ArrayList<>(gv.group500);
 		opts.group(group500);
 		new GroupProcessor(opts).processGroups();
@@ -121,12 +120,10 @@ public class MergedMakeShort2
 		opts.group(group1600);
 		new GroupProcessor(opts).processGroups();
 
-		opts.predicate(3, w -> false);
-
 		List<Word> group3800 = new ArrayList<>(gv.group3800);
 		opts.group(group3800);
 		new GroupProcessor(opts).processGroups();
-
+		//		opts.predicate(3, w -> false);
 		List<Word> group5700 = new ArrayList<>(gv.group5700);
 		opts.group(group5700);
 		new GroupProcessor(opts).processGroups();
@@ -140,10 +137,28 @@ public class MergedMakeShort2
 			String     code = entry.getKey();
 			List<Word> ws   = entry.getValue();
 			Collections.sort(ws);
-			int start = 0;
+			String code3 = code.substring(0, 3);
+			int    start = 0;
 			for (int i = start; i < ws.size(); i++) {
 				Word w = ws.get(i);
-				if (gv.isIn5700Set(w.getWord())) {
+				if (gv.isNotInCodeSet(code3)) {
+					w.setCode(code);
+					w.setCodeExt("");
+					Word newWord = w.clone();
+					newWord.setCode(code3);
+					newWord.setCodeExt("");
+					gv.updateCodeSetCounter(code3)
+					  .addToResult2(newWord)
+					  .increaseCodeLengthCounter(code3.length())
+					  .addToFull(w);
+
+				} else if (gv.isNotInCodeSet(code)) {
+					w.setCode(code);
+					w.setCodeExt("");
+					gv.updateCodeSetCounter(code)
+					  .addToResult2(w)
+					  .increaseCodeLengthCounter(code.length());
+				} else if (gv.isIn5700Set(w.getWord())) {
 					w.setCode(code);
 					w.setCodeExt("");
 					gv.updateCodeSetCounter(code)
