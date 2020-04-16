@@ -91,10 +91,12 @@ public class MergedMakeShort2
 	{
 		log.info("Processing groups ...");
 		Options opts = new Options().globalVariables(gv);
-		opts.predicate(1, w -> gv.isNotInCodeSet(w.getCode().substring(0, 1)))
-		    .function(1, w -> w.getCode().substring(0, 1));
-		opts.predicate(2, w -> gv.isNotInCodeSet(w.getCode().substring(0, 2)))
-		    .function(2, Word::getCode);
+		opts.predicate(1, w -> false).function(1, w -> w.getCode().substring(0, 1))
+		    .predicate(2, w -> false).function(2, Word::getCode);
+		//		opts.predicate(1, w -> gv.isNotInCodeSet(w.getCode().substring(0, 1)))
+		//		    .function(1, w -> w.getCode().substring(0, 1));
+		//		opts.predicate(2, w -> gv.isNotInCodeSet(w.getCode().substring(0, 2)))
+		//		    .function(2, Word::getCode);
 		//		opts.predicate(3, w -> {
 		//			String  code3 = w.getCode() + w.getCodeExt().substring(0, 1);
 		//			boolean in500 = gv.isIn500Set(w.getWord());
@@ -102,16 +104,20 @@ public class MergedMakeShort2
 		//			return in500 || notIn;
 		//		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(3, w -> {
-			String  code3 = w.getCode() + w.getCodeExt().substring(0, 1);
-			boolean notIn = gv.isNotInCodeSet(code3);
-			return notIn;
+			boolean inCommonSet = false; // gv.isIn500Set(w.getWord());
+			String  code3       = w.getCode() + w.getCodeExt().substring(0, 1);
+			boolean notIn       = gv.isNotInCodeSet(code3);
+			return notIn || inCommonSet;
 		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(4, w -> {
-			boolean in3800 = gv.isIn3800Set(w.getWord());
-			boolean notIn  = gv.isNotInCodeSet(w.getCode() + w.getCodeExt());
-			return in3800 && notIn;
+			boolean in3800 = false; // gv.isIn3800Set(w.getWord());
+			String  code   = w.getCode() + w.getCodeExt();
+			boolean notIn  = gv.isNotInCodeSet(code);
+			//			int     codeSetCount = gv.getCodeSetCount(code);
+			return notIn || in3800;
 		}).function(4, w -> w.getCode() + w.getCodeExt());
 
+		// 一级汉字
 		List<Word> group500 = new ArrayList<>(gv.group500);
 		opts.group(group500);
 		new GroupProcessor(opts).processGroups();
@@ -123,7 +129,12 @@ public class MergedMakeShort2
 		List<Word> group3800 = new ArrayList<>(gv.group3800);
 		opts.group(group3800);
 		new GroupProcessor(opts).processGroups();
-		//		opts.predicate(3, w -> false);
+
+		// 二级汉字
+		opts.predicate(1, w -> false)
+		    .predicate(2, w -> false)
+		    .predicate(3, w -> false)
+		    .predicate(4, w -> false);
 		List<Word> group5700 = new ArrayList<>(gv.group5700);
 		opts.group(group5700);
 		new GroupProcessor(opts).processGroups();
@@ -141,33 +152,42 @@ public class MergedMakeShort2
 			int    start = 0;
 			for (int i = start; i < ws.size(); i++) {
 				Word w = ws.get(i);
-				if (gv.isNotInCodeSet(code3)) {
-					w.setCode(code);
-					w.setCodeExt("");
-					Word newWord = w.clone();
-					newWord.setCode(code3);
-					newWord.setCodeExt("");
-					gv.updateCodeSetCounter(code3)
-					  .addToResult2(newWord)
-					  .increaseCodeLengthCounter(code3.length())
-					  .addToFull(w);
-
-				} else if (gv.isNotInCodeSet(code)) {
-					w.setCode(code);
-					w.setCodeExt("");
-					gv.updateCodeSetCounter(code)
-					  .addToResult2(w)
-					  .increaseCodeLengthCounter(code.length());
-				} else if (gv.isIn5700Set(w.getWord())) {
-					w.setCode(code);
-					w.setCodeExt("");
-					gv.updateCodeSetCounter(code)
-					  .addToResult2(w)
-					  .increaseCodeLengthCounter(code.length());
+				if (gv.isIn5700Set(w.getWord())) {
+					// 二级汉字
+					if (gv.isNotInCodeSet(code3)) {
+						w.setCode(code);
+						w.setCodeExt("");
+						Word newWord = w.clone();
+						newWord.setCode(code3);
+						newWord.setCodeExt("");
+						gv.updateCodeSetCounter(code3)
+						  .addToResult2(newWord)
+						  .increaseCodeLengthCounter(code3.length())
+						  .addToFull(w);
+					} else {
+						w.setCode(code);
+						w.setCodeExt("");
+						gv.updateCodeSetCounter(code)
+						  .addToResult2(w)
+						  .increaseCodeLengthCounter(code.length());
+					}
 				} else {
-					w.setCode(code);
-					w.setCodeExt("");
-					gv.updateCodeSetCounter(code).addToUncommon(w);
+					if (gv.isNotInCodeSet(code3)) {
+						w.setCode(code);
+						w.setCodeExt("");
+						Word newWord = w.clone();
+						newWord.setCode(code3);
+						newWord.setCodeExt("");
+						gv.updateCodeSetCounter(code3)
+						  .addToUncommon(newWord)
+						  .increaseCodeLengthCounter(code3.length())
+						  .addToFull(w);
+					} else {
+						// 三级汉字
+						w.setCode(code);
+						w.setCodeExt("");
+						gv.updateCodeSetCounter(code).addToUncommon(w);
+					}
 				}
 			}
 		}
@@ -176,6 +196,7 @@ public class MergedMakeShort2
 
 	private void postProcess()
 	{
+//		fullProcess();
 		printCounter("Post process done!");
 	}
 
@@ -195,8 +216,26 @@ public class MergedMakeShort2
 		gv.printCounter();
 	}
 
-
-
+	private void fullProcess()
+	{
+		log.info("Processing full ...");
+		Iterator<Word> iter = gv.full.iterator();
+		while (iter.hasNext()) {
+			Word   w    = iter.next();
+			String code = w.getCode();
+			if (gv.isNotInCodeSet(code) || gv.isIn3800Set(w.getWord())) {
+				w.setCode(code);
+				w.setCodeExt("");
+				w.setLevel(200);
+				gv.increaseCodeLengthCounter(code.length()).addCodeSetCounter(code).addToResult2(w);
+				iter.remove();
+			} else {
+				w.setCode(code);
+				w.setCodeExt("");
+				w.setLevel(300);
+			}
+		}
+	}
 
 
 }

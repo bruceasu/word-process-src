@@ -2530,7 +2530,7 @@
 跺	do
 帛	bo
 滇	dm
-盎	ag
+盎	ah
 踞	ju
 怦	pg
 夙	su
@@ -6377,7 +6377,6 @@
 兹	zi
 兹	ci
 综	zs
-综	zg
 驿	yi
 钡	bw
 𦈡	xu
@@ -7374,7 +7373,6 @@
 㙘	yc
 鳟	zy
 䏡	ui
-俩	lx
 俩	ll
 瓯	ou
 驰	ii
@@ -9196,3 +9194,5 @@
 六	lu
 差	ci
 差	id
+啱	ng
+唔	m

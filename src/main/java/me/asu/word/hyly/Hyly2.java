@@ -6,7 +6,6 @@ import static me.asu.word.ResourcesFiles.loadAsMapList;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +26,8 @@ public class Hyly2
 		String                    name   = "he";
 		Map<String, List<String>> he     = loadAsMapList("he.txt");
 		List<String>              oneSet = ResourcesFiles.readLinesInResources("he_1_2.txt");
-		List<String>              twoSet = ResourcesFiles.readLinesInResources("phrases-2.txt");
-		oneSet.addAll(twoSet);
+		//		List<String>              twoSet = ResourcesFiles.readLinesInResources("phrases-2.txt");
+		//		oneSet.addAll(twoSet);
 		Map<String, List<String>> xm = loadAsMapList("kuaishou.less.txt");
 		List<Word> merged = Merge.merge(he, xm);
 		Map<String, List<Word>> results = new MergedMakeShort2().makeSort(merged, oneSet);
@@ -49,12 +48,12 @@ public class Hyly2
 
 		File       outFile2 = new File(outdir, name + "-out2.txt");
 		List<Word> result2  = results.get("result2");
-		writeTo(result2, outFile2, 30000);
+		writeTo(result2, outFile2, 20000);
 		System.out.println("保存到：" + outFile2.getAbsolutePath());
 
 		File       outFullFile = new File(outdir, name + "-full.txt");
 		List<Word> full        = results.get("full");
-		writeFullTo(full, outFullFile, 20000);
+		writeFullTo(full, outFullFile, 15000);
 		System.out.println("保存到：" + outFullFile.getAbsolutePath());
 
 		File       outOtherFile = new File(outdir, name + "-other.txt");
