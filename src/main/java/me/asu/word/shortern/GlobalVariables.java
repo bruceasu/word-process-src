@@ -13,16 +13,16 @@ import me.asu.word.Word;
 public class GlobalVariables {
 
     // group
-    List<Word> group500 = new ArrayList<>();
-    List<Word> group1600 = new ArrayList<>();
-    List<Word> group3800 = new ArrayList<>();
-    List<Word> group5700 = new ArrayList<>();
+    List<Word> group500   = new ArrayList<>();
+    List<Word> group1600  = new ArrayList<>();
+    List<Word> group3800  = new ArrayList<>();
+    List<Word> group4200  = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
-    Set<String> w500 = ResourcesFiles.w500();
-    Set<String> w1600 = ResourcesFiles.w1600();
-    Set<String> w3800 = ResourcesFiles.w3800();
-    Set<String> w5700 = ResourcesFiles.w5700();
+    Set<String> w500    = ResourcesFiles.w500();
+    Set<String> w1600   = ResourcesFiles.w1600();
+    Set<String> w3800   = ResourcesFiles.w3800();
+    Set<String> w4200   = ResourcesFiles.w4200();
     Set<String> wGb2312 = ResourcesFiles.gb2312();
 
     List<String> single   = new ArrayList<>();
@@ -78,8 +78,8 @@ public class GlobalVariables {
     public boolean isInGB2312Set(String w) {
         return wGb2312.contains(w);
     }
-    public boolean isIn5700Set(String w) {
-        return w5700.contains(w);
+    public boolean isIn4200Set(String w) {
+        return w4200.contains(w);
     }
 
     public boolean isIn3800Set(String w) {
@@ -163,8 +163,8 @@ public class GlobalVariables {
         return this;
     }
 
-    public GlobalVariables addToG5700(Word w) {
-        group5700.add(w);
+    public GlobalVariables addToG4200(Word w) {
+        group4200.add(w);
         return this;
     }
 

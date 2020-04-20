@@ -29,6 +29,7 @@ public class WubiMakeShort
     static List<Word> sp = new ArrayList<>();
     static Map<String, AtomicInteger> codeSet = new HashMap<>();
     static int[] codeLenCounter = new int[30];
+    private static String[] padding = new String[] {"", ";", "/", "/", "/", "/", "/", "/", "/", "/", "/"};
 
     static {
         for (int i = 0; i<30; i++) {
@@ -41,7 +42,7 @@ public class WubiMakeShort
         Set<String> w500 = ResourcesFiles.w500();
         Set<String> w1600 = ResourcesFiles.w1600();
         Set<String> w3800 = ResourcesFiles.w3800();
-        Set<String> w5700 = ResourcesFiles.w5700();
+        Set<String> w5700 = ResourcesFiles.w4200();
         Set<String> wGb2312 = ResourcesFiles.gb2312();
         Set<String> single = new HashSet<>();
 
@@ -213,7 +214,6 @@ public class WubiMakeShort
         return results;
     }
 
-    private static String[] padding = new String[] {"", ";", "/", "/", "/", "/", "/", "/", "/", "/", "/"};
     private static void processGroups(List<Word> group, int offset, int dup, boolean allowCode3) {
 
         for (Word w : group) {

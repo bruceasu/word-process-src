@@ -69,8 +69,8 @@ public class MergedMakeShort
                 gv.addToG1600(w);
             } else if (gv.isIn3800Set(w.getWord())) {
                 gv.addToG3800(w);
-            } else if (gv.isIn5700Set(w.getWord())) {
-                gv.addToG5700(w);
+            } else if (gv.isIn4200Set(w.getWord())) {
+                gv.addToG4200(w);
             } else {
                 w.setLevel(90);
                 gv.addToGroupOther(w);
@@ -83,7 +83,7 @@ public class MergedMakeShort
         log.info("group500: {}", gv.group500.size());
         log.info("group1600: {}", gv.group1600.size());
         log.info("group3800: {}", gv.group3800.size());
-        log.info("group5700: {}", gv.group5700.size());
+        log.info("group4200: {}", gv.group4200.size());
         log.info("groupOther: {}", gv.groupOther.size());
     }
 
@@ -121,7 +121,7 @@ public class MergedMakeShort
         new GroupProcessor(opts).processGroups();
 
         //        opts.predicate(3, w -> false);
-        List<Word> group5700 = new ArrayList<>(gv.group5700);
+        List<Word> group5700 = new ArrayList<>(gv.group4200);
         opts.group(group5700);
         new GroupProcessor(opts).processGroups();
         printCounter("First round done.");
@@ -155,7 +155,7 @@ public class MergedMakeShort
                     //                    gv.updateCodeSetCounter(code)
                     //                      .addToResult(w)
                     //                      .increaseCodeLengthCounter(code.length());
-                } else if (gv.isIn5700Set(w.getWord())) {
+                } else if (gv.isIn4200Set(w.getWord())) {
                     w.setCode(code);
                     w.setCodeExt("");
                     gv.updateCodeSetCounter(code)

@@ -13,6 +13,15 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-500.txt"));
     }
 
+    public static List<String> readLinesInResources(String name) {
+        String myDIR = OsHelper.getMyDIR();
+        File file = new File(myDIR, name);
+        if (!file.exists()) {
+            file = new File(myDIR, "resources" + File.separator + name);
+        }
+        return Files.readLines(file);
+    }
+
     public static Set<String> w1600() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-1600.txt"));
     }
@@ -21,7 +30,7 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-gb2312-1.txt"));
     }
 
-    public static Set<String> w5700() {
+    public static Set<String> w4200() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words.txt"));
     }
 
@@ -37,11 +46,9 @@ public class ResourcesFiles {
         return new HashSet<>(readLinesInResources("commons-words-1600.txt"));
     }
 
-
     public static Set<String> loadCommonWordsGB2312_1() {
         return new HashSet<>(readLinesInResources("commons-words-gb2312_1.txt"));
     }
-
 
     public static Set<String> loadCommonWords() {
         return new HashSet<>(readLinesInResources("commons-words.txt"));
@@ -90,15 +97,6 @@ public class ResourcesFiles {
             }
         }
         return map;
-    }
-
-    public static List<String> readLinesInResources(String name) {
-        String myDIR = OsHelper.getMyDIR();
-        File file = new File(myDIR, name);
-        if (!file.exists()) {
-            file = new File(myDIR, "resources" + File.separator + name);
-        }
-        return Files.readLines(file);
     }
 
     public static List<String> readLinesInResources(String name, String charset) {

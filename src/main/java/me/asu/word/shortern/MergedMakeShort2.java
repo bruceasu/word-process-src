@@ -69,8 +69,8 @@ public class MergedMakeShort2
 				gv.addToG1600(w);
 			} else if (gv.isIn3800Set(w.getWord())) {
 				gv.addToG3800(w);
-			} else if (gv.isIn5700Set(w.getWord())) {
-				gv.addToG5700(w);
+			} else if (gv.isIn4200Set(w.getWord())) {
+				gv.addToG4200(w);
 			} else {
 				w.setLevel(90);
 				gv.addToGroupOther(w);
@@ -83,7 +83,7 @@ public class MergedMakeShort2
 		log.info("group500: {}", gv.group500.size());
 		log.info("group1600: {}", gv.group1600.size());
 		log.info("group3800: {}", gv.group3800.size());
-		log.info("group5700: {}", gv.group5700.size());
+		log.info("group4200: {}", gv.group4200.size());
 		log.info("groupOther: {}", gv.groupOther.size());
 	}
 
@@ -107,14 +107,14 @@ public class MergedMakeShort2
 			boolean inCommonSet = false; // gv.isIn500Set(w.getWord());
 			String  code3       = w.getCode() + w.getCodeExt().substring(0, 1);
 			boolean notIn       = gv.isNotInCodeSet(code3);
-			return notIn || inCommonSet;
+			return notIn ; //|| inCommonSet;
 		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(4, w -> {
 			boolean in3800 = false; // gv.isIn3800Set(w.getWord());
 			String  code   = w.getCode() + w.getCodeExt();
 			boolean notIn  = gv.isNotInCodeSet(code);
 			//			int     codeSetCount = gv.getCodeSetCount(code);
-			return notIn || in3800;
+			return notIn ; //|| in3800;
 		}).function(4, w -> w.getCode() + w.getCodeExt());
 
 		// 一级汉字
@@ -130,13 +130,8 @@ public class MergedMakeShort2
 		opts.group(group3800);
 		new GroupProcessor(opts).processGroups();
 
-		// 二级汉字
-		opts.predicate(1, w -> false)
-		    .predicate(2, w -> false)
-		    .predicate(3, w -> false)
-		    .predicate(4, w -> false);
-		List<Word> group5700 = new ArrayList<>(gv.group5700);
-		opts.group(group5700);
+		List<Word> group4200 = new ArrayList<>(gv.group4200);
+		opts.group(group4200);
 		new GroupProcessor(opts).processGroups();
 		printCounter("First round done.");
 	}
@@ -152,7 +147,7 @@ public class MergedMakeShort2
 			int    start = 0;
 			for (int i = start; i < ws.size(); i++) {
 				Word w = ws.get(i);
-				if (gv.isIn5700Set(w.getWord())) {
+				if (gv.isIn4200Set(w.getWord())) {
 					// 二级汉字
 					if (gv.isNotInCodeSet(code3)) {
 						w.setCode(code);
@@ -172,14 +167,16 @@ public class MergedMakeShort2
 						  .increaseCodeLengthCounter(code.length());
 					}
 				} else {
+
 					if (gv.isNotInCodeSet(code3)) {
 						w.setCode(code);
 						w.setCodeExt("");
 						Word newWord = w.clone();
 						newWord.setCode(code3);
 						newWord.setCodeExt("");
+						// 当作二级汉字
 						gv.updateCodeSetCounter(code3)
-						  .addToUncommon(newWord)
+						  .addToResult2(newWord)
 						  .increaseCodeLengthCounter(code3.length())
 						  .addToFull(w);
 					} else {
