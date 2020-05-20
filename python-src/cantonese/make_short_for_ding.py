@@ -81,56 +81,31 @@ def round1(dataContext):
                 dataContext.result.append(w + "\t" + key_front + "\t2")
                 dataContext.full.append(w + "\t" + cc_full)
             else:
-                kl = len(key_front)
-                if kl == 1:
-                    remain = dataContext.remain1
-                elif kl == 2:
-                    remain = dataContext.remain2
-                elif kl == 3:
-                    remain = dataContext.remain3
+                #kl = len(key_front)
+                #if kl == 1:
+                #    remain = dataContext.remain1
+                #elif kl == 2:
+                #    remain = dataContext.remain2
+                #elif kl == 3:
+                #    remain = dataContext.remain3
+                #else:
+                #    print "The key is too long. ", key_front, kl
+                remain = dataContext.remain1
+                item = (w, key_front, key_ext, cc_full)
+                if key_front in remain:
+                    remain[key_front].append(item)
                 else:
-                    print "The key is too long. ", key_front, kl
-
-                item = (w, key_front, key_ext)
-                if cc_full in remain:
-                    remain[cc_full].append(item)
-                else:
-                    remain[cc_full] = [item]
+                    remain[key_front] = [item]
         except Exception as err:
             logging.error(err)
 
 
 def round2(dataContext):
-    round2process(dataContext, dataContext.remain1)
-    round2process(dataContext, dataContext.remain2)
-    round2process(dataContext, dataContext.remain3)
-
-def round2process(dataContext, remain):
+    remain = dataContext.remain1
+    print "remain", len(remain), "symbol(s)."
     for (k, vs) in remain.iteritems():
-        if len(vs) == 1:
-            # 为了减少重码，把简码的机会留给可能有重码的字。
-            # 这里先可能会导致顺序在前面的反而是全码。
-            #dataContext.retry.append((k, vs[0]))
-            v = vs[0]
-            code_ext = v[1] + v[2][0]
-            if code_ext not in dataContext.code_set:
-                dataContext.code_set[code_ext] = 1
-                code_len = len(code_ext)
-                dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + code_ext + "\t3")
-                dataContext.full.append(v[0] + "\t" + k)
-            elif k not in dataContext.code_set:
-                dataContext.code_set[k] = 1
-                code_len = len(k)
-                dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + k + "\t4")
-            else:
-                dataContext.code_set[k] += 1
-                code_len = len(k)
-                dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + k + "\t5")
-            continue
         for v in vs:
+            cc_full = v[3]
             code_ext = v[1] + v[2][0]
             if code_ext not in dataContext.code_set:
                 dataContext.code_set[code_ext] = 1
@@ -138,43 +113,16 @@ def round2process(dataContext, remain):
                 dataContext.code_len_count[code_len] += 1
                 dataContext.result.append(v[0] + "\t" + code_ext + "\t3")
                 dataContext.full.append(v[0] + "\t" + k)
-            elif k not in dataContext.code_set:
-                dataContext.code_set[k] = 1
-                code_len = len(k)
+            elif cc_full not in dataContext.code_set:
+                dataContext.code_set[cc_full] = 1
+                code_len = len(cc_full)
                 dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + k + "\t4")
+                dataContext.result.append(v[0] + "\t" + cc_full + "\t4")
             else:
-                dataContext.code_set[k] += 1
-                code_len = len(k)
+                dataContext.code_set[cc_full] += 1
+                code_len = len(cc_full)
                 dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + k + "\t5")
-
-def round3(dataContext):
-    retry = dataContext.retry
-
-    for x in retry:
-        # print x
-        k = x[0]
-        v = x[1]
-
-        code_ext = v[1] + v[2][0]
-        if code_ext not in dataContext.code_set:
-            dataContext.code_set[code_ext] = 1
-            code_len = len(code_ext)
-            dataContext.code_len_count[code_len] += 1
-            dataContext.result.append(v[0] + "\t" + code_ext + "\t3")
-            dataContext.full.append(v[0] + "\t" + k)
-        elif k not in dataContext.code_set:
-            dataContext.code_set[k] = 1
-            code_len = len(k)
-            dataContext.code_len_count[code_len] += 1
-            dataContext.result.append(v[0] + "\t" + k + "\t4")
-        else:
-            dataContext.code_set[k] += 1
-            code_len = len(k)
-            dataContext.code_len_count[code_len] += 1
-            dataContext.result.append(v[0] + "\t" + k + "\t5")
-
+                dataContext.result.append(v[0] + "\t" + cc_full + "\t5")
 
 def make_short(infile, coding='utf-8'):
     (short_name, extension) = os.path.splitext(infile)
@@ -201,10 +149,6 @@ def make_short(infile, coding='utf-8'):
     print("%s: process remain..." % sys.argv[0])
     # round 2
     round2(dataContext)
-    print ("%s: %d words. And %d codes." % (sys.argv[0], len(dataContext.result), len(dataContext.code_set)))
-
-    # round 3
-    round3(dataContext)
     print ("%s: %d words. And %d codes." % (sys.argv[0], len(dataContext.result), len(dataContext.code_set)))
 
 

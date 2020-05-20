@@ -84,8 +84,13 @@ public class GroupProcessor {
         newWord.setCode(code);
         newWord.setCodeExt("");
         w.setCode(w.getCode() + w.getCodeExt());
-        gv.increaseCodeLengthCounter(code.length()).addToResult(newWord)
+        gv.increaseCodeLengthCounter(code.length())
           .updateCodeSetCounter(code);
+        if (gv.isInGB2312Set(w.getWord())) {
+            gv.addToResult(newWord);
+        } else {
+            gv.addToUncommon(newWord);
+        }
         if (code.length() < 4) {
             gv.addToFull(w);
         }

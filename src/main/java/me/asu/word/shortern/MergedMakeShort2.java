@@ -104,17 +104,12 @@ public class MergedMakeShort2
 		//			return in500 || notIn;
 		//		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(3, w -> {
-			boolean inCommonSet = false; // gv.isIn500Set(w.getWord());
 			String  code3       = w.getCode() + w.getCodeExt().substring(0, 1);
-			boolean notIn       = gv.isNotInCodeSet(code3);
-			return notIn ; //|| inCommonSet;
+			return gv.isNotInCodeSet(code3);
 		}).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
 		opts.predicate(4, w -> {
-			boolean in3800 = false; // gv.isIn3800Set(w.getWord());
 			String  code   = w.getCode() + w.getCodeExt();
-			boolean notIn  = gv.isNotInCodeSet(code);
-			//			int     codeSetCount = gv.getCodeSetCount(code);
-			return notIn ; //|| in3800;
+			return gv.isNotInCodeSet(code);
 		}).function(4, w -> w.getCode() + w.getCodeExt());
 
 		// 一级汉字
@@ -125,6 +120,7 @@ public class MergedMakeShort2
 		List<Word> group1600 = new ArrayList<>(gv.group1600);
 		opts.group(group1600);
 		new GroupProcessor(opts).processGroups();
+
 
 		List<Word> group3800 = new ArrayList<>(gv.group3800);
 		opts.group(group3800);
@@ -147,7 +143,7 @@ public class MergedMakeShort2
 			int    start = 0;
 			for (int i = start; i < ws.size(); i++) {
 				Word w = ws.get(i);
-				if (gv.isIn4200Set(w.getWord())) {
+				if (gv.isInGB2312Set(w.getWord())) {
 					// 二级汉字
 					if (gv.isNotInCodeSet(code3)) {
 						w.setCode(code);
@@ -167,23 +163,21 @@ public class MergedMakeShort2
 						  .increaseCodeLengthCounter(code.length());
 					}
 				} else {
-
 					if (gv.isNotInCodeSet(code3)) {
 						w.setCode(code);
 						w.setCodeExt("");
 						Word newWord = w.clone();
 						newWord.setCode(code3);
 						newWord.setCodeExt("");
-						// 当作二级汉字
 						gv.updateCodeSetCounter(code3)
-						  .addToResult2(newWord)
+						  .addToUncommon(newWord)
 						  .increaseCodeLengthCounter(code3.length())
 						  .addToFull(w);
 					} else {
 						// 三级汉字
 						w.setCode(code);
 						w.setCodeExt("");
-						gv.updateCodeSetCounter(code).addToUncommon(w);
+						gv.updateCodeSetCounter(code ).addToUncommon(w);
 					}
 				}
 			}
@@ -193,7 +187,7 @@ public class MergedMakeShort2
 
 	private void postProcess()
 	{
-//		fullProcess();
+		fullProcess();
 		printCounter("Post process done!");
 	}
 
@@ -220,7 +214,7 @@ public class MergedMakeShort2
 		while (iter.hasNext()) {
 			Word   w    = iter.next();
 			String code = w.getCode();
-			if (gv.isNotInCodeSet(code) || gv.isIn3800Set(w.getWord())) {
+			if (gv.isNotInCodeSet(code) && gv.isInGB2312Set(w.getWord())) {
 				w.setCode(code);
 				w.setCodeExt("");
 				w.setLevel(200);
