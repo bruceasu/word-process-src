@@ -37,15 +37,14 @@ public class MergedMakeShort2
             if (kv.length < 2) {
                 continue;
             }
-
             Word w = new Word();
             w.setWord(kv[0]);
             w.setCode(kv[1]);
             w.setLevel(1);
             w.setOrder(searchSimplifiedOrder(kv[0]));
+            gv.addToResult(w);
             gv.updateCodeSetCounter(kv[1])
               .increaseCodeLengthCounter(kv[1].length())
-              .addToResult(w)
               .addToSingle(kv[0]);
         }
     }
@@ -58,7 +57,7 @@ public class MergedMakeShort2
         log.info("Group {} lines into groups.", lines.size());
         for (int i = 0; i < lines.size(); i++) {
             Word w = lines.get(i);
-            gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
+            //gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
             if (gv.isInSingleSet(w.getWord())) {
                 w.setLevel(2);
                 String code = w.getCode() + w.getCodeExt();
@@ -93,29 +92,39 @@ public class MergedMakeShort2
     {
         log.info("Processing groups ...");
         Options opts = new Options().globalVariables(gv);
-        opts.predicate(1, w -> false).predicate(2, w -> false);
+                opts.predicate(1, w -> false).predicate(2, w -> false);
         //		    .predicate(3, w -> false);
         //		opts.predicate(4, w -> true)
         //		    .function(4, w -> w.getCode() + " " + w.getCodeExt());
 
-        //				opts.predicate(1, w -> gv.isNotInCodeSet(w.getCode().substring(0, 1)))
-        //				    .function(1, w -> w.getCode().substring(0, 1));
-        //				opts.predicate(2, w -> {
-        //					boolean notInCodeSet = gv.isNotInCodeSet(w.getCode().substring(0, 2));
-        //					boolean in500 = gv.isIn500Set(w.getWord());
-        //					return notInCodeSet || in500;
-        //				}).function(2, Word::getCode);
+        opts.predicate(1, w -> gv.isNotInCodeSet(w.getCode().substring(0, 1)))
+            .function(1, w -> w.getCode().substring(0, 1));
+        opts.predicate(2, w -> {
+            String code = w.getCode();
+            String cd = (code.length() >= 2) ? code.substring(0, 2) : code;
+            boolean notInCodeSet = gv.isNotInCodeSet(cd);
+            boolean inCommon = gv.isIn500Set(w.getWord());
+            boolean b = gv.getCodeSetCount(cd) < 2;
+           // return notInCodeSet || (inCommon && b);
+            return notInCodeSet;
+        }).function(2, Word::getCode);
         opts.predicate(3, w -> {
             String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
             boolean notIn = gv.isNotInCodeSet(code3);
-            boolean inCommon = gv.isIn1600Set(w.getWord());
+            boolean inCommon = gv.isIn500Set(w.getWord());
             boolean gt = gv.isCode3setGt(code3, 2);
+            if (notIn) {
+                return notIn;
+            }
+            if (inCommon) {
+                System.out.println("w = " + w);
+            }
             return notIn;
-//            return notIn || (inCommon && !gt);
+//                        return notIn || (inCommon && !gt);
         }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
         opts.predicate(4, w -> {
             String code = w.getCode() + w.getCodeExt();
-            return gv.isNotInCodeSet(code);
+            return gv.isNotInCodeSet(code) ;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -146,6 +155,7 @@ public class MergedMakeShort2
             Collections.sort(ws);
             String code3 = code.substring(0, 3);
             int start = 0;
+
             for (int i = start; i < ws.size(); i++) {
                 Word w = ws.get(i);
                 if (gv.isIn4200Set(w.getWord())) {
@@ -192,7 +202,7 @@ public class MergedMakeShort2
 
     private void postProcess()
     {
-//        fullProcess();
+        //        fullProcess();
         printCounter("Post process done!");
     }
 

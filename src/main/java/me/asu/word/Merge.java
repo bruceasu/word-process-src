@@ -52,6 +52,7 @@ public class Merge {
 
         }
         Collections.sort(result);
+        System.out.println("Not match: " + notMatch.size());
         System.out.println("Not match: " + notMatch);
         return result;
     }

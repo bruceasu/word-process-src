@@ -28,8 +28,8 @@ public class Hyly2
         List<String> oneSet = ResourcesFiles.readLinesInResources("he_1_2.txt");
         List<String> twoSet = ResourcesFiles.readLinesInResources("phrases-2.txt");
         oneSet.addAll(twoSet);
-        Map<String, List<String>> xm = loadAsMapList("kuaishou.less.txt");
-//        Map<String, List<String>> xm = loadAsMapList("rain.txt");
+//        Map<String, List<String>> xm = loadAsMapList("kuaishou.less.txt");
+        Map<String, List<String>> xm = loadAsMapList("rain.txt");
         List<Word> merged = Merge.merge(he, xm);
 
         //		List<String> oneSet = Collections.emptyList();
