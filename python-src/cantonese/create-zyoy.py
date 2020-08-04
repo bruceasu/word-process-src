@@ -188,51 +188,51 @@ def get_mapping2():
 
                 "g": "g",
                 "k": "k",
-                "~": "j",  # ng
+                "~": "v",  # ng
                 "h": "h",
 
                 "z": "z",
                 "c": "c",
                 "s": "s",
 
-                "j": "y",
+                "j": "j",
                 "w": "w",
 
-                "#": "gw",  # gw
-                "$": "kw",  # kw
+                "#": "x",  # gw
+                "$": "y",  # kw
         }
         w = {
                 "": "-",
                 "a": "a",  # aa
-                "r": "r",  # a
+                "r": "q",  # a
                 "e": "e",
-                "v": "v",  # yu , 同u合并，kut,kvt, gun, gvn 会混，但方言中，两组音也是混的，关系不大。
+                "v": "y",  # yu , 同u合并，kut,kvt, gun, gvn 会混，但方言中，两组音也是混的，关系不大。
                 "u": "u",  # 长u，于短u是互补的。
                 "i": "i",  # 长i，于短i是互补的。
                 "o": "o",
-                "!": "x",  # eo	eo, eu是互补的。
-                "@": "q",  # oe/eu
+                "!": "r",  # eo	eo, eu是互补的。
+                "@": "r",  # oe/eu
 
                 # 鼻音
-                #"an": "s",
-                #"rn": "d",
-                #"in": "f",
-                #"on": "g",
-                #"un": "h",
-                #"!n": "d",
-                #"vn": "h",
+                "an": "g",
+                "rn": "f",
+                "in": "d",
+                "on": "s",
+                "un": "c",
+                "!n": "x",
+                "vn": "z",
 
-                #"a~": "g",
-                #"r~": "g",
-                #"i~": "k",
-                #"o~": "l",
-                #"u~": "j",
-                #"@~": ";",
-                #"e~": "k",
+                "a~": "h",
+                "r~": "j",
+                "i~": "k",
+                "o~": "l",
+                "u~": "n",
+                "@~": "m",
+                "e~": "k",
 
-                #"am": "b",
-                #"rm": "n",
-                #"im": "m",
+                "am": "b",
+                "rm": "w",
+                "im": "p",
 
                 # 双元音
                 #"ai": "q",
@@ -272,12 +272,12 @@ def get_mapping2():
                 "": "",
                 "u": "u",
                 "i": "i",
-                "p": "b",
-                "t": "d",
-                "k": "g",
-                "m": "m",
-                "n": "n",
-                "~": "j"  # ng
+                "p": "p",
+                "t": "t",
+                "k": "k",
+                #"m": "m",
+                #"n": "n",
+                #"~": "j"  # ng
         }
 
         zyoy_mapping = {}
@@ -458,7 +458,8 @@ if __name__ == '__main__':
 
         # merge
         #last_file= "data\\rain1.txt"
-        last_file="data\kuaishou.txt"
+        last_file= "data\\rain.txt"
+        #last_file="data\kuaishou.txt"
         #last_file="data\\cj5.2codes.txt"
         #last_file="data\\abc.txt"
         merged = merge(fisrt, last_file, charset=encoding)

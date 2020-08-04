@@ -6879,12 +6879,12 @@
 吽	kn
 呎	kn
 呣	kd
-呪	kr
-咁	oc
+呪	ke
+咁	ka
 咇	kx
 咈	ka
 咑	kd
-咗	og
+咗	kg
 咥	kt
 咹	kn
 哋	kx

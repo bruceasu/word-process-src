@@ -92,39 +92,39 @@ public class MergedMakeShort2
     {
         log.info("Processing groups ...");
         Options opts = new Options().globalVariables(gv);
-                opts.predicate(1, w -> false).predicate(2, w -> false);
-        //		    .predicate(3, w -> false);
-        //		opts.predicate(4, w -> true)
-        //		    .function(4, w -> w.getCode() + " " + w.getCodeExt());
+        //opts.predicate(1, w -> false)
+        //    .predicate(2, w -> false);
+        //	  .predicate(3, w -> false);
+        //    .predicate(4, w -> true)
+        //    .function(4, w -> w.getCode() + " " + w.getCodeExt());
 
-        opts.predicate(1, w -> gv.isNotInCodeSet(w.getCode().substring(0, 1)))
+        opts.predicate(1, w -> gv.isIn500Set(w.getWord()) && gv.getCodeSetCount(w.getCode().substring(0, 1)) < 2)
             .function(1, w -> w.getCode().substring(0, 1));
         opts.predicate(2, w -> {
             String code = w.getCode();
             String cd = (code.length() >= 2) ? code.substring(0, 2) : code;
             boolean notInCodeSet = gv.isNotInCodeSet(cd);
-            boolean inCommon = gv.isIn500Set(w.getWord());
+            boolean inLevel1 = gv.isIn500Set(w.getWord());
+            boolean inCommon = gv.isIn1600Set(w.getWord());
+            //boolean b = true;
             boolean b = gv.getCodeSetCount(cd) < 2;
-           // return notInCodeSet || (inCommon && b);
-            return notInCodeSet;
+            return notInCodeSet || inLevel1 || (inCommon && b);
+            //return notInCodeSet;
         }).function(2, Word::getCode);
         opts.predicate(3, w -> {
             String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
             boolean notIn = gv.isNotInCodeSet(code3);
-            boolean inCommon = gv.isIn500Set(w.getWord());
+            boolean inLevel2 = gv.isIn1600Set(w.getWord());
+            boolean inCommon = gv.isIn3800Set(w.getWord());
+            //boolean gt = true;
             boolean gt = gv.isCode3setGt(code3, 2);
-            if (notIn) {
-                return notIn;
-            }
-            if (inCommon) {
-                System.out.println("w = " + w);
-            }
-            return notIn;
-//                        return notIn || (inCommon && !gt);
+            //return notIn;
+            return notIn ||  (inLevel2 && !gt);
         }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
         opts.predicate(4, w -> {
             String code = w.getCode() + w.getCodeExt();
-            return gv.isNotInCodeSet(code) ;
+            boolean inLevel3 = gv.isIn3800Set(w.getWord());
+            return gv.isNotInCodeSet(code) || inLevel3;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -192,7 +192,7 @@ public class MergedMakeShort2
                         // 三级汉字
                         w.setCode(code);
                         w.setCodeExt("");
-                        gv.updateCodeSetCounter(code).addToUncommon(w);
+                        gv.updateCodeSetCounter(code).increaseCodeLengthCounter(code.length()).addToUncommon(w);
                     }
                 }
             }
@@ -202,7 +202,7 @@ public class MergedMakeShort2
 
     private void postProcess()
     {
-        //        fullProcess();
+        //fullProcess();
         printCounter("Post process done!");
     }
 
@@ -229,11 +229,13 @@ public class MergedMakeShort2
         while (iter.hasNext()) {
             Word w = iter.next();
             String code = w.getCode();
-            if (gv.isNotInCodeSet(code) && gv.isInGB2312Set(w.getWord())) {
+            if (gv.isNotInCodeSet(code) || gv.isIn4200Set(w.getWord())) {
                 w.setCode(code);
                 w.setCodeExt("");
                 w.setLevel(200);
-                gv.increaseCodeLengthCounter(code.length()).addCodeSetCounter(code).addToResult2(w);
+                gv.increaseCodeLengthCounter(code.length())
+                  .addCodeSetCounter(code)
+                  .addToUncommon(w);
                 iter.remove();
             } else {
                 w.setCode(code);
