@@ -61,14 +61,14 @@ def find_file(base_name):
 # a s d f g n ñ k l ö
 # z ģ c ü b h m , . /
 
-# 键盘布局3 [精照分离，辅音一码，元音一码]
-#|---+---+---+-------+---+---+-----+-----+---+---|
-#| ķ | w | e |   a   | t | y | ŝ/u | ĉ/i | o | p |
-#|---+---+---+-------+---+---+-----+-----+---+---|
-#| ä | s | d | f/ö/ê | g | h |  ñ  |  k  | l | ; |
-#|---+---+---+-------+---+---+-----+-----+---+---|
-#| z | ģ | c | ẑ/ü   | b | n |  m  |  ,  | . | / |
-#|---+---+---+-------+---+---+-----+-----+---+---|
+# 键盘布局3 [十九键，辅音一码，元音一码]
+#|----+----+----+-----+----+----+----+----+----+----|
+#| ķ  | w  | ñ  | b   | t  | y  | m  | c  | ģ  | p  |
+#| äi | ai | ei | öi  |    | ü  | u  | i  | o  | ou |
+#|----+----+----+-----+----+----+----+----+----+----|
+#| n  | s  | d  | f   | g  | h  | z  | k  | l  | ;  |
+#| ä  | a  | e  | ö/ê | äu | au | ui | iu | oi |    |
+#|----+----+----+-----+----+----+----+----+----+----|
 
 # 键盘布局4 [辅音一码，元音一码，起首笔画一码]
 # 横 竖 撇 捺 折 弯 叉 框
@@ -295,59 +295,65 @@ def get_mapping2():
 def get_mapping3():
         s = {
                 u"": u"",  # 零声母
-                u"b": u"b",
+                u"b": u"r",
                 u"p": u"p",
-                u"m": u"m",
+                u"m": u"u",
                 u"f": u"f",
 
                 u"d": u"d",
                 u"t": u"t",
-                u"n": u"n",
+                u"n": u"a",
                 u"l": u"l",
 
                 u"g": u"g",
                 u"k": u"k",
-                u"ñ": u"j",  # ng
+                u"ñ": u"e",  # ng
                 u"h": u"h",
 
-                u"z": u"z",
-                u"c": u"c",
+                u"z": u"j",
+                u"c": u"i",
                 u"s": u"s",
-
-                u"ẑ": u"v",
-                u"ĉ": u"i",
-                u"ŝ": u"u",
-
                 u"j": u"y",
+                
                 u"w": u"w",
-
-                u"ģ": u"x",  # gw
+                u"ģ": u"o",  # gw
                 u"ķ": u"q",  # kw
 
         }
         w = {
                 u"": u"",
-                u"ä": u"a",  # aa
-                u"a": u"r",  # a
-                u"e": u"e",
-                u"ü": u"v",  # yu , 同u合并，kut,kvt, gun, gvn 会混，但方言中，两组音也是混的，关系不大。
+                u"a": u"a",  # aa
+                u"r": u"s",  # a
+                u"e": u"d",
+                u"v": u"y",  # yu , 同u合并，kut,kvt, gun, gvn 会混，但方言中，两组音也是混的，关系不大。
                 u"u": u"u",  # 长u，于短u是互补的。
                 u"i": u"i",  # 长i，于短i是互补的。
                 u"o": u"o",
-                u"ê": u"f",  # eo	eo, eu是互补的。
-                u"ö": u"f",  # oe/eu
+                u"!": u"f",  # eo	eo, eu是互补的。
+                u"@": u"f",  # oe/eu
+                # 双元音
+                "ai": "q",
+                "ri": "w",
+                "ei": "e",
+                "oi": "l",
+                "ui": "j",
+                "!i": "r",
+                "au": "g",
+                "ru": "h",
+                "iu": "j",
+                "ou": "p",
         }
 
         m = {
                 u"": u"",
-                u"u": u"u",
-                u"i": u"i",
+                #u"u": u"u",
+                #u"i": u"i",
                 u"p": u"p",
-                u"t": u"d",
+                u"t": u"t",
                 u"k": u"k",
-                u"m": u"m",
-                u"n": u"n",
-                u"ñ": u"j"  # ng
+                u"m": u"u",
+                u"n": u"a",
+                u"ñ": u"e"  # ng
         }
 
         zyoy_mapping = {}
@@ -427,7 +433,7 @@ def make_mapping(single):
         把拼音转成键盘布局
         """
         py = "zyoy.single.mapped.txt"
-        mapping.mapping(single, py, encoding, get_mapping2())
+        mapping.mapping(single, py, encoding, get_mapping4())
         return py
 
 
