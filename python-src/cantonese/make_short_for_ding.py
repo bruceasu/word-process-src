@@ -112,7 +112,7 @@ def round2(dataContext):
                 code_len = len(code_ext)
                 dataContext.code_len_count[code_len] += 1
                 dataContext.result.append(v[0] + "\t" + code_ext + "\t3")
-                dataContext.full.append(v[0] + "\t" + k)
+                dataContext.full.append(v[0] + "\t" +  cc_full)
             elif cc_full not in dataContext.code_set:
                 dataContext.code_set[cc_full] = 1
                 code_len = len(cc_full)
