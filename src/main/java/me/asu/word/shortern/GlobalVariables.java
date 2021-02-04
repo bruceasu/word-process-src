@@ -30,6 +30,7 @@ public class GlobalVariables {
     List<Word>   result2  = new ArrayList<>();
     List<Word>   full     = new ArrayList<>();
     List<Word>   uncommon = new ArrayList<>();
+    List<Word>   remain = new ArrayList<>();
 
     Map<String, AtomicInteger> codeSet = new HashMap<>();
     Map<String, AtomicInteger> code3Set = new HashMap<>();
@@ -166,6 +167,15 @@ public class GlobalVariables {
     public GlobalVariables addToG4200(Word w) {
         group4200.add(w);
         return this;
+    }
+
+    public GlobalVariables addToRemain(Word w) {
+        remain.add(w);
+        return this;
+    }
+
+    public List<Word> getRemain() {
+        return remain;
     }
 
     public GlobalVariables updateCodeSetCounter(String code) {

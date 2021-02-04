@@ -2140,7 +2140,6 @@
 隋	do
 乓	ph
 桔	ju
-桔	jp
 庇	bi
 褐	he
 氓	mh
@@ -3554,7 +3553,6 @@
 靛	dm
 狷	jr
 笏	hu
-枸	ju
 枸	gz
 惇	dy
 趔	lp

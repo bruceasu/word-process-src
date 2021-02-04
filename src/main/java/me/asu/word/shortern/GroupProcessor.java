@@ -61,7 +61,7 @@ public class GroupProcessor {
                 int                    level    = len * 10 + offset;
                 Function<Word, String> function = opts.function(len);
                 if (function == null) {
-                   String code = w.getCode().substring(0,1);
+                   String code = w.getCode().substring(0,len);
                     addNewCode(w, code, level);
                 } else {
                     String code = function.apply(w);
@@ -79,15 +79,19 @@ public class GroupProcessor {
 
     public void addNewCode(Word w, String code, int level)
     {
+        String hz = w.getWord();
         w.setLevel(level);
         Word newWord = w.clone();
         newWord.setCode(code);
         newWord.setCodeExt("");
         w.setCode(w.getCode() + w.getCodeExt());
+        w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code));
         gv.increaseCodeLengthCounter(code.length())
           .updateCodeSetCounter(code);
-        if (gv.isInGB2312Set(w.getWord())) {
+        if (gv.isIn3800Set(hz)) {
             gv.addToResult(newWord);
+        } else if (gv.isIn4200Set(hz)) {
+            gv.addToResult2(newWord);
         } else {
             gv.addToUncommon(newWord);
         }

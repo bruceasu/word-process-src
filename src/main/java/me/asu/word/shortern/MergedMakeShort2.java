@@ -63,7 +63,7 @@ public class MergedMakeShort2
                 String code = w.getCode() + w.getCodeExt();
                 w.setCode(code);
                 w.setCodeExt("");
-                gv.addToFull(w);
+                gv.addToResult2(w);
             } else if (gv.isIn500Set(w.getWord())) {
                 gv.getGroup500().add(w);
             } else if (gv.isIn1600Set(w.getWord())) {
@@ -108,18 +108,15 @@ public class MergedMakeShort2
         opts.predicate(3, w -> {
             String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
             boolean notIn = gv.isNotInCodeSet(code3);
-            boolean inLevel1 = gv.isIn500Set(w.getWord());
-            //boolean gt1 = gv.isCode3setGt(code3, 2);
-            //boolean inLevel2 = gv.isIn1600Set(w.getWord());
-            //boolean gt2 = gv.isCode3setGt(code3, 3);
-            return notIn || inLevel1;
+            boolean inLevel = gv.isIn3800Set(w.getWord());
+            return notIn && inLevel;
             //return notIn || (inCommon && !gt1) ||  (inLevel2 && !gt2) ;
         }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
         opts.predicate(4, w -> {
-            //return true;
+//            return false;
             String code = w.getCode() + w.getCodeExt();
-            boolean inLevel2 = gv.isIn1600Set(w.getWord());
-            return gv.isNotInCodeSet(code) || inLevel2;
+            boolean inLevel2 = gv.isIn3800Set(w.getWord());
+            return gv.isNotInCodeSet(code) && inLevel2;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -178,11 +175,32 @@ public class MergedMakeShort2
                     //newWord.setCode(code3);
                     //newWord.setCodeExt("");
                     //gv.addRecheck(newWord);
-                    if (gv.isIn4200Set(w.getWord())) {
+                    String hz = w.getWord();
+                    if (gv.isIn3800Set(hz)) {
                         if (gv.isNotInCodeSet(code3)) {
                             w.setCode(code);
                             w.setCodeExt("");
                             Word newWord = w.clone();
+                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
+                            newWord.setCode(code3);
+                            newWord.setCodeExt("");
+                            gv.updateCodeSetCounter(code3)
+                              .addToResult(newWord)
+                              .increaseCodeLengthCounter(code3.length())
+                              .addToFull(w);
+                        } else {
+                            w.setCode(code);
+                            w.setCodeExt("");
+                            gv.updateCodeSetCounter(code)
+                              .addToResult(w)
+                              .increaseCodeLengthCounter(code.length());
+                        }
+                    } else if (gv.isIn4200Set(hz)) {
+                        if (gv.isNotInCodeSet(code3)) {
+                            w.setCode(code);
+                            w.setCodeExt("");
+                            Word newWord = w.clone();
+                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)
@@ -201,6 +219,7 @@ public class MergedMakeShort2
                             w.setCode(code);
                             w.setCodeExt("");
                             Word newWord = w.clone();
+                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)
@@ -225,7 +244,7 @@ public class MergedMakeShort2
 
     private void postProcess()
     {
-        fullProcess();
+      //  fullProcess();
         printCounter("Post process done!");
     }
 
