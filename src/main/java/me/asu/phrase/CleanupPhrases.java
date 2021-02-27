@@ -59,9 +59,27 @@ public class CleanupPhrases
 		System.out.println("Done!");
 	}
 
+	private static void cleanupPhrases3(Set<String> codeSet,
+	                                    Set<String> phraseCodeSet,
+	                                    Set<String> nounsSet,
+	                                    FileWriter fw1,
+	                                    FileWriter fw2)
+	{
+		List<String> phrases3 = ResourcesFiles.readLinesInResources("he_phrases-3.txt");
+		phrases3.forEach(line -> {
+			if (line.trim().isEmpty()) {
+				return;
+			}
+			String[] kv     = line.trim().split("\\s+");
+			boolean  isNoun = nounsSet.contains(kv[0]);
+			boolean  isDup  = codeSet.contains(kv[1]);
+			outputWithRule(fw1, fw2, kv, isNoun, isDup, phraseCodeSet);
+		});
+	}
+
 	private static void cleanupPhrases4(Set<String> codeSet, Set<String> phraseCodeSet, Set<String> nounsSet,
 			Set<String> freqWords, Set<String> singleWords, FileWriter fw1, FileWriter fw2) {
-		List<String> phrases4 = ResourcesFiles.readLinesInResources("phrases-4.txt");
+		List<String> phrases4 = ResourcesFiles.readLinesInResources("he_phrases-4.txt");
 		phrases4.forEach(line -> {
 			if (line.trim().isEmpty()) {
 				return;
@@ -86,24 +104,6 @@ public class CleanupPhrases
 				}
 			}
 
-			outputWithRule(fw1, fw2, kv, isNoun, isDup, phraseCodeSet);
-		});
-	}
-
-	private static void cleanupPhrases3(Set<String> codeSet,
-	                                    Set<String> phraseCodeSet,
-	                                    Set<String> nounsSet,
-	                                    FileWriter fw1,
-	                                    FileWriter fw2)
-	{
-		List<String> phrases3 = ResourcesFiles.readLinesInResources("phrases-3.txt");
-		phrases3.forEach(line -> {
-			if (line.trim().isEmpty()) {
-				return;
-			}
-			String[] kv     = line.trim().split("\\s+");
-			boolean  isNoun = nounsSet.contains(kv[0]);
-			boolean  isDup  = codeSet.contains(kv[1]);
 			outputWithRule(fw1, fw2, kv, isNoun, isDup, phraseCodeSet);
 		});
 	}

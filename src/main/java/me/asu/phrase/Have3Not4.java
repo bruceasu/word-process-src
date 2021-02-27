@@ -3,7 +3,6 @@ package me.asu.phrase;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import me.asu.word.ResourcesFiles;
 
@@ -16,7 +15,7 @@ public class Have3Not4
 	public static void main(String[] args) throws IOException
 	{
 		Map<String, String> map3 = ResourcesFiles.loadAsMap("3-1.txt");
-		Map<String, String> map4 = ResourcesFiles.loadAsMap("phrases-4.txt");
+		Map<String, String> map4 = ResourcesFiles.loadAsMap("he_phrases-4.txt");
 
 		File outDir = new File("out");
 		if (!outDir.exists()) {

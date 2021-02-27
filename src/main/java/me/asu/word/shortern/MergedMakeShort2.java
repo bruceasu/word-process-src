@@ -181,7 +181,7 @@ public class MergedMakeShort2
                             w.setCode(code);
                             w.setCodeExt("");
                             Word newWord = w.clone();
-                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
+//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)
@@ -200,7 +200,7 @@ public class MergedMakeShort2
                             w.setCode(code);
                             w.setCodeExt("");
                             Word newWord = w.clone();
-                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
+//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)
@@ -219,7 +219,7 @@ public class MergedMakeShort2
                             w.setCode(code);
                             w.setCodeExt("");
                             Word newWord = w.clone();
-                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
+//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)

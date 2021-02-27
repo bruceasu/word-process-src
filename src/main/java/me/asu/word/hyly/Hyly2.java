@@ -25,9 +25,8 @@ public class Hyly2
 	{
 		String name = "he";
 		Map<String, List<String>> he = loadAsMapList("he.txt");
-
         List<String> oneSet = ResourcesFiles.readLinesInResources("he_1_2.txt");
-        List<String> twoSet = ResourcesFiles.readLinesInResources("phrases-2.txt");
+        List<String> twoSet = ResourcesFiles.readLinesInResources("he_phrases-2.txt");
         oneSet.addAll(twoSet);
 
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.less.txt");

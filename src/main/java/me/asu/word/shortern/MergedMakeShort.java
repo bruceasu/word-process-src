@@ -57,7 +57,6 @@ public class MergedMakeShort
         log.info("Group {} lines into groups.", lines.size());
         for (int i = 0; i < lines.size(); i++) {
             Word w = lines.get(i);
-            //gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
             if (gv.isInSingleSet(w.getWord())) {
                 w.setLevel(2);
                 String code = w.getCode() + w.getCodeExt();
@@ -106,17 +105,17 @@ public class MergedMakeShort
             return gv.isNotInCodeSet(code);
         }).function(2, Word::getCode);
         opts.predicate(3, w -> {
-//            String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
-//            boolean notIn = gv.isNotInCodeSet(code3);
-//            boolean inLevel = gv.isIn4200Set(w.getWord());
-//            return notIn && inLevel;
-            return false;
+            String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
+            boolean notIn = gv.isNotInCodeSet(code3);
+            boolean inLevel = gv.isIn1600Set(w.getWord());
+            return notIn && inLevel;
+            //return notIn || (inCommon && !gt1) ||  (inLevel2 && !gt2) ;
         }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
         opts.predicate(4, w -> {
-            return false;
-//            String code = w.getCode() + w.getCodeExt();
-//            boolean inLevel2 = gv.isIn1600Set(w.getWord());
-//            return gv.isNotInCodeSet(code) || inLevel2;
+//            return false;
+            String code = w.getCode() + w.getCodeExt();
+            boolean inLevel2 = gv.isIn3800Set(w.getWord());
+            return gv.isNotInCodeSet(code) && inLevel2;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -146,54 +145,72 @@ public class MergedMakeShort
             List<Word> ws = entry.getValue();
             Collections.sort(ws);
             String code3 = code.substring(0, 3);
-            if (ws.size() == 1) {
-                Word w = ws.get(0);
-                if (gv.isIn1600Set(w.getWord())) {
-                    w.setCode(code);
-                    w.setCodeExt("");
-                    gv.updateCodeSetCounter(code)
-                      .addToResult(w)
-                      .increaseCodeLengthCounter(code.length());
-                } else if (gv.isIn4200Set(w.getWord())) {
-                    w.setCode(code);
-                    w.setCodeExt("");
-                    gv.updateCodeSetCounter(code)
-                      .addToResult2(w)
-                      .increaseCodeLengthCounter(code.length());
-                } else {
-                    w.setCode(code);
-                    w.setCodeExt("");
-                    gv.updateCodeSetCounter(code)
-                      .increaseCodeLengthCounter(code.length())
-                      .addToUncommon(w);
-                }
-
-            }
-            else {
+            //if (ws.size() == 1) {
+            //    Word w = ws.get(0);
+            //    if (gv.isIn1600Set(w.getWord())) {
+            //        w.setCode(code);
+            //        w.setCodeExt("");
+            //        gv.updateCodeSetCounter(code)
+            //          .addToResult(w)
+            //          .increaseCodeLengthCounter(code.length());
+            //    } else if (gv.isIn4200Set(w.getWord())) {
+            //        w.setCode(code);
+            //        w.setCodeExt("");
+            //        gv.updateCodeSetCounter(code)
+            //          .addToResult2(w)
+            //          .increaseCodeLengthCounter(code.length());
+            //    } else {
+            //        w.setCode(code);
+            //        w.setCodeExt("");
+            //        gv.updateCodeSetCounter(code)
+            //          .increaseCodeLengthCounter(code.length())
+            //          .addToUncommon(w);
+            //    }
+            //}
+            //else {
             for (int i = 0; i < ws.size(); i++) {
                 Word w = ws.get(i);
                 //Word newWord = w.clone();
                 //newWord.setCode(code3);
                 //newWord.setCodeExt("");
                 //gv.addRecheck(newWord);
-                if (gv.isIn1600Set(w.getWord())) {
-                    if (gv.isNotInCodeSet(code3)) {
+                String hz = w.getWord();
+                if (gv.isIn3800Set(hz)) {
+//                    if (gv.isNotInCodeSet(code3)) {
+//                        w.setCode(code);
+//                        w.setCodeExt("");
+//                        Word newWord = w.clone();
+//                        newWord.setCode(code3);
+//                        newWord.setCodeExt("");
+//                        gv.updateCodeSetCounter(code3)
+//                          .addToResult(newWord)
+//                          .increaseCodeLengthCounter(code3.length())
+//                          .addToFull(w);
+//                    } else {
                         w.setCode(code);
                         w.setCodeExt("");
-                        Word newWord = w.clone();
-                        newWord.setCode(code3);
-                        newWord.setCodeExt("");
-                        gv.updateCodeSetCounter(code3)
-                          .addToResult2(newWord)
-                          .increaseCodeLengthCounter(code3.length())
-                          .addToFull(w);
-                    } else {
+                        gv.updateCodeSetCounter(code)
+                          .addToResult(w)
+                          .increaseCodeLengthCounter(code.length());
+//                    }
+                } else if (gv.isIn4200Set(hz)) {
+//                    if (gv.isNotInCodeSet(code3)) {
+//                        w.setCode(code);
+//                        w.setCodeExt("");
+//                        Word newWord = w.clone();
+//                        newWord.setCode(code3);
+//                        newWord.setCodeExt("");
+//                        gv.updateCodeSetCounter(code3)
+//                          .addToResult2(newWord)
+//                          .increaseCodeLengthCounter(code3.length())
+//                          .addToFull(w);
+//                    } else {
                         w.setCode(code);
                         w.setCodeExt("");
                         gv.updateCodeSetCounter(code)
                           .addToResult2(w)
                           .increaseCodeLengthCounter(code.length());
-                    }
+//                    }
                 } else {
 //                    if (gv.isNotInCodeSet(code3)) {
 //                        w.setCode(code);
@@ -214,7 +231,7 @@ public class MergedMakeShort
 //                    }
                 }
             }
-            }
+            //}
 
 
         }
@@ -223,9 +240,7 @@ public class MergedMakeShort
 
     private void postProcess()
     {
-
-
-//        fullProcess();
+          fullProcess();
         printCounter("Post process done!");
     }
 
@@ -252,14 +267,17 @@ public class MergedMakeShort
         while (iter.hasNext()) {
             Word w = iter.next();
             String code = w.getCode();
-            if (gv.isNotInCodeSet(code)
-                    && gv.isIn4200Set(w.getWord())) {
+            if (gv.isNotInCodeSet(code) ) {
                 w.setCode(code);
                 w.setCodeExt("");
                 w.setLevel(200);
                 gv.increaseCodeLengthCounter(code.length())
-                  .addCodeSetCounter(code)
-                  .addToResult2(w);
+                  .addCodeSetCounter(code);
+                if (gv.isIn4200Set(w.getWord())) {
+                     gv.addToResult2(w);
+                } else {
+                    gv.addToUncommon(w);
+                }
                 iter.remove();
             } else {
                 w.setCode(code);
