@@ -16,6 +16,7 @@ public class Word implements Comparable<Word> {
     int order;
     Set<String> tags = new HashSet<>();
 
+    @Override
     public Word clone() {
         Word w = new Word();
         w.setWord(this.word);
@@ -33,12 +34,10 @@ public class Word implements Comparable<Word> {
         }
         int i = this.getLevel() - o.getLevel();
         if (i == 0) {
-            i = this.getOrder() - o.getOrder();
+            i= this.getCode().compareTo(o.getCode());
             if (i == 0) {
-                return this.getCode().compareTo(o.getCode());
+                i = this.getOrder() - o.getOrder();
             }
-            return i;
-
         }
         return i;
     }

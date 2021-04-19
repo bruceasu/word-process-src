@@ -1,14 +1,23 @@
 package me.asu.word.shortern;
 
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.*;
-import lombok.extern.slf4j.Slf4j;
 import me.asu.word.Word;
+import org.slf4j.Logger;
 
-@Slf4j
+/**
+ * 1. 一简
+ * 2. 二简（前500)
+ * 3. 一般常用字三简（前1500）
+ * 4. 一般常用字全码
+ * 5. 生僻字填充3码
+ * 6. 生僻字全码
+ */
 public class MergedMakeShort
 {
+    private static final Logger log = getLogger(MergedMakeShort.class);
 
     GlobalVariables gv   = new GlobalVariables();
     Options         opts = new Options();
@@ -91,10 +100,10 @@ public class MergedMakeShort
     {
         log.info("Processing groups ...");
         Options opts = new Options().globalVariables(gv);
-        //opts.predicate(1, w -> false)
-        //    .predicate(2, w -> false);
-        //	  .predicate(3, w -> false);
-        //    .predicate(4, w -> true)
+        opts.predicate(1, w -> false)
+            .predicate(2, w -> false)
+            .predicate(3, w -> false)
+            .predicate(4, w -> false);
         //    .function(4, w -> w.getCode() + " " + w.getCodeExt());
 
         opts.predicate(1, w -> gv.isIn500Set(w.getWord())
@@ -102,20 +111,23 @@ public class MergedMakeShort
             .function(1, w -> w.getCode().substring(0, 1));
         opts.predicate(2, w -> {
             String code = w.getCode();
-            return gv.isNotInCodeSet(code);
+            return gv.isNotInCodeSet(code) ;
         }).function(2, Word::getCode);
         opts.predicate(3, w -> {
             String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
             boolean notIn = gv.isNotInCodeSet(code3);
             boolean inLevel = gv.isIn1600Set(w.getWord());
-            return notIn && inLevel;
+            return (notIn && inLevel);
             //return notIn || (inCommon && !gt1) ||  (inLevel2 && !gt2) ;
         }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
         opts.predicate(4, w -> {
 //            return false;
-            String code = w.getCode() + w.getCodeExt();
-            boolean inLevel2 = gv.isIn3800Set(w.getWord());
-            return gv.isNotInCodeSet(code) && inLevel2;
+//            String code = w.getCode() + w.getCodeExt();
+//            boolean notIn = gv.isNotInCodeSet(code);
+//            final boolean in4200Set = gv.isIn4200Set(w.getWord());
+
+            boolean inLevel = gv.isIn1600Set(w.getWord());
+            return  inLevel ;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -170,65 +182,68 @@ public class MergedMakeShort
             //else {
             for (int i = 0; i < ws.size(); i++) {
                 Word w = ws.get(i);
-                //Word newWord = w.clone();
-                //newWord.setCode(code3);
-                //newWord.setCodeExt("");
+                Word newWord = w.clone();
+                newWord.setCode(code3);
+                newWord.setCodeExt("");
                 //gv.addRecheck(newWord);
                 String hz = w.getWord();
                 if (gv.isIn3800Set(hz)) {
-//                    if (gv.isNotInCodeSet(code3)) {
-//                        w.setCode(code);
-//                        w.setCodeExt("");
-//                        Word newWord = w.clone();
-//                        newWord.setCode(code3);
-//                        newWord.setCodeExt("");
-//                        gv.updateCodeSetCounter(code3)
-//                          .addToResult(newWord)
-//                          .increaseCodeLengthCounter(code3.length())
-//                          .addToFull(w);
-//                    } else {
+                    if (gv.isNotInCodeSet(code3)) {
+                        w.setCode(code);
+                        w.setCodeExt("");
+                        gv.updateCodeSetCounter(code3)
+                          .addToResult(newWord)
+                          .increaseCodeLengthCounter(code3.length())
+                          .addToFull(w);
+                    } else if(gv.isNotInCodeSet(code)) {
                         w.setCode(code);
                         w.setCodeExt("");
                         gv.updateCodeSetCounter(code)
                           .addToResult(w)
                           .increaseCodeLengthCounter(code.length());
-//                    }
-                } else if (gv.isIn4200Set(hz)) {
-//                    if (gv.isNotInCodeSet(code3)) {
-//                        w.setCode(code);
-//                        w.setCodeExt("");
-//                        Word newWord = w.clone();
-//                        newWord.setCode(code3);
-//                        newWord.setCodeExt("");
-//                        gv.updateCodeSetCounter(code3)
-//                          .addToResult2(newWord)
-//                          .increaseCodeLengthCounter(code3.length())
-//                          .addToFull(w);
-//                    } else {
+                    }else {
                         w.setCode(code);
                         w.setCodeExt("");
                         gv.updateCodeSetCounter(code)
                           .addToResult2(w)
                           .increaseCodeLengthCounter(code.length());
-//                    }
+                    }
+                } else if (gv.isIn4200Set(hz)) {
+                    if (gv.isNotInCodeSet(code3)) {
+                        w.setCode(code);
+                        w.setCodeExt("");
+                        gv.updateCodeSetCounter(code3)
+                          .addToResult2(newWord)
+                          .increaseCodeLengthCounter(code3.length())
+                          .addToFull(w);
+                    } else if(gv.isNotInCodeSet(code)) {
+                        w.setCode(code);
+                        w.setCodeExt("");
+                        gv.updateCodeSetCounter(code)
+                          .addToResult2(w)
+                          .increaseCodeLengthCounter(code.length());
+                    } else {
+                        w.setCode(code);
+                        w.setCodeExt("");
+                        gv.updateCodeSetCounter(code)
+                          .addToResult2(w)
+                          .increaseCodeLengthCounter(code.length());
+                    }
                 } else {
-//                    if (gv.isNotInCodeSet(code3)) {
-//                        w.setCode(code);
-//                        w.setCodeExt("");
-//                        Word newWord = w.clone();
-//                        newWord.setCode(code3);
-//                        newWord.setCodeExt("");
-//                        gv.updateCodeSetCounter(code3)
-//                          .addToUncommon(newWord)
-//                          .increaseCodeLengthCounter(code3.length())
-//                          .addToFull(w);
-//                    } else {
+                    if (gv.isNotInCodeSet(code3)) {
+                        w.setCode(code);
+                        w.setCodeExt("");
+                        gv.updateCodeSetCounter(code3)
+                          .addToUncommon(newWord)
+                          .increaseCodeLengthCounter(code3.length())
+                          .addToFull(w);
+                    } else {
                         w.setCode(code);
                         w.setCodeExt("");
                         gv.updateCodeSetCounter(code)
                           .increaseCodeLengthCounter(code.length())
                           .addToUncommon(w);
-//                    }
+                    }
                 }
             }
             //}
@@ -240,7 +255,7 @@ public class MergedMakeShort
 
     private void postProcess()
     {
-          fullProcess();
+        //fullProcess();
         printCounter("Post process done!");
     }
 
@@ -286,6 +301,4 @@ public class MergedMakeShort
             }
         }
     }
-
-
 }

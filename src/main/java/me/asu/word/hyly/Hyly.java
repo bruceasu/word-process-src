@@ -2,6 +2,7 @@ package me.asu.word.hyly;
 
 
 import static me.asu.word.ResourcesFiles.loadAsMapList;
+import static me.asu.word.ResourcesFiles.readLinesInResources;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,8 @@ public class Hyly {
     public static void main(String[] args) throws IOException {
         String name = "he";
         Map<String, List<String>> he = loadAsMapList("he.txt");
-        List<String> oneSet = ResourcesFiles.readLinesInResources("he_1_2.txt");
-        List<String> twoSet = ResourcesFiles.readLinesInResources("he_phrases-2.txt");
+        List<String> oneSet = readLinesInResources("he_1_2.txt");
+        List<String> twoSet = readLinesInResources("he_phrases-2.txt");
         oneSet.addAll(twoSet);
         Map<String, List<String>> xm = loadAsMapList("rain.txt");
         List<Word> merged = Merge.merge(he, xm);

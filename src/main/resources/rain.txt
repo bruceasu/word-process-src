@@ -810,7 +810,7 @@
 乡	vp
 杨	mp
 叶	ku
-警	yy
+警	yc
 限	en
 湖	do
 软	iq
@@ -6858,7 +6858,7 @@
 僜	ra
 僰	ra
 兲	wb
-冇	ik
+冇	uk
 冏	kk
 冧	bm
 剋	du

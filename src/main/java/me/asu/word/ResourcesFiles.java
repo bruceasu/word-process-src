@@ -99,6 +99,34 @@ public class ResourcesFiles {
         return map;
     }
 
+    public static Map<String, List<String>> loadBuShou() {
+        List<String> strings = readLinesInResources("bushou.txt");
+        Map<String, List<String>> map = new HashMap<>();
+        for (String line : strings) {
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] split = line.split("\\s+");
+            if (split.length < 2) {
+                continue;
+            }
+            String code = split[0];
+            for (int i = 1; i < split.length; i++) {
+                String w = split[i];
+                if (map.containsKey(w)) {
+                    map.get(w).add(code);
+                } else {
+                    List<String> ls = new ArrayList<>();
+                    ls.add(code);
+                    map.put(w, ls);
+                }
+            }
+
+        }
+        return map;
+    }
+
     public static List<String> readLinesInResources(String name, String charset) {
         String myDIR = OsHelper.getMyDIR();
         File file = new File(myDIR, name);
