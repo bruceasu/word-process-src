@@ -3,13 +3,12 @@ package me.asu.word.hyly;
 
 import static me.asu.word.ResourcesFiles.loadAsMapList;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Files;
+import java.util.*;
 import me.asu.util.Streams;
 import me.asu.word.Merge;
 import me.asu.word.ResourcesFiles;
@@ -17,22 +16,58 @@ import me.asu.word.Word;
 import me.asu.word.shortern.MergedMakeShort2;
 
 /**
- * 主打单字，形音
+ * 前500无法正常编码的用无理编码。
  */
-public class Hyly2
+public class FindUnUseCode
 {
 
 	public static void main(String[] args) throws IOException
 	{
-		String name = "he";
-		Map<String, List<String>> he = loadAsMapList("he.txt");
-//		List<String> oneSet = new ArrayList<>();
-        List<String> oneSet = ResourcesFiles.readLinesInResources("rain_1.txt");
-		Map<String, List<String>> xm = loadAsMapList("rain.txt");
-        List<Word> merged = Merge.merge(xm, he);
-		Map<String, List<Word>> results = new MergedMakeShort2().makeSort(merged, oneSet);
+		Map<String, List<String>> oneSet = loadAsMapList("he_1_2.txt");
+		List<String> the500 = ResourcesFiles.readLinesInResources("common-words-500.txt");
+		File outdir = new File("out");
+		if (!outdir.exists()) {
+			outdir.mkdirs();
+		}
+		File outFile = new File(outdir, "no-code-out.txt");
+		try (BufferedWriter writer = Files.newBufferedWriter(outFile.toPath())) {
+			the500.forEach(z -> {
+				if (!oneSet.containsKey(z)) {
+					try {
+						writer.write(z);
+						writer.write(System.lineSeparator());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 
-		save(name, results);
+				}
+			});
+		}
+		HashSet<String> codes = new HashSet<>();
+		oneSet.values().forEach(codes::addAll);
+		// make available
+		List<String> a = new ArrayList<>(26 * 26);
+		for (char i = 'a'; i < 'z'; i++) {
+			for (char j = 'a'; j < 'z'; j++) {
+				a.add(new String(new char[]{i, j}));
+			}
+		}
+		File outFile2 = new File(outdir, "no-word-out.txt");
+		try (BufferedWriter writer = Files.newBufferedWriter(outFile2.toPath())) {
+			a.forEach(z -> {
+				if (!codes.contains(z)) {
+					try {
+						writer.write(z);
+						writer.write(System.lineSeparator());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+				}
+			});
+		}
+
+		System.out.println("DONE.");
 	}
 
 	protected static void save(String name, Map<String, List<Word>> results) throws IOException

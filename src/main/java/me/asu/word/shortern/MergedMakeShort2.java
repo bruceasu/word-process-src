@@ -55,6 +55,7 @@ public class MergedMakeShort2
             return;
         }
         log.info("Group {} lines into groups.", lines.size());
+        lines.sort(Word::compare);
         for (int i = 0; i < lines.size(); i++) {
             Word w = lines.get(i);
             //gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
@@ -63,7 +64,7 @@ public class MergedMakeShort2
                 String code = w.getCode() + w.getCodeExt();
                 w.setCode(code);
                 w.setCodeExt("");
-                gv.addToResult2(w);
+                gv.addToFull(w);
             } else if (gv.isIn500Set(w.getWord())) {
                 gv.getGroup500().add(w);
             } else if (gv.isIn1600Set(w.getWord())) {
@@ -92,11 +93,11 @@ public class MergedMakeShort2
     {
         log.info("Processing groups ...");
         Options opts = new Options().globalVariables(gv);
-        //opts.predicate(1, w -> false)
-        //    .predicate(2, w -> false);
-        //	  .predicate(3, w -> false);
-        //    .predicate(4, w -> true)
-        //    .function(4, w -> w.getCode() + " " + w.getCodeExt());
+        opts.predicate(1, w -> false)
+            .predicate(2, w -> false)
+        	.predicate(3, w -> false)
+            .predicate(4, w -> true)
+            .function(4, w -> w.getCode() + " " + w.getCodeExt());
 
         opts.predicate(1, w -> gv.isIn500Set(w.getWord())
                 && gv.getCodeSetCount(w.getCode().substring(0, 1)) < 1)
@@ -116,7 +117,8 @@ public class MergedMakeShort2
 //            return false;
             String code = w.getCode() + w.getCodeExt();
             boolean inLevel2 = gv.isIn3800Set(w.getWord());
-            return gv.isNotInCodeSet(code) && inLevel2;
+            boolean notInCodeSet = gv.isNotInCodeSet(code);
+            return notInCodeSet && inLevel2;
         }).function(4, w -> w.getCode() + w.getCodeExt());
 
         // 一级汉字
@@ -185,14 +187,14 @@ public class MergedMakeShort2
                             newWord.setCode(code3);
                             newWord.setCodeExt("");
                             gv.updateCodeSetCounter(code3)
-                              .addToResult(newWord)
+                              .addToResult2(newWord)
                               .increaseCodeLengthCounter(code3.length())
                               .addToFull(w);
                         } else {
                             w.setCode(code);
                             w.setCodeExt("");
                             gv.updateCodeSetCounter(code)
-                              .addToResult(w)
+                              .addToResult2(w)
                               .increaseCodeLengthCounter(code.length());
                         }
                     } else if (gv.isIn4200Set(hz)) {
