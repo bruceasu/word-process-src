@@ -7,31 +7,26 @@ import lombok.extern.slf4j.Slf4j;
 import me.asu.word.Word;
 
 @Slf4j
-public class MergedMakeShort2
-{
+public class MergedMakeShort2 {
 
     GlobalVariables gv   = new GlobalVariables();
     Options         opts = new Options();
 
-    public MergedMakeShort2()
-    {
+    public MergedMakeShort2() {
         opts.setGv(gv);
     }
 
-    public Map<String, List<Word>> makeSort(List<Word> lines, List<String> oneSet)
-    {
+    public Map<String, List<Word>> makeSort(List<Word> lines, List<String> oneSet) {
         processOneSet(oneSet);
         group(lines);
 
-        processCommonGroups();
-        otherGroupProcess();
+        processGroups();
         postProcess();
 
         return makeResult();
     }
 
-    protected void processOneSet(List<String> oneSet)
-    {
+    protected void processOneSet(List<String> oneSet) {
         for (String str : oneSet) {
             String[] kv = str.split("\\s+");
             if (kv.length < 2) {
@@ -49,8 +44,7 @@ public class MergedMakeShort2
         }
     }
 
-    private void group(List<Word> lines)
-    {
+    private void group(List<Word> lines) {
         if (lines == null) {
             return;
         }
@@ -66,12 +60,16 @@ public class MergedMakeShort2
                 w.setCodeExt("");
                 gv.addToFull(w);
             } else if (gv.isIn500Set(w.getWord())) {
+                w.setLevel(10);
                 gv.getGroup500().add(w);
             } else if (gv.isIn1600Set(w.getWord())) {
+                w.setLevel(20);
                 gv.addToG1600(w);
             } else if (gv.isIn3800Set(w.getWord())) {
+                w.setLevel(30);
                 gv.addToG3800(w);
             } else if (gv.isIn4200Set(w.getWord())) {
+                w.setLevel(40);
                 gv.addToG4200(w);
             } else {
                 w.setLevel(90);
@@ -89,169 +87,186 @@ public class MergedMakeShort2
         log.info("groupOther: {}", gv.groupOther.size());
     }
 
-    private void processCommonGroups()
-    {
+    private void processGroups() {
         log.info("Processing groups ...");
-        Options opts = new Options().globalVariables(gv);
-        opts.predicate(1, w -> false)
-            .predicate(2, w -> false)
-        	.predicate(3, w -> false)
-            .predicate(4, w -> true)
-            .function(4, w -> w.getCode() + " " + w.getCodeExt());
-
-        opts.predicate(1, w -> gv.isIn500Set(w.getWord())
-                && gv.getCodeSetCount(w.getCode().substring(0, 1)) < 1)
-            .function(1, w -> w.getCode().substring(0, 1));
-        opts.predicate(2, w -> {
-            String code = w.getCode();
-            return gv.isNotInCodeSet(code);
-        }).function(2, Word::getCode);
-        opts.predicate(3, w -> {
-            String code3 = w.getCode() + w.getCodeExt().substring(0, 1);
-            boolean notIn = gv.isNotInCodeSet(code3);
-            boolean inLevel = gv.isIn3800Set(w.getWord());
-            return notIn && inLevel;
-            //return notIn || (inCommon && !gt1) ||  (inLevel2 && !gt2) ;
-        }).function(3, w -> w.getCode() + w.getCodeExt().substring(0, 1));
-        opts.predicate(4, w -> {
-//            return false;
-            String code = w.getCode() + w.getCodeExt();
-            boolean inLevel2 = gv.isIn3800Set(w.getWord());
-            boolean notInCodeSet = gv.isNotInCodeSet(code);
-            return notInCodeSet && inLevel2;
-        }).function(4, w -> w.getCode() + w.getCodeExt());
-
         // 一级汉字
-        List<Word> group500 = new ArrayList<>(gv.group500);
-        opts.group(group500);
-        new GroupProcessor(opts).processGroups();
 
-        List<Word> group1600 = new ArrayList<>(gv.group1600);
-        opts.group(group1600);
-        new GroupProcessor(opts).processGroups();
-
-        List<Word> group3800 = new ArrayList<>(gv.group3800);
-        opts.group(group3800);
-        new GroupProcessor(opts).processGroups();
-
-        List<Word> group4200 = new ArrayList<>(gv.group4200);
-        opts.group(group4200);
-        new GroupProcessor(opts).processGroups();
-        printCounter("First round done.");
+        // 1. 前五百字
+        process500(gv.group500);
+        // 2. 前千五百，能有三码，必有三码，不能则四码必在前。
+        process1500(gv.group1600);
+        // 3. 四字中唯一的，若三码亦唯一，则取3码，否则取四码
+        // 4. 四码字中，有多字的，按字频排序，取首字，若能取三码能取则。
+        processOther();
     }
 
-    private void otherGroupProcess()
-    {
-        Map<String, List<Word>> groupBySyllables = gv.groupSyllablesForOther();
-        for (Map.Entry<String, List<Word>> entry : groupBySyllables.entrySet()) {
-            String code = entry.getKey();
-            List<Word> ws = entry.getValue();
-            Collections.sort(ws);
-            String code3 = code.substring(0, 3);
-            //if (ws.size() == 1) {
-            //    Word w = ws.get(0);
-            //    if (gv.isIn1600Set(w.getWord())) {
-            //        w.setCode(code);
-            //        w.setCodeExt("");
-            //        gv.updateCodeSetCounter(code)
-            //          .addToResult(w)
-            //          .increaseCodeLengthCounter(code.length());
-            //    } else if (gv.isIn4200Set(w.getWord())) {
-            //        w.setCode(code);
-            //        w.setCodeExt("");
-            //        gv.updateCodeSetCounter(code)
-            //          .addToResult2(w)
-            //          .increaseCodeLengthCounter(code.length());
-            //    } else {
-            //        w.setCode(code);
-            //        w.setCodeExt("");
-            //        gv.updateCodeSetCounter(code)
-            //          .increaseCodeLengthCounter(code.length())
-            //          .addToUncommon(w);
-            //    }
-            //}
-            //else {
-                for (int i = 0; i < ws.size(); i++) {
-                    Word w = ws.get(i);
-                    //Word newWord = w.clone();
-                    //newWord.setCode(code3);
-                    //newWord.setCodeExt("");
-                    //gv.addRecheck(newWord);
-                    String hz = w.getWord();
-                    if (gv.isIn3800Set(hz)) {
-                        if (gv.isNotInCodeSet(code3)) {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            Word newWord = w.clone();
-//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
-                            newWord.setCode(code3);
-                            newWord.setCodeExt("");
-                            gv.updateCodeSetCounter(code3)
-                              .addToResult2(newWord)
-                              .increaseCodeLengthCounter(code3.length())
-                              .addToFull(w);
-                        } else {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            gv.updateCodeSetCounter(code)
-                              .addToResult2(w)
-                              .increaseCodeLengthCounter(code.length());
-                        }
-                    } else if (gv.isIn4200Set(hz)) {
-                        if (gv.isNotInCodeSet(code3)) {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            Word newWord = w.clone();
-//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
-                            newWord.setCode(code3);
-                            newWord.setCodeExt("");
-                            gv.updateCodeSetCounter(code3)
-                              .addToResult2(newWord)
-                              .increaseCodeLengthCounter(code3.length())
-                              .addToFull(w);
-                        } else {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            gv.updateCodeSetCounter(code)
-                              .addToResult2(w)
-                              .increaseCodeLengthCounter(code.length());
-                        }
+    private void processOther() {
+        SortedMap<String, List<Word>> m    = new TreeMap<>();
+        List<List<Word>>              list = new LinkedList<>();
+        list.add(gv.group3800);
+        list.add(gv.group4200);
+        list.add(gv.groupOther);
+        list.forEach(g -> {
+            g.forEach(w -> {
+                String code    = w.getCode();
+                String codeExt = w.getCodeExt();
+                String code3   = code + codeExt.charAt(0);
+                if (m.containsKey(code3)) {
+                    m.get(code3).add(w);
+                } else {
+                    List<Word> words = new ArrayList<>();
+                    words.add(w);
+                    m.put(code3, words);
+                }
+            });
+        });
+
+        m.forEach((k, v) -> {
+            Collections.sort(v, Word::compare);
+            Word w     = v.get(0);
+            int  start = 0;
+            if (gv.isNotInCodeSet(k)) {
+                Word newWord = w.clone();
+                newWord.setCode(k);
+                newWord.setCodeExt("");
+                gv.increaseCodeLengthCounter(k.length())
+                  .updateCodeSetCounter(k);
+
+                String hz = newWord.getWord();
+                if (gv.isIn3800Set(hz)) {
+                    gv.addToResult(newWord);
+                } else if (gv.isIn4200Set(hz)) {
+                    gv.addToResult2(newWord);
+                } else {
+                    gv.addToUncommon(newWord);
+                }
+
+                w.setLevel(50 + w.getLevel());
+                w.setCode(w.getCode() + w.getCodeExt());
+                w.setCodeExt("");
+                gv.addToFull(w);
+                start = 1;
+            }
+
+            for (int i = start; i < v.size(); i++) {
+                Word   word = v.get(i);
+                String full = word.getCode() + word.getCodeExt();
+                word.setCode(full);
+                word.setCodeExt("");
+
+                String  hanzi   = word.getWord();
+                if (gv.isNotInCodeSet(full)) {
+                    if (gv.isIn3800Set(hanzi)) {
+                        gv.addToResult(word);
+                    } else if( gv.isIn4200Set(hanzi)) {
+                        gv.addToResult2(word);
+                    }else {
+                        gv.addToUncommon(word);
+                    }
+                } else {
+                    if (gv.isIn3800Set(hanzi)|| gv.isIn4200Set(hanzi)) {
+                        gv.addToResult2(word);
                     } else {
-                        if (gv.isNotInCodeSet(code3)) {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            Word newWord = w.clone();
-//                            w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code3));
-                            newWord.setCode(code3);
-                            newWord.setCodeExt("");
-                            gv.updateCodeSetCounter(code3)
-                              .addToUncommon(newWord)
-                              .increaseCodeLengthCounter(code3.length())
-                              .addToFull(w);
-                        } else {
-                            w.setCode(code);
-                            w.setCodeExt("");
-                            gv.updateCodeSetCounter(code)
-                              .increaseCodeLengthCounter(code.length())
-                              .addToUncommon(w);
-                        }
+                        gv.addToUncommon(word);
                     }
                 }
-            //}
+                gv.increaseCodeLengthCounter(full.length())
+                  .updateCodeSetCounter(full);
+            }
 
 
-        }
-        printCounter("Second round done.");
+        });
     }
 
-    private void postProcess()
-    {
-      //  fullProcess();
+    private void process1500(List<Word> group1500) {
+        group1500.forEach(w -> {
+            String code    = w.getCode();
+            String codeExt = w.getCodeExt();
+            String code3   = code + codeExt.charAt(0);
+            String full    = code + codeExt;
+
+            if (gv.isInCodeSet(code3)) {
+                gv.increaseCodeLengthCounter(full.length())
+                  .updateCodeSetCounter(full);
+                w.setCode(full);
+                w.setCodeExt("");
+                if (gv.isNotInCodeSet(full)) {
+                    gv.addToResult(w);
+                } else {
+                    gv.addToResult2(w);
+                }
+                return;
+            }
+
+            Word newWord = w.clone();
+            newWord.setCode(code3);
+            newWord.setCodeExt("");
+            gv.increaseCodeLengthCounter(code3.length())
+              .updateCodeSetCounter(code3);
+            gv.addToResult(newWord);
+
+            w.setLevel(50 + w.getLevel());
+            w.setCode(full);
+            w.setCodeExt("");
+            gv.addToFull(w);
+
+
+        });
+    }
+
+    private void process500(List<Word> group500) {
+        group500.forEach(w -> {
+            String code    = w.getCode();
+            String codeExt = w.getCodeExt();
+            String code3   = code + codeExt.charAt(0);
+            String full    = w.getCode() + w.getCodeExt();
+            if (gv.isNotInCodeSet(code)) {
+                Word newWord = w.clone();
+                newWord.setCode(code);
+                newWord.setCodeExt("");
+                gv.increaseCodeLengthCounter(code.length())
+                  .updateCodeSetCounter(code);
+                gv.addToResult(newWord);
+
+                w.setLevel(50 + w.getLevel());
+                w.setCode(full);
+                gv.addToFull(w);
+                return;
+            }
+
+            if (gv.isNotInCodeSet(code3)) {
+                Word newWord2 = w.clone();
+                newWord2.setCode(code3);
+                newWord2.setCodeExt("");
+                gv.increaseCodeLengthCounter(code3.length())
+                  .updateCodeSetCounter(code3);
+                gv.addToResult(newWord2);
+
+                w.setLevel(50 + w.getLevel());
+                w.setCode(full);
+                gv.addToFull(w);
+                return;
+            }
+
+            w.setCode(full);
+            gv.increaseCodeLengthCounter(full.length())
+              .updateCodeSetCounter(full);
+            if(gv.isNotInCodeSet(full)) {
+                gv.addToResult(w);
+            } else {
+                gv.addToResult2(w);
+            }
+
+        });
+    }
+
+
+    private void postProcess() {
+        //  fullProcess();
         printCounter("Post process done!");
     }
 
-    private Map<String, List<Word>> makeResult()
-    {
+    private Map<String, List<Word>> makeResult() {
         Map<String, List<Word>> results = new HashMap<>();
         results.put("result", gv.result);
         results.put("result2", gv.result2);
@@ -260,18 +275,16 @@ public class MergedMakeShort2
         return results;
     }
 
-    private void printCounter(String x)
-    {
+    private void printCounter(String x) {
         log.info(x);
         gv.printCounter();
     }
 
-    private void fullProcess()
-    {
+    private void fullProcess() {
         log.info("Processing full ...");
         Iterator<Word> iter = gv.full.iterator();
         while (iter.hasNext()) {
-            Word w = iter.next();
+            Word   w    = iter.next();
             String code = w.getCode();
             if (gv.isNotInCodeSet(code) && gv.isIn4200Set(w.getWord())) {
                 w.setCode(code);

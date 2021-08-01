@@ -13,15 +13,15 @@ public class Merge {
     public static void main(String[] args) throws IOException
     {
         Map<String, List<String>> he = loadAsMapList("he.txt");
-        Map<String, List<String>> ks = loadAsMapList("kuaishou.txt");
+//        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");
+        Map<String, List<String>> xm = loadAsMapList("cs.txt");
         //        Map<String, List<String>> bh  = loadAsMapList("bh.txt");
-        List<Word> ret = merge(he, ks);
+        List<Word> ret = merge(he, xm);
 
         Writer writer = Streams.fileOutw("out\\merged.txt");
         for (Word s : ret) {
             String codeExt = s.getCodeExt();
-            int    i       = codeExt.length() - 1;
-            writer.write(String.format("%s\t%s%s\n", s.getWord(), s.getCode(), codeExt.charAt(i)));
+            writer.write(String.format("%s\t%s%s\n", s.getWord(), s.getCode(), codeExt));
         }
         Streams.safeClose(writer);
     }

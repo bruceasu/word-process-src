@@ -199,6 +199,12 @@ public class GlobalVariables {
         return this;
     }
 
+    public int getCostSetCount(String code) {
+        AtomicInteger c = codeSet.get(code);
+        if (c == null) return 0;
+        return  c.get();
+    }
+
     public GlobalVariables increaseCodeSetCounter(String code)
     {
         codeSet.get(code).incrementAndGet();

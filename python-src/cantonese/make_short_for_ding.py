@@ -53,7 +53,44 @@ class DataContext:
 
 
 def round1(dataContext):
-     for line in dataContext.content:
+
+    single = {
+        u"嗯":u"q",
+        u"为":u"w",
+        u"不":u"e",
+        u"你":u"r",
+        u"同":u"t",
+        u"人":u"y",
+        u"国":u"u",
+        u"有":u"i",
+        u"我":u"o",
+        u"民":u"p",
+        u"上":u"a",
+        u"是":u"s",
+        u"的":u"d",
+        u"发":u"f",
+        u"工":u"g",
+        u"在":u"h",
+        u"这":u"j",
+        u"中":u"k",
+        u"了":u"l",
+        u"唔":u";",
+        #"一":"y",
+        #"和":"w",
+        #"主":"p",
+        #"经":"g",
+        #"地":"d",
+        #"要":"x",
+        #"以":"y",
+
+
+    }
+    for k, v in single.iteritems():
+        code_len = len(v)
+        dataContext.code_set[v] = 1
+        dataContext.code_len_count[code_len] += 1
+        dataContext.result.append(k + "\t" + v + "\t1")
+    for line in dataContext.content:
         dataContext.count += 1
         line = line.strip().decode(dataContext.coding)
         if line == "" or line[0] == '#':
@@ -68,7 +105,9 @@ def round1(dataContext):
             key_ext = cc[1]
             dataContext.ci.add(w + u'\t' + key_front)
             cc_full = key_front + key_ext
-            if key_single not in dataContext.code_set:
+            if w in single:
+                dataContext.full.append(w + "\t" + cc_full)
+            elif key_single not in dataContext.code_set:
                 dataContext.code_set[key_single] = 1
                 code_len = len(key_single)
                 dataContext.code_len_count[code_len] += 1
@@ -103,6 +142,8 @@ def round1(dataContext):
 def round2(dataContext):
     remain = dataContext.remain1
     print "remain", len(remain), "symbol(s)."
+    order_char = ['','b', 'c', 'm', 'n', 'v', 'x', 'z']
+    order_len = len(order_char) -1
     for (k, vs) in remain.iteritems():
         for v in vs:
             cc_full = v[3]
@@ -122,7 +163,16 @@ def round2(dataContext):
                 dataContext.code_set[cc_full] += 1
                 code_len = len(cc_full)
                 dataContext.code_len_count[code_len] += 1
-                dataContext.result.append(v[0] + "\t" + cc_full + "\t5")
+                #print cc_full, dataContext.code_set[cc_full]
+                if dataContext.code_set[cc_full] > order_len:
+                    c = 'z'
+                else:
+                    c = order_char[dataContext.code_set[cc_full]-1]
+                new_full = cc_full + c
+                while new_full in dataContext.code_set:
+                    new_full = new_full + c
+                dataContext.code_set[new_full] = 1
+                dataContext.result.append(v[0] + "\t" + new_full+ "\t5")
 
 def make_short(infile, coding='utf-8'):
     (short_name, extension) = os.path.splitext(infile)

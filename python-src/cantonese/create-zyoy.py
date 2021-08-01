@@ -294,37 +294,40 @@ def get_mapping2():
 
 def get_mapping3():
         s = {
-                u"": u"",  # 零声母
-                u"b": u"r",
+                u"": u"a",  # 零声母
+                u"b": u"e",
                 u"p": u"p",
-                u"m": u"u",
+                u"m": u";",
                 u"f": u"f",
 
                 u"d": u"d",
                 u"t": u"t",
-                u"n": u"a",
+                u"n": u"r",
                 u"l": u"l",
 
                 u"g": u"g",
                 u"k": u"k",
-                u"ñ": u"e",  # ng
+                u"ñ": u"o",  # ng
+                u"~": u"o",  # ng
                 u"h": u"h",
 
                 u"z": u"j",
-                u"c": u"i",
+                u"c": u"q",
                 u"s": u"s",
                 u"j": u"y",
                 
                 u"w": u"w",
-                u"ģ": u"o",  # gw
-                u"ķ": u"q",  # kw
+                u"ģ": u"u",  # gw
+                u"ķ": u"i",  # kw
+                u"#": u"u",  # gw
+                u"$": u"i",  # kw
 
         }
         w = {
                 u"": u"",
                 u"a": u"a",  # aa
                 u"r": u"s",  # a
-                u"e": u"d",
+                u"e": u"e",
                 u"v": u"y",  # yu , 同u合并，kut,kvt, gun, gvn 会混，但方言中，两组音也是混的，关系不大。
                 u"u": u"u",  # 长u，于短u是互补的。
                 u"i": u"i",  # 长i，于短i是互补的。
@@ -334,14 +337,14 @@ def get_mapping3():
                 # 双元音
                 "ai": "q",
                 "ri": "w",
-                "ei": "e",
+                "ei": "d",
                 "oi": "l",
                 "ui": "j",
                 "!i": "r",
-                "au": "g",
-                "ru": "h",
-                "iu": "j",
-                "ou": "p",
+                "au": "t",
+                "ru": "g",
+                "iu": "k",
+                "ou": "h",
         }
 
         m = {
@@ -351,9 +354,10 @@ def get_mapping3():
                 u"p": u"p",
                 u"t": u"t",
                 u"k": u"k",
-                u"m": u"u",
-                u"n": u"a",
-                u"ñ": u"e"  # ng
+                u"m": u";",
+                u"n": u"r",
+                u"ñ": u"o",  # ng
+                u"~": u"o"  # ng
         }
 
         zyoy_mapping = {}
@@ -433,7 +437,7 @@ def make_mapping(single):
         把拼音转成键盘布局
         """
         py = "zyoy.single.mapped.txt"
-        mapping.mapping(single, py, encoding, get_mapping4())
+        mapping.mapping(single, py, encoding, get_mapping3())
         return py
 
 
@@ -463,8 +467,8 @@ if __name__ == '__main__':
         fisrt = make_mapping(single)
 
         # merge
-        #last_file= "data\\rain1.txt"
-        last_file= "data\\rain.txt"
+        last_file= "data\\rain1.txt"
+        #last_file= "data\\rain.txt"
         #last_file="data\kuaishou.txt"
         #last_file="data\\cj5.2codes.txt"
         #last_file="data\\abc.txt"
