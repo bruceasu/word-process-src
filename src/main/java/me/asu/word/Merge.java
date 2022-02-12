@@ -13,8 +13,11 @@ public class Merge {
     public static void main(String[] args) throws IOException
     {
         Map<String, List<String>> he = loadAsMapList("he.txt");
+//        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");
-        Map<String, List<String>> xm = loadAsMapList("cs.txt");
+//        Map<String, List<String>> xm = loadAsMapList("cs.txt");
+        Map<String, List<String>> xm = loadAsMapList("rain.txt");
+//        Map<String, List<String>> xm = loadAsMapList("rain-s-t.txt");
         //        Map<String, List<String>> bh  = loadAsMapList("bh.txt");
         List<Word> ret = merge(he, xm);
 

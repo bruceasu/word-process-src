@@ -26,10 +26,23 @@ public class GlobalVariables {
     Set<String> wGb2312 = ResourcesFiles.gb2312();
 
     List<String> single   = new ArrayList<>();
+    // 唯一常用字（4200group）
     List<Word>   result   = new ArrayList<>();
+    // 重码常用字（4200group）
     List<Word>   result2  = new ArrayList<>();
+
+    // 唯一通用字（gb2312group）
+    List<Word>   result3  = new ArrayList<>();
+    // 重码通用字（gb2312group）
+    List<Word>   result4  = new ArrayList<>();
+    // 唯一罕用字（非gb2312group）
+    List<Word>   result5  = new ArrayList<>();
+    // 重码罕用字（非gb2312group）
+    List<Word>   result6 = new ArrayList<>();
+    // 占位简码
+    List<Word>   result7  = new ArrayList<>();
     List<Word>   full     = new ArrayList<>();
-    List<Word>   uncommon = new ArrayList<>();
+
     List<Word>   remain = new ArrayList<>();
 
     Map<String, AtomicInteger> codeSet = new HashMap<>();
@@ -45,7 +58,7 @@ public class GlobalVariables {
 
     public void printCounter() {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < codeLenCounter.length; i++) {
+        for (int i = 1; i < codeLenCounter.length; i++) {
             builder.append(codeLenCounter[i]).append(", ");
         }
         if (builder.length() > 0) {
@@ -129,15 +142,36 @@ public class GlobalVariables {
         result2.add(w);
         return this;
     }
+    public GlobalVariables addToResult3(Word w)
+    {
+        result3.add(w);
+        return this;
+    }
+    public GlobalVariables addToResult4(Word w)
+    {
+        result4.add(w);
+        return this;
+    }
+    public GlobalVariables addToResult5(Word w)
+    {
+        result5.add(w);
+        return this;
+    }
+    public GlobalVariables addToResult6(Word w)
+    {
+        result6.add(w);
+        return this;
+    }
+    public GlobalVariables addToResult7(Word w)
+    {
+        result7.add(w);
+        return this;
+    }
     public GlobalVariables addToFull(Word w) {
         full.add(w);
         return this;
     }
 
-    public GlobalVariables addToUncommon(Word w) {
-        uncommon.add(w);
-        return this;
-    }
 
     public GlobalVariables addToSingle(String w) {
         single.add(w);

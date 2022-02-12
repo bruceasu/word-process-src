@@ -93,7 +93,7 @@ public class GroupProcessor {
         } else if (gv.isIn4200Set(hz)) {
             gv.addToResult2(newWord);
         } else {
-            gv.addToUncommon(newWord);
+            gv.addToResult6(newWord);
         }
         if (code.length() < 4) {
             gv.addToFull(w);

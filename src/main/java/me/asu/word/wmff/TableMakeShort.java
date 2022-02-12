@@ -138,7 +138,7 @@ public class TableMakeShort {
                         gv.addToResult(w);
                     } else {
                         if (gv.isInGB2312Set(w.getWord())) {
-                            gv.addToUncommon(w);
+                            gv.addToResult6(w);
                         } else {
                             gv.addToResult(w);
                         }
@@ -173,7 +173,7 @@ public class TableMakeShort {
                             w.setLevel(110);
                             gv.addCodeSetCounter(code)
                               .increaseCodeLengthCounter(code.length())
-                              .addToUncommon(w);
+                              .addToResult6(w);
                         }
 
                     }
@@ -204,7 +204,7 @@ public class TableMakeShort {
         Map<String, List<Word>> results = new HashMap<>();
         results.put("result", gv.getResult());
         results.put("full", gv.getFull());
-        results.put("uncommon", gv.getUncommon());
+        results.put("uncommon", gv.getResult6());
         return results;
     }
 

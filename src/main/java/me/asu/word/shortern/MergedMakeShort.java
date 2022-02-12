@@ -237,7 +237,7 @@ public class MergedMakeShort
 							w.setCode(code);
 							w.setCodeExt("");
 							gv.updateCodeSetCounter(code3)
-							  .addToUncommon(newWord)
+							  .addToResult6(newWord)
 							  .increaseCodeLengthCounter(code3.length())
 							  .addToFull(w);
 						} else {
@@ -245,7 +245,7 @@ public class MergedMakeShort
 							w.setCodeExt("");
 							gv.updateCodeSetCounter(code)
 							  .increaseCodeLengthCounter(code.length())
-							  .addToUncommon(w);
+							  .addToResult6(w);
 						}
 					}
 				}
@@ -268,7 +268,7 @@ public class MergedMakeShort
 		results.put("result", gv.result);
 		results.put("result2", gv.result2);
 		results.put("full", gv.full);
-		results.put("uncommon", gv.uncommon);
+		results.put("uncommon", gv.result6);
 		return results;
 	}
 
@@ -294,7 +294,7 @@ public class MergedMakeShort
 				if (gv.isIn4200Set(w.getWord())) {
 					gv.addToResult2(w);
 				} else {
-					gv.addToUncommon(w);
+					gv.addToResult6(w);
 				}
 				iter.remove();
 			} else {
