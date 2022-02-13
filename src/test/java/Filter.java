@@ -13,28 +13,86 @@ import me.asu.util.Strings;
 public class Filter {
 
     public static void main(String[] args) throws IOException {
-        List<String>              he      = Files.readAllLines(Paths.get("out/merged.txt"));
-        Map<String, List<String>> he2     = loadAsMapList("out/merged-1.txt");
-        Set<String>               wordSet = new HashSet<>();
-        he.forEach(line -> {
-            if (Strings.isBlank(line)) { return; }
-            if (line.startsWith("#")) { return; }
+//        find1();
+//        find2();
+        merge();
+    }
 
-            String[] split = line.split("\\s+");
-            wordSet.add(split[0]);
-        });
+    private static void merge() throws IOException {
+        List<String>              he      = Files.readAllLines(Paths.get("out/he3.txt"));
+        Map<String, List<String>> xm     = loadAsMapList("src/main/resources/rain-s-t.txt");
+        Path out = Paths.get("out", "he4.txt");
+        try (BufferedWriter writer = Files.newBufferedWriter(out)) {
+            for (String line : he) {
+                if (Strings.isBlank(line)) { continue; }
+                if (line.startsWith("#")) { continue; }
+
+                String[] split = line.split("\\s+");
+                String   hz   = split[0];
+                if (xm.containsKey(hz)) {
+                    writer.write(line);
+                    writer.write(xm.get(hz).get(0));
+                    writer.write("\n");
+                } else {
+                    System.out.println(line);
+                }
+            }
+        }
+        System.out.println("DONE");
+    }
+
+    private static void find1() throws IOException {
+        List<String>              he      = Files.readAllLines(Paths.get("src/main/resources/he.txt"));
+        Map<String, List<String>> he2     = loadAsMapList("src/main/resources/he-tone.txt");
         Path out = Paths.get("out", "he3.txt");
         try (BufferedWriter writer = Files.newBufferedWriter(out)) {
-            he2.forEach((w, list) -> {
-                if (wordSet.contains(w)) { return; }
-                try {
-                    for (String s : list) {
-                        writer.write(String.format("%s\t%s%n", w, s));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (String line : he) {
+                if (Strings.isBlank(line)) { continue; }
+                if (line.startsWith("#")) { continue; }
+
+                String[] split = line.split("\\s+");
+                if (!he2.containsKey(split[0])) {
+                    writer.write(line);
+                    writer.write("\n");
                 }
-            });
+            }
+        }
+        System.out.println("DONE");
+    }
+
+    private static void find2() throws IOException {
+        List<String>              he      = Files.readAllLines(Paths.get("python-src/py.txt"));
+        Map<String, List<String>> he2     = loadAsMapList("out/he3.txt");
+        Path out = Paths.get("out", "he4.txt");
+        try (BufferedWriter writer = Files.newBufferedWriter(out)) {
+            for (String line : he) {
+                if (Strings.isBlank(line)) { continue; }
+                if (line.startsWith("#")) { continue; }
+
+                String[] split = line.split("\\s+");
+                if (he2.containsKey(split[0])) {
+                    List<String> s = he2.get(split[0]);
+                    if (s.size() == 1 && split.length == 2) {
+                        writer.write("1 ");
+                        writer.write(split[0]);
+                        writer.write("\t");
+                        writer.write(s.get(0));
+                        writer.write(line.charAt(line.length()-1));
+                        writer.write("\n");
+                    } else {
+                        writer.write("2 ");
+                        writer.write(split[0]);
+                        writer.write("\t");
+                        for (String l : s) {
+                            writer.write(l);
+                            writer.write(" ");
+                        }
+                        writer.write(line);
+                        writer.write("\n");
+                    }
+
+                }
+            }
         }
         System.out.println("DONE");
     }
