@@ -14,38 +14,38 @@ public class GlobalVariables {
 
     // group
     List<Word> group500   = new ArrayList<>();
-    List<Word> group1600  = new ArrayList<>();
-    List<Word> group3800  = new ArrayList<>();
-    List<Word> group4200  = new ArrayList<>();
+    List<Word> group1000  = new ArrayList<>();
+    List<Word> group2000  = new ArrayList<>();
+    List<Word> group4000  = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
     Set<String> w500    = ResourcesFiles.w500();
-    Set<String> w1600   = ResourcesFiles.w1600();
-    Set<String> w3800   = ResourcesFiles.w3800();
-    Set<String> w4200   = ResourcesFiles.w4200();
+    Set<String> w1000   = ResourcesFiles.w1000();
+    Set<String> w2000   = ResourcesFiles.w2000();
+    Set<String> w4000   = ResourcesFiles.w4000();
     Set<String> wGb2312 = ResourcesFiles.gb2312();
 
-    List<String> single   = new ArrayList<>();
-    // 唯一常用字（4200group）
-    List<Word>   result   = new ArrayList<>();
-    // 重码常用字（4200group）
-    List<Word>   result2  = new ArrayList<>();
+    List<String> single  = new ArrayList<>();
+    // 唯一常用字（4000）
+    List<Word>   result  = new ArrayList<>();
+    // 重码常用字（4000）
+    List<Word>   result2 = new ArrayList<>();
 
     // 唯一通用字（gb2312group）
-    List<Word>   result3  = new ArrayList<>();
+    List<Word> result3 = new ArrayList<>();
     // 重码通用字（gb2312group）
-    List<Word>   result4  = new ArrayList<>();
+    List<Word> result4 = new ArrayList<>();
     // 唯一罕用字（非gb2312group）
-    List<Word>   result5  = new ArrayList<>();
+    List<Word> result5 = new ArrayList<>();
     // 重码罕用字（非gb2312group）
-    List<Word>   result6 = new ArrayList<>();
+    List<Word> result6 = new ArrayList<>();
     // 占位简码
-    List<Word>   result7  = new ArrayList<>();
-    List<Word>   full     = new ArrayList<>();
+    List<Word> result7 = new ArrayList<>();
+    List<Word> full    = new ArrayList<>();
 
-    List<Word>   remain = new ArrayList<>();
+    List<Word> remain = new ArrayList<>();
 
-    Map<String, AtomicInteger> codeSet = new HashMap<>();
+    Map<String, AtomicInteger> codeSet  = new HashMap<>();
     Map<String, AtomicInteger> code3Set = new HashMap<>();
 
     int[] codeLenCounter = new int[30];
@@ -68,7 +68,7 @@ public class GlobalVariables {
     }
 
     public Map<String, List<Word>> groupSyllablesForOther() {
-       return groupSyllablesForOther("");
+        return groupSyllablesForOther("");
     }
 
     public Map<String, List<Word>> groupSyllablesForOther(String delimiter) {
@@ -77,7 +77,7 @@ public class GlobalVariables {
         log.info("groupOther: {}", groupOther.size());
         for (Word w : groupOther) {
             String code = w.getCode() + delimiter;
-            if(Strings.isNotBlank(w.getCodeExt())) {
+            if (Strings.isNotBlank(w.getCodeExt())) {
                 code += w.getCodeExt();
             }
             if (!groupBySyllables.containsKey(code)) {
@@ -92,19 +92,23 @@ public class GlobalVariables {
     public boolean isInGB2312Set(String w) {
         return wGb2312.contains(w);
     }
-    public boolean isIn4200Set(String w) {
-        return w4200.contains(w);
+
+    public boolean isIn4000Set(String w) {
+        return w4000.contains(w);
     }
 
-    public boolean isIn3800Set(String w) {
-        return w3800.contains(w);
+    public boolean isIn2000Set(String w) {
+        return w2000.contains(w);
     }
-    public boolean isIn1600Set(String w) {
-        return w1600.contains(w);
+
+    public boolean isIn1000Set(String w) {
+        return w1000.contains(w);
     }
+
     public boolean isIn500Set(String w) {
         return w500.contains(w);
     }
+
     public boolean isInSingleSet(String w) {
         return single.contains(w);
     }
@@ -137,36 +141,36 @@ public class GlobalVariables {
         return this;
     }
 
-    public GlobalVariables addToResult2(Word w)
-    {
+    public GlobalVariables addToResult2(Word w) {
         result2.add(w);
         return this;
     }
-    public GlobalVariables addToResult3(Word w)
-    {
+
+    public GlobalVariables addToResult3(Word w) {
         result3.add(w);
         return this;
     }
-    public GlobalVariables addToResult4(Word w)
-    {
+
+    public GlobalVariables addToResult4(Word w) {
         result4.add(w);
         return this;
     }
-    public GlobalVariables addToResult5(Word w)
-    {
+
+    public GlobalVariables addToResult5(Word w) {
         result5.add(w);
         return this;
     }
-    public GlobalVariables addToResult6(Word w)
-    {
+
+    public GlobalVariables addToResult6(Word w) {
         result6.add(w);
         return this;
     }
-    public GlobalVariables addToResult7(Word w)
-    {
+
+    public GlobalVariables addToResult7(Word w) {
         result7.add(w);
         return this;
     }
+
     public GlobalVariables addToFull(Word w) {
         full.add(w);
         return this;
@@ -189,17 +193,17 @@ public class GlobalVariables {
     }
 
     public GlobalVariables addToG1600(Word w) {
-        group1600.add(w);
+        group1000.add(w);
         return this;
     }
 
     public GlobalVariables addToG3800(Word w) {
-        group3800.add(w);
+        group2000.add(w);
         return this;
     }
 
     public GlobalVariables addToG4200(Word w) {
-        group4200.add(w);
+        group4000.add(w);
         return this;
     }
 
@@ -222,31 +226,27 @@ public class GlobalVariables {
         return this;
     }
 
-    public boolean isNotInCodeSet(String code)
-    {
+    public boolean isNotInCodeSet(String code) {
         return !isInCodeSet(code);
     }
 
-    public GlobalVariables addCodeSetCounter(String code)
-    {
+    public GlobalVariables addCodeSetCounter(String code) {
         codeSet.put(code, new AtomicInteger(1));
         return this;
     }
 
     public int getCostSetCount(String code) {
         AtomicInteger c = codeSet.get(code);
-        if (c == null) return 0;
-        return  c.get();
+        if (c == null) { return 0; }
+        return c.get();
     }
 
-    public GlobalVariables increaseCodeSetCounter(String code)
-    {
+    public GlobalVariables increaseCodeSetCounter(String code) {
         codeSet.get(code).incrementAndGet();
         return this;
     }
 
-    public boolean isInCodeSet(String code)
-    {
+    public boolean isInCodeSet(String code) {
         return codeSet.containsKey(code);
     }
 

@@ -22,9 +22,9 @@ public class TableMakeShort {
         processOneSet(oneSet);
         group(lines);
         processGroups(gv.getGroup500(), 0, 1, true);
-        processGroups(gv.getGroup1600(), 2, 1, true);
-        processGroups(gv.getGroup3800(), 4, 1, true);
-        processGroups(gv.getGroup4200(), 6, 1, true);
+        processGroups(gv.getGroup1000(), 2, 1, true);
+        processGroups(gv.getGroup2000(), 4, 1, true);
+        processGroups(gv.getGroup4000(), 6, 1, true);
         processOther();
         processFull();
         gv.printCounter();
@@ -67,11 +67,11 @@ public class TableMakeShort {
                 gv.addToFull(w);
             } else if (gv.isIn500Set(w.getWord())) {
                 gv.getGroup500().add(w);
-            } else if (gv.isIn1600Set(w.getWord())) {
+            } else if (gv.isIn1000Set(w.getWord())) {
                 gv.addToG1600(w);
-            } else if (gv.isIn3800Set(w.getWord())) {
+            } else if (gv.isIn2000Set(w.getWord())) {
                 gv.addToG3800(w);
-            } else if (gv.isIn4200Set(w.getWord())) {
+            } else if (gv.isIn4000Set(w.getWord())) {
                 gv.addToG4200(w);
             } else {
                 w.setLevel(90);
@@ -98,7 +98,7 @@ public class TableMakeShort {
                     int level = 21 + offset;
                     addNewCode(w, code3, level);
                 } else {
-                    if (gv.isIn1600Set(w.getWord())) {
+                    if (gv.isIn1000Set(w.getWord())) {
                         System.out.printf("$ddcmd(\"%s\", \"%s[]\")  %s\t%s%n", w.getWord(),
                                 w.getWord(), w.getCode() + w.getCodeExt(), w);
                     }

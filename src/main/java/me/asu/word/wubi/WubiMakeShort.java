@@ -40,9 +40,9 @@ public class WubiMakeShort
     public static Map<String, List<Word>> makeSort(List<String> lines, List<String> oneSet) throws IOException {
 
         Set<String> w500 = ResourcesFiles.w500();
-        Set<String> w1600 = ResourcesFiles.w1600();
-        Set<String> w3800 = ResourcesFiles.w3800();
-        Set<String> w5700 = ResourcesFiles.w4200();
+        Set<String> w1600 = ResourcesFiles.w1000();
+        Set<String> w3800 = ResourcesFiles.w2000();
+        Set<String> w5700 = ResourcesFiles.w4000();
         Set<String> wGb2312 = ResourcesFiles.gb2312();
         Set<String> single = new HashSet<>();
 

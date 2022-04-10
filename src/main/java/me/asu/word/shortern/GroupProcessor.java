@@ -88,9 +88,9 @@ public class GroupProcessor {
 //        w.setWord(String.format("$ddcmd(%s,%s[%s])", hz, hz, code));
         gv.increaseCodeLengthCounter(code.length())
           .updateCodeSetCounter(code);
-        if (gv.isIn3800Set(hz)) {
+        if (gv.isIn2000Set(hz)) {
             gv.addToResult(newWord);
-        } else if (gv.isIn4200Set(hz)) {
+        } else if (gv.isIn4000Set(hz)) {
             gv.addToResult2(newWord);
         } else {
             gv.addToResult6(newWord);
