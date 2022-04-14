@@ -10,10 +10,8 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.*;
 import me.asu.util.Streams;
-import me.asu.word.Merge;
 import me.asu.word.ResourcesFiles;
 import me.asu.word.Word;
-import me.asu.word.shortern.MergedMakeShort2;
 
 /**
  * 前500无法正常编码的用无理编码。

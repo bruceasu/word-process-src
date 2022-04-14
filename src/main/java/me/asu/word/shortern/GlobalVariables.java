@@ -24,6 +24,11 @@ public class GlobalVariables {
     Set<String> w2000   = ResourcesFiles.w2000();
     Set<String> w4000   = ResourcesFiles.w4000();
     Set<String> wGb2312 = ResourcesFiles.gb2312();
+    Set<String> wBig5_common = ResourcesFiles.big5_common();
+    Set<String> wBig5 = ResourcesFiles.big5();
+    Set<String> wBig5_hkscs = ResourcesFiles.big5_hkscs();
+    Set<String> wJapanese = ResourcesFiles.japanese();
+    Set<String> wGeneralSpecification = ResourcesFiles.generalSpecification();
 
     List<String> single  = new ArrayList<>();
     // 唯一常用字（4000）
@@ -87,6 +92,22 @@ public class GlobalVariables {
         }
         log.info("groupBySyllables: {}", groupBySyllables.size());
         return groupBySyllables;
+    }
+    public boolean isInBig5Common(String w) {
+        return wBig5_common.contains(w);
+    }
+    public boolean isInBig5Hkscs(String w) {
+        return wBig5_hkscs.contains(w);
+    }
+    public boolean isInBig5(String w) {
+        return wBig5.contains(w);
+    }
+    public boolean isInGeneralSpecification(String w) {
+        return wGeneralSpecification.contains(w);
+    }
+
+    public boolean isInJapanese(String w) {
+        return wJapanese.contains(w);
     }
 
     public boolean isInGB2312Set(String w) {

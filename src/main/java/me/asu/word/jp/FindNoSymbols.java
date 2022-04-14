@@ -14,20 +14,23 @@ public class FindNoSymbols
 
     public static void main(String[] args) throws IOException
     {
-        String jp = "src/main/resources/日本常用汉字表.txt";
+//        String jp = "src/main/resources/日本常用汉字表.txt";
+        String jp = "src/main/resources/日本汉字水准1.txt";
+//        String jp = "src/main/resources/日本汉字水准2.txt";
+//        String jp = "src/main/resources/日本汉字其他.txt";
         String he = "src/main/resources/he-s-t.txt";
         String rain = "src/main/resources/rain-s-t.txt";
         String out = "out/jp.txt";
         String out2 = "out/jp-not.txt";
 
-        Map<String, List<String>> hes = getHes(he);
-        Map<String, List<String>> rains = getHes(rain);
+        Map<String, List<String>> hes = loadFileToMap(he);
+        Map<String, List<String>> rains = loadFileToMap(rain);
         Map<String, List<String>> mapping = mapping(hes, rains);
         process(jp, out, out2, mapping);
         System.out.println("DONE!");
     }
 
-    private static Map<String, List<String>> getHes(String file) throws IOException
+    private static Map<String, List<String>> loadFileToMap(String file) throws IOException
     {
         List<String> lines = Files.readAllLines(Paths.get(file), StandardCharsets.UTF_8);
         Map<String, List<String>> hes = new HashMap<>();
@@ -52,8 +55,8 @@ public class FindNoSymbols
                                                      Map<String, List<String>> rains)
     {
         Map<String, List<String>> mapping = new HashMap<>();
-        hes.forEach((w, list)->{
-            List<String> list2 = rains.get(w);
+        rains.forEach((w, list)->{
+            List<String> list2 = hes.get(w);
             if (list2 == null || list2.isEmpty()) {
                 mapping.put(w, list);
             } else {

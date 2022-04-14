@@ -1,46 +1,34 @@
-package me.asu.word.hyly;
+package me.asu.word.hyly2;
 
 
-import static me.asu.word.ResourcesFiles.loadAsMapList;
+import static me.asu.word.ResourcesFiles.loadWords;
 import static me.asu.word.ResourcesFiles.readLinesInResources;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import me.asu.util.Streams;
-import me.asu.word.Merge;
 import me.asu.word.Word;
-import me.asu.word.shortern.MergedMakeShort2;
 
 /**
- * 主打单字，形音
- * 用于顶功模式
+ * 繁体版
  */
 public class Hyly2 {
 
     public static void main(String[] args) throws IOException {
         String name = "he";
-        Map<String, List<String>> he = loadAsMapList("he.txt");
-        Map<String, List<String>> xm = loadAsMapList("rain.txt");
-        List<String> oneSet = new LinkedList<>();
-        List<Word>                merged  = Merge.merge(he, xm);
-//        List<Word> merged = Merge.merge(xm, he);
-       oneSet = readLinesInResources("he_1_2.txt");
-//       oneSet = readLinesInResources("he2_1.txt");
-        List<String>              twoSet = readLinesInResources("he_p_2.txt");
-//        List<String>              twoSet = readLinesInResources("he_phrases-2.txt");
-        oneSet.addAll(twoSet);
 
-//        oneSet = readLinesInResources("rain_1.txt");
+        List<String> oneSet = new LinkedList<>();
+        List<Word> merged = loadWords("he2.txt", false);
+        oneSet = readLinesInResources("he2_ext.txt");
         Map<String, List<Word>> results =
                 new MergedMakeShort2().makeSort(merged, oneSet);
 
         save(name, results);
     }
+
+
 
     protected static void save(String name, Map<String, List<Word>> results)
     throws IOException {
