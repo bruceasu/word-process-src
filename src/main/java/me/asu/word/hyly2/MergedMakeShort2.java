@@ -3,6 +3,7 @@ package me.asu.word.hyly2;
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import me.asu.word.Word;
 
@@ -105,7 +106,7 @@ public class MergedMakeShort2 {
         remain.clear();
         processGroupLevel2(remain, gv.getGroupTradition());
 
-        processGroup(gv.getGroupSimplification(), gv.getGroupJapanese(), gv.getGroupOther());
+        processOtherGroup(gv.getGroupSimplification(), gv.getGroupJapanese(), gv.getGroupOther());
 
     }
 
@@ -113,11 +114,7 @@ public class MergedMakeShort2 {
      * process group common tradition
      */
     private void processGroupLevel1(List<Word>... wordList) {
-        List<Word> list = new LinkedList<>();
-        for (List<Word> wList : wordList) {
-            list.addAll(wList);
-        }
-        Collections.sort(list, Word::compare);
+        List<Word> list = joinList(wordList);
         for (Word w : list) {
             Word clone = w.clone();
             String code = w.getCode();
@@ -141,10 +138,6 @@ public class MergedMakeShort2 {
                 clone.setCodeExt("");
                 gv.addToFull(clone);
             } else {
-//                w.setCodeExt("");
-//                addToResult(w);
-//                gv.increaseCodeLengthCounter(code.length())
-//                  .updateCodeSetCounter(code);
                 gv.addToRemain(w);
             }
         }
@@ -154,11 +147,7 @@ public class MergedMakeShort2 {
      * process group other tradition
      */
     private void processGroupLevel2(List<Word>... wordList) {
-        List<Word> list = new LinkedList<>();
-        for (List<Word> wList : wordList) {
-            list.addAll(wList);
-        }
-        Collections.sort(list, Word::compare);
+        List<Word> list = joinList(wordList);
 
         for (int i = 0; i < list.size(); i++) {
             Word w = list.get(i);
@@ -219,12 +208,8 @@ public class MergedMakeShort2 {
         });
     }
 
-    private void processGroup(List<Word>... wordList) {
-        List<Word> list = new LinkedList<>();
-        for (List<Word> wList : wordList) {
-            list.addAll(wList);
-        }
-        Collections.sort(list, Word::compare);
+    private void processOtherGroup(List<Word>... wordList) {
+        List<Word> list = joinList(wordList);
         for (int i = 0; i < list.size(); i++) {
             Word w = list.get(i);
             addToResult(w);
@@ -233,31 +218,69 @@ public class MergedMakeShort2 {
         }
     }
 
+    private List<Word> joinList(List<Word>... wordList) {
+        List<Word> list = new LinkedList<>();
+        for (List<Word> wList : wordList) {
+            list.addAll(wList);
+        }
+        Collections.sort(list, Word::compare);
+        return list;
+    }
+
     private void addToResult(Word w) {
         String hz = w.getWord();
-        if (gv.isIn500Set(hz)) {
+        if (gv.isIn500Set(hz) || gv.isIn1000Set(hz)|| gv.isIn2000Set(hz)) {
             gv.addToResult(w);
-        } else if (gv.isIn1000Set(hz)|| gv.isIn2000Set(hz)) {
-            gv.addToResult2(w);
         } else if (gv.isInBig5Common(hz)) {
-            gv.addToResult3(w);
+            gv.addToResult2(w);
         } else if (gv.isInBig5(hz)) {
-            gv.addToResult4(w);
+            gv.addToResult3(w);
         } else if (gv.isInGeneralSpecification(hz)){
-            gv.addToResult6(w);
+            gv.addToResult4(w);
         } else if (gv.isInJapanese(hz)) {
-            gv.addToResult7(w);
+            gv.addToResult5(w);
         }  else if (gv.isInBig5Hkscs(hz)) {
             // 香港字符集里包含了一些简体字和日文字，放在最最后面比较好。
-            gv.addToResult5(w);
+            gv.addToResult6(w);
+        } else {
+            gv.addToResult7(w);
         }
     }
 
      private void postProcess() {
 //        fullProcess();
         printCounter("Post process done!");
-    }
+         statistic();
+     }
+    private void statistic() {
+        // statistic
+        List<Word> result = gv.getResult();
+        List<Word> result2 = gv.getResult2();
+        List<Word> result3 = gv.getResult3();
+        List<Word> result4 = gv.getResult4();
+        List<Word> result5 = gv.getResult5();
+        List<Word> result6 = gv.getResult6();
+        List<Word> result7 = gv.getResult7();
+        List<Word> words = joinList(result, result2, result3
+//                ,result4, result5, result6, result7
+        );
+        Map<String, AtomicInteger> stat = new HashMap<>();
+        for (Word w : words) {
+            String c = w.getCode();
+            stat.computeIfAbsent(c, k -> new AtomicInteger(0));
+            stat.get(c).incrementAndGet();
+        }
+        Map<Integer, List<String>> dup = new TreeMap<>();
+        stat.forEach((c,n)->{
+            int cnt = n.get();
+            dup.computeIfAbsent(cnt, k->new LinkedList<>());
+            dup.get(cnt).add(c);
+        });
 
+        dup.forEach((c,l)->{
+            System.out.printf("dup %d has %d words.%n", c, l.size());
+        });
+    }
     private Map<String, List<Word>> makeResult() {
         Map<String, List<Word>> results = new HashMap<>();
         results.put("result", gv.result);

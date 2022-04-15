@@ -2,6 +2,7 @@ package me.asu.word;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Data;
 
@@ -58,5 +59,21 @@ public class Word implements Comparable<Word>
             }
         }
         return i;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        Word word1 = (Word) o;
+        return Objects.equals(word, word1.word) && Objects
+                .equals(code, word1.code) && Objects
+                .equals(codeExt, word1.codeExt) && Objects
+                .equals(tags, word1.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(word, code, codeExt, tags);
     }
 }

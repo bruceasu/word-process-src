@@ -6876,7 +6876,7 @@
 乂	pn
 乸	xd
 伋	rn
-佢	rk
+佢	ra
 佸	rk
 係	rx
 俬	rs
@@ -10199,7 +10199,6 @@
 靉	yw
 鮊	ab
 鶬	nr
-嗰	ku
 瞜	on
 膕	oa
 穇	hp

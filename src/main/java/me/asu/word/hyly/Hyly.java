@@ -81,7 +81,7 @@ public class Hyly {
 
         File outFile7 = new File(outdir, name + "-out7.txt");
         List<Word> result7 = results.get("result7");
-        writeTo(result7, outFile7, 45000);
+        writeTo(result7, outFile7, 5000);
         System.out.printf("保存到： %s, %d lines%n", outFile7.getAbsolutePath(),
                 result7.size());
 

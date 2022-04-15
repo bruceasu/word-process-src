@@ -47,7 +47,8 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("big5.txt"));
     }
     public static Set<String> big5_common() {
-        return new HashSet<>(ResourcesFiles.readLinesInResources("big5-common.txt"));
+//        return new HashSet<>(ResourcesFiles.readLinesInResources("big5-common.txt"));
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words.txt"));
     }
     public static Set<String> japanese() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准1和水准2.txt"));

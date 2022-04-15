@@ -7910,7 +7910,6 @@
 閣	gemk
 閤	gemk
 嗰	gekk
-嗰	geku
 嘅	geke
 頜	gera
 餎	geuk
@@ -8889,7 +8888,6 @@
 況	klde
 礦	klub
 纊	klsb
-佢	kork
 啹	kokk
 闊	komk
 拡	kofs
@@ -9922,7 +9920,7 @@
 詘	quyk
 趨	quze
 軀	quuk
-佢	qurk
+佢	qura
 區	qukk
 闃	qumq
 坥	qutq

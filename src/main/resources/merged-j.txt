@@ -39,7 +39,6 @@
 車	aaju
 車	aaie
 円	aayr
-円	aaye
 冊	aace
 門	aamf
 門	aamf
@@ -8813,7 +8812,6 @@
 呯	kupk
 唞	kutc
 唞	kudz
-嗰	kuge
 嗱	kuna
 斝	kujx
 见	kvjm
@@ -10139,8 +10137,7 @@
 佁	rkyi
 佁	rkii
 佔	rkvj
-佢	rkko
-佢	rkqu
+佢	raqu
 佸	rkho
 侷	rkju
 傖	rkif

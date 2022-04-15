@@ -8672,7 +8672,6 @@
 侁	uf
 佽	ci
 佸	ho
-佢	ko
 佢	qu
 佖	bi
 佁	yi
@@ -11994,7 +11993,6 @@
 圏	qr
 囲	ww
 円	yr
-円	ye
 図	tu
 団	tr
 増	zg

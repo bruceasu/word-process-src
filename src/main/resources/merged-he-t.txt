@@ -8658,7 +8658,6 @@
 嗹	lmkz
 嗱	naku
 嗰	gekk
-嗰	geku
 嗮	sdky
 嗊	gskb
 嗊	hskb
@@ -8833,8 +8832,7 @@
 佽	cirq
 佸	hork
 併	bkrc
-佢	kork
-佢	qurk
+佢	qura
 佖	birp
 佈	burj
 佁	iirk
