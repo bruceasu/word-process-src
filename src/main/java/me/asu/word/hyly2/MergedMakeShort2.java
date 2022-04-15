@@ -184,6 +184,7 @@ public class MergedMakeShort2 {
             m.computeIfAbsent(code, k -> new HashSet<>());
             m.get(code).add(w);
         }
+        remain.clear();
         m.forEach((k, l) -> {
             List<Word> wl = new ArrayList<>(l.size());
             wl.addAll(l);
@@ -194,6 +195,7 @@ public class MergedMakeShort2 {
                 Word w = wl.get(i);
                 Word clone = w.clone();
                 if (gv.isNotInCodeSet(code3)) {
+                    w.setWord(code3);
                     addToResult(w);
                     gv.increaseCodeLengthCounter(code3.length())
                       .updateCodeSetCounter(code3);
