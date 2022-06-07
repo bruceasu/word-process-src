@@ -9769,7 +9769,7 @@
 棲	qimn
 榿	qimd
 気	qiqx
-氣	qirm
+氣	qiqm
 淒	qidn
 玘	qiwv
 碁	qiqu

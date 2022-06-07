@@ -20,6 +20,10 @@ public class ResourcesFiles {
         return Files.readLines(file);
     }
 
+    public static Set<String> readLinesAsSetInResources(String name) {
+        return new HashSet<>(ResourcesFiles.readLinesInResources(name));
+    }
+
     public static Set<String> w500() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-500.txt"));
     }
@@ -56,7 +60,7 @@ public class ResourcesFiles {
     public static Set<String> generalSpecification() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("通用规范字.txt"));
     }
-    public static List<Word> loadWords(String file, boolean simplized) {
+    public static List<Word> loadWords(String file, boolean simplified) {
         List<String> strings = readLinesInResources(file);
         List<Word> list = new ArrayList<>(strings.size());
         for (String s : strings) {
@@ -69,7 +73,7 @@ public class ResourcesFiles {
             w.setCode(kv[1]);
             w.setCodeExt("");
             w.setWord(kv[0]);
-            if(simplized) {
+            if(simplified) {
                 w.setOrder(searchSimplifiedOrder(kv[0]));
             } else {
                 w.setOrder(searchTraditionalOrder(kv[0]));

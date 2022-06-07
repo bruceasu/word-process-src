@@ -117,8 +117,7 @@ public class MergedMakeShort {
 
     private void processGroups() {
         log.info("Processing groups ...");
-        processGroupLevel1(gv.getGroup500(), gv.getGroup1000(),
-                gv.getGroup2000());
+        processGroupLevel1(gv.getGroup500(), gv.getGroup1000(), gv.getGroup2000());
         List<Word> remain = new ArrayList<>(gv.getRemain());
         remain.clear();
         processGroupLevel2(remain, gv.getGroup4000());
@@ -137,7 +136,8 @@ public class MergedMakeShort {
             String code = w.getCode();
             String code1 = code.substring(0, 1);
             String code2 = code.substring(0, 2);
-            String[] codes = {code1, code2};
+            String code3 = code.substring(0, 3);
+            String[] codes = {code1, code2, code3};
             boolean accept = false;
             for (String s : codes) {
                 if (gv.isNotInCodeSet(s)) {
@@ -159,19 +159,6 @@ public class MergedMakeShort {
         }
     }
 
-    private List<Word> joinList(List<Word>... wordList) {
-        int size = 0;
-        for (List<Word> wList : wordList) {
-            size += wList.size();
-        }
-	    List<Word> list = new ArrayList<>(size);
-	    for (List<Word> wList : wordList) {
-		    list.addAll(wList);
-	    }
-        Collections.sort(list, Word::compare);
-        return list;
-    }
-
     private void processGroupLevel2(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
 
@@ -190,41 +177,40 @@ public class MergedMakeShort {
             wl.addAll(l);
             wl.sort(Word::compareTo);
             int size = wl.size();
-            if (size == 1) {
-                Word w = wl.get(0);
-                Word clone = w.clone();
-                w.setCode(k);
-                addToResult(w);
-                gv.increaseCodeLengthCounter(k.length())
-                  .updateCodeSetCounter(k);
-                clone.setCodeExt("");
-                gv.addToFull(clone);
-//            } else if (size == 2) {
-//                for (int i = 0; i < size; i++) {
-//                    Word w = wl.get(i);
-//                    Word clone = w.clone();
-//                    w.setCode(k);
-//                    addToResult(w);
-//                    gv.increaseCodeLengthCounter(k.length())
-//                      .updateCodeSetCounter(k);
-//                    clone.setCodeExt("");
-//                    gv.addToFull(clone);
-//                }
+            if (gv.isNotInCodeSet(k)) {
+                if (size == 1) { // 唯一
+                    Word w = wl.get(0);
+                    Word clone = w.clone();
+                    w.setCode(k);
+                    addToResult(w);
+                    gv.increaseCodeLengthCounter(k.length())
+                            .updateCodeSetCounter(k);
+                    clone.setCodeExt("");
+                    gv.addToFull(clone);
+                } else {
+                    Word w = wl.get(0);
+                    Word clone = w.clone();
+                    w.setCode(k);
+                    addToResult(w);
+                    gv.increaseCodeLengthCounter(k.length())
+                            .updateCodeSetCounter(k);
+                    clone.setCodeExt("");
+                    gv.addToFull(clone);
+                    for (int i = 1; i < size; i++) {
+                        w = wl.get(i);
+                        String code = w.getCode();
+                        addToResult(w);
+                        gv.increaseCodeLengthCounter(code.length())
+                                .updateCodeSetCounter(code);
+                    }
+                }
             } else {
-                Word w = wl.get(0);
-                Word clone = w.clone();
-                w.setCode(k);
-                addToResult(w);
-                gv.increaseCodeLengthCounter(k.length())
-                  .updateCodeSetCounter(k);
-                clone.setCodeExt("");
-                gv.addToFull(clone);
-                for (int i = 1; i < size; i++) {
-                    w = wl.get(i);
+                for (int i = 0; i < size; i++) {
+                    Word w = wl.get(i);
                     String code = w.getCode();
                     addToResult(w);
                     gv.increaseCodeLengthCounter(code.length())
-                      .updateCodeSetCounter(code);
+                            .updateCodeSetCounter(code);
                 }
             }
         });
@@ -269,6 +255,20 @@ public class MergedMakeShort {
         } else {
 	        gv.addToResult7(w);
         }
+    }
+
+
+    private List<Word> joinList(List<Word>... wordList) {
+        int size = 0;
+        for (List<Word> wList : wordList) {
+            size += wList.size();
+        }
+        List<Word> list = new ArrayList<>(size);
+        for (List<Word> wList : wordList) {
+            list.addAll(wList);
+        }
+        Collections.sort(list, Word::compare);
+        return list;
     }
 
     private void postProcess() {

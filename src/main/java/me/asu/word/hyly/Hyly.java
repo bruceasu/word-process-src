@@ -25,13 +25,13 @@ public class Hyly {
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
         List<Word> merged = loadWords("merged-he-s.txt", true);
-        List<String> oneSet = readLinesInResources("he_1_2.txt");
+        List<String> oneSet = readLinesInResources("he_1_500.txt");
         List<String> twoSet = readLinesInResources("he_phrases-2.txt");
         oneSet.addAll(twoSet);
 
 //        List<String>              oneSet = readLinesInResources("rain_1.txt");
-        Map<String, List<Word>> results = new MergedMakeShort()
-                .makeSort(merged, oneSet);
+        Map<String, List<Word>> results =
+                new MergedMakeShort().makeSort(merged, oneSet);
 
         save(name, results);
     }
