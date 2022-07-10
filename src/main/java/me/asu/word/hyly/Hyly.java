@@ -14,7 +14,7 @@ import me.asu.util.Streams;
 import me.asu.word.Word;
 
 /**
- * 主打单字，形音
+ * 主打单字，音形
  */
 public class Hyly {
 

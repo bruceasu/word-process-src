@@ -195,7 +195,7 @@ public class MergedMakeShort2 {
                 Word w = wl.get(i);
                 Word clone = w.clone();
                 if (gv.isNotInCodeSet(code3)) {
-                    w.setWord(code3);
+                    w.setCode(code3);
                     addToResult(w);
                     gv.increaseCodeLengthCounter(code3.length())
                       .updateCodeSetCounter(code3);
@@ -231,26 +231,43 @@ public class MergedMakeShort2 {
 
     private void addToResult(Word w) {
         String hz = w.getWord();
+        String code = w.getCode();
         if (gv.isIn500Set(hz) || gv.isIn1000Set(hz)|| gv.isIn2000Set(hz)) {
-            gv.addToResult(w);
+            if (gv.isNotInCodeSet(code)) {
+                gv.addToResult(w);
+            } else {
+                gv.addToResult2(w);
+            }
         } else if (gv.isInBig5Common(hz)) {
-            gv.addToResult2(w);
+            if (gv.isNotInCodeSet(code)) {
+                gv.addToResult3(w);
+            } else {
+                gv.addToResult4(w);
+            }
         } else if (gv.isInBig5(hz)) {
-            gv.addToResult3(w);
+            if (gv.isNotInCodeSet(code)) {
+                gv.addToResult5(w);
+            } else {
+                gv.addToResult6(w);
+            }
         } else if (gv.isInGeneralSpecification(hz)){
-            gv.addToResult4(w);
+            gv.addToResult7(w);
         } else if (gv.isInJapanese(hz)) {
-            gv.addToResult5(w);
+            gv.addToResult7(w);
         }  else if (gv.isInBig5Hkscs(hz)) {
             // 香港字符集里包含了一些简体字和日文字，放在最最后面比较好。
-            gv.addToResult6(w);
+            if (gv.isNotInCodeSet(code)) {
+                gv.addToResult6(w);
+            } else {
+                gv.addToResult7(w);
+            }
         } else {
             gv.addToResult7(w);
         }
     }
 
      private void postProcess() {
-//        fullProcess();
+        fullProcess();
         printCounter("Post process done!");
          statistic();
      }
@@ -264,7 +281,8 @@ public class MergedMakeShort2 {
         List<Word> result6 = gv.getResult6();
         List<Word> result7 = gv.getResult7();
         List<Word> words = joinList(result, result2, result3
-//                ,result4, result5, result6, result7
+                ,result4, result5
+                //, result6, result7
         );
         Map<String, AtomicInteger> stat = new HashMap<>();
         for (Word w : words) {
@@ -303,16 +321,28 @@ public class MergedMakeShort2 {
 
     private void fullProcess() {
         log.info("Processing full ...");
+        List<Word> result = gv.getResult();
+        List<Word> result2 = gv.getResult2();
+        List<Word> result3 = gv.getResult3();
+        List<Word> result4 = gv.getResult4();
+        List<Word> result5 = gv.getResult5();
+        List<Word>  list = joinList(result,result2,result3,result4,result5);
+        Set<String> codes = new HashSet<>();
+        for (Word word : list) {
+            codes.add(word.getCode());
+        }
+
         Iterator<Word> iter = gv.full.iterator();
         while (iter.hasNext()) {
             Word w = iter.next();
             String code = w.getCode();
             String hz = w.getWord();
-            if (gv.isNotInCodeSet(code)) {
+            if (!codes.contains(code)) {
                 w.setLevel(200);
                 gv.addToResult7(w);
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
+                codes.add(code);
                 iter.remove();
             } else {
 //                w.setLevel(300);

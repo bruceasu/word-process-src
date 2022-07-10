@@ -1,4 +1,4 @@
-package me.asu.word.hyly;
+package me.asu.word.hyly3;
 
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
@@ -12,7 +12,7 @@ import me.asu.word.shortern.GlobalVariables;
  * 用于顶功模式
  */
 @Slf4j
-public class MergedMakeShort {
+public class MergedMakeShort3 {
 
     GlobalVariables gv         = new GlobalVariables();
     Set<String>     oneSetColl = new HashSet<>();
@@ -137,7 +137,6 @@ public class MergedMakeShort {
             String code = w.getCode();
             String code1 = code.substring(0, 1);
             String code2 = code.substring(0, 2);
-//            String code3 = code.substring(0, 3);
             String[] codes = {code1, code2};
             boolean accept = false;
             for (String s : codes) {
@@ -178,37 +177,39 @@ public class MergedMakeShort {
             wl.addAll(l);
             wl.sort(Word::compareTo);
             int size = wl.size();
-            for (int i = 0; i < size; i++) {
-                Word w = wl.get(i);
-                if (gv.isNotInCodeSet(k)) {
+            if (size == 1) {
+                // all has 3 length code.
+                for (int i = 0; i < size; i++) {
+                    Word w = wl.get(i);
                     Word clone = w.clone();
                     clone.setCodeExt("");
                     gv.addToFull(clone);
+
                     w.setCode(k);
                     addToResult(w);
                     gv.increaseCodeLengthCounter(k.length())
                       .updateCodeSetCounter(k);
-                } else {
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(w.getCode().length())
-                      .updateCodeSetCounter(w.getCode());
+
+                }
+            } else {
+                for (Word w : wl) {
+                    String code = w.getCode();
+                    if (gv.isNotInCodeSet(k)) {
+                        Word clone = w.clone();
+                        clone.setCodeExt("");
+                        gv.addToFull(clone);
+                        w.setCode(k);
+                        addToResult(w);
+                        gv.increaseCodeLengthCounter(k.length())
+                          .updateCodeSetCounter(k);
+                    } else {
+                        addToResult(w);
+                        gv.increaseCodeLengthCounter(code.length())
+                          .updateCodeSetCounter(code);
+                    }
                 }
             }
 
-
-            // all has 3 length code.
-//            for (int i = 0; i < size; i++) {
-//                Word w = wl.get(i);
-//                Word clone = w.clone();
-//                clone.setCodeExt("");
-//                gv.addToFull(clone);
-//
-//                w.setCode(k);
-//                addToResult(w);
-//                gv.increaseCodeLengthCounter(k.length())
-//                  .updateCodeSetCounter(k);
-//
-//            }
         });
     }
 
@@ -241,16 +242,16 @@ public class MergedMakeShort {
         List<Word> wl = joinList(wordList);
         for (int i = 0; i < wl.size(); i++) {
             Word w = wl.get(i);
-            Word clone = w.clone();
             String code = w.getCode();
-            String code3 = code.substring(0, 3);
+            String code3 = code.substring(0,3);
             if (gv.isNotInCodeSet(code3)) {
+                Word clone = w.clone();
+                clone.setCodeExt("");
+                gv.addToFull(clone);
                 w.setCode(code3);
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code3.length())
                   .updateCodeSetCounter(code3);
-                clone.setCodeExt("");
-                gv.addToFull(clone);
             } else {
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code.length())
@@ -261,37 +262,20 @@ public class MergedMakeShort {
 
     private void addToResult(Word w) {
         String hz = w.getWord();
-        String code = w.getCode();
         if (gv.isIn500Set(hz) || gv.isIn1000Set(hz) || gv.isIn2000Set(hz)) {
-            if (gv.isNotInCodeSet(code)) {
-                gv.addToResult(w);
-            } else {
-                gv.addToResult2(w);
-            }
+            gv.addToResult(w);
         } else if (gv.isIn4000Set(hz)) {
-            if (gv.isNotInCodeSet(code)) {
-                gv.addToResult3(w);
-            } else {
-                gv.addToResult4(w);
-            }
+            gv.addToResult2(w);
         } else if (gv.isInGB2312Set(hz)) {
-            if (gv.isNotInCodeSet(code)) {
-                gv.addToResult5(w);
-            } else {
-                gv.addToResult7(w);
-            }
+	        gv.addToResult3(w);
         } else if (gv.isInBig5(hz)) {
-	        gv.addToResult7(w);
+	        gv.addToResult4(w);
         } else if (gv.isInJapanese(hz)) {
-	        gv.addToResult7(w);
+	        gv.addToResult5(w);
         } else if (gv.isInBig5Hkscs(hz)) {
-            if (gv.isNotInCodeSet(code)) {
-                gv.addToResult6(w);
-            } else {
-                gv.addToResult7(w);
-            }
+            gv.addToResult6(w);
         } else {
-	        gv.addToResult6(w);
+	        gv.addToResult7(w);
         }
     }
 
@@ -310,7 +294,7 @@ public class MergedMakeShort {
     }
 
     private void postProcess() {
-        fullProcess();
+//        fullProcess();
         printCounter("Post process done!");
 	    statistic();
     }
@@ -325,8 +309,7 @@ public class MergedMakeShort {
 		List<Word> result6 = gv.getResult6();
 		List<Word> result7 = gv.getResult7();
 		List<Word> words = joinList(result, result2, result3
-                ,result4, result5
-                //, result6, result7
+//                ,result4, result5, result6, result7
 		);
 		Map<String, AtomicInteger> stat = new HashMap<>();
 		for (Word w : words) {
@@ -366,27 +349,16 @@ public class MergedMakeShort {
 
     private void fullProcess() {
         log.info("Processing full ...");
-        List<Word> result = gv.getResult();
-        List<Word> result2 = gv.getResult2();
-        List<Word> result3 = gv.getResult3();
-        List<Word> result4 = gv.getResult4();
-        List<Word> result5 = gv.getResult5();
-        List<Word>  list = joinList(result,result2,result3,result4,result5);
-        Set<String> codes = new HashSet<>();
-        for (Word word : list) {
-            codes.add(word.getCode());
-        }
         Iterator<Word> iter = gv.getFull().iterator();
         while (iter.hasNext()) {
             Word w = iter.next();
             String code = w.getCode();
             String hz = w.getWord();
-            if (!codes.contains(code)) {
+            if (gv.isNotInCodeSet(code)) {
                 w.setLevel(200);
-                gv.addToResult5(w);
+                gv.addToResult7(w);
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
-                codes.add(code);
                 iter.remove();
             } else {
 //                w.setLevel(300);
