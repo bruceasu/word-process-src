@@ -10,7 +10,7 @@ import me.asu.word.Word;
 
 @Getter
 @Slf4j
-public class GlobalVariables {
+public class GlobalVariables2 {
 
     // group
     List<Word> groupTraditionCommon  = new ArrayList<>();
@@ -54,7 +54,7 @@ public class GlobalVariables {
 
     int[] codeLenCounter = new int[30];
 
-    public GlobalVariables() {
+    public GlobalVariables2() {
         for (int i = 0; i < 30; i++) {
             codeLenCounter[i] = 0;
         }
@@ -128,7 +128,7 @@ public class GlobalVariables {
         return single.contains(w);
     }
 
-    public GlobalVariables increaseCode3SetCounter(String code) {
+    public GlobalVariables2 increaseCode3SetCounter(String code) {
         AtomicInteger atomicInteger = code3Set.get(code);
         if (atomicInteger == null) {
             atomicInteger = new AtomicInteger();
@@ -146,83 +146,83 @@ public class GlobalVariables {
         return atomicInteger.get() > n;
     }
 
-    public GlobalVariables increaseCodeLengthCounter(int idx) {
+    public GlobalVariables2 increaseCodeLengthCounter(int idx) {
         codeLenCounter[idx] += 1;
         return this;
     }
 
-    public GlobalVariables addToResult(Word w) {
+    public GlobalVariables2 addToResult(Word w) {
         result.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult2(Word w) {
+    public GlobalVariables2 addToResult2(Word w) {
         result2.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult3(Word w) {
+    public GlobalVariables2 addToResult3(Word w) {
         result3.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult4(Word w) {
+    public GlobalVariables2 addToResult4(Word w) {
         result4.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult5(Word w) {
+    public GlobalVariables2 addToResult5(Word w) {
         result5.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult6(Word w) {
+    public GlobalVariables2 addToResult6(Word w) {
         result6.add(w);
         return this;
     }
 
-    public GlobalVariables addToResult7(Word w) {
+    public GlobalVariables2 addToResult7(Word w) {
         result7.add(w);
         return this;
     }
 
-    public GlobalVariables addToFull(Word w) {
+    public GlobalVariables2 addToFull(Word w) {
         full.add(w);
         return this;
     }
 
 
-    public GlobalVariables addToSingle(String w) {
+    public GlobalVariables2 addToSingle(String w) {
         single.add(w);
         return this;
     }
 
-    public GlobalVariables addToGroupOther(Word w) {
+    public GlobalVariables2 addToGroupOther(Word w) {
         groupOther.add(w);
         return this;
     }
 
-    public GlobalVariables addToSimplification(Word w) {
+    public GlobalVariables2 addToSimplification(Word w) {
         groupSimplification.add(w);
         return this;
     }
 
-    public GlobalVariables addToTraditionCommon(Word w) {
+    public GlobalVariables2 addToTraditionCommon(Word w) {
         groupTraditionCommon.add(w);
         return this;
     }
 
-    public GlobalVariables addToTradition(Word w) {
+    public GlobalVariables2 addToTradition(Word w) {
         groupTradition.add(w);
         return this;
     }
 
-    public GlobalVariables addToJapanese(Word w) {
+    public GlobalVariables2 addToJapanese(Word w) {
         groupJapanese.add(w);
         return this;
     }
 
-    public GlobalVariables addToRemain(Word w) {
+    public GlobalVariables2 addToRemain(Word w) {
         remain.add(w);
         return this;
     }
@@ -231,7 +231,7 @@ public class GlobalVariables {
         return remain;
     }
 
-    public GlobalVariables updateCodeSetCounter(String code) {
+    public GlobalVariables2 updateCodeSetCounter(String code) {
         if (isNotInCodeSet(code)) {
             addCodeSetCounter(code);
         } else {
@@ -245,7 +245,7 @@ public class GlobalVariables {
         return !isInCodeSet(code);
     }
 
-    public GlobalVariables addCodeSetCounter(String code) {
+    public GlobalVariables2 addCodeSetCounter(String code) {
         codeSet.put(code, new AtomicInteger(1));
         return this;
     }
@@ -256,7 +256,7 @@ public class GlobalVariables {
         return c.get();
     }
 
-    public GlobalVariables increaseCodeSetCounter(String code) {
+    public GlobalVariables2 increaseCodeSetCounter(String code) {
         codeSet.get(code).incrementAndGet();
         return this;
     }

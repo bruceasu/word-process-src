@@ -8,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.asu.word.Word;
 import me.asu.word.shortern.GlobalVariables;
 
-/**
- * 用于顶功模式
- */
 @Slf4j
 public class MergedMakeShort {
 
@@ -65,17 +62,6 @@ public class MergedMakeShort {
             //gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
             String hz = w.getWord();
             if (gv.isInSingleSet(hz)) {
-//                String code1 = w.getCode().substring(0, 1);
-//                String code2 = w.getCode().substring(0, 2);
-//                String code3 = w.getCode().substring(0, 3);
-//                boolean found = false;
-//                String[] col = {code1, code2, code3};
-//                for (String s : col) {
-//                    if (oneSetColl.contains(hz + "\t" + s)) {
-//                        found = true;
-//                        break;
-//                    }
-//                }
                 boolean found = true;
                 if (found) {
                     Word clone = w.clone();
@@ -119,16 +105,50 @@ public class MergedMakeShort {
         log.info("Processing groups ...");
         processGroupLevel1(gv.getGroup500(), gv.getGroup1000());
         List<Word> remain = new ArrayList<>(gv.getRemain());
-        remain.clear();
+        gv.getRemain().clear();
         processGroupLevel2(remain, gv.getGroup2000());
-        processGroupLevel3(gv.getGroup4000());
-        processOtherGroup(gv.getGroupOther());
-
-    }
-
-    private void processGroupLevel1(List<Word>... wordList) {
-        List<Word> list = joinList(wordList);
-        processOneAndTwo(list);
+        remain = new ArrayList<>(gv.getRemain());
+        gv.getRemain().clear();
+        processGroupLevel3(remain, gv.getGroup4000());
+        remain = new ArrayList<>(gv.getRemain());
+        gv.getRemain().clear();
+        processOtherGroup(remain, gv.getGroupOther());
+//        List<Word> r = gv.getRemain();
+//        r.sort(Word::compareTo);
+//        r.forEach(w->{
+//            String[] padding = {"a", "e", "i", "o","u"};
+//            String commonPadding = "v";
+//            if (gv.isIn4000Set(w.getWord())) {
+//                boolean notAccept = true;
+//                for (String s : padding) {
+//                    String code = w.getCode();
+//                    code = code.substring(0,3) + s;
+//                    if (gv.isNotInCodeSet(code)) {
+//                        w.setCode(code);
+//                        addToResult(w);
+//                        gv.increaseCodeLengthCounter(code.length())
+//                          .updateCodeSetCounter(code);
+//                        notAccept = false;
+//                        break;
+//                    }
+//                }
+//                if (notAccept) {
+//                    String code = w.getCode();
+//                    code = code.substring(0,3) + commonPadding;
+//                    w.setCode(code);
+//                    addToResult(w);
+//                    gv.increaseCodeLengthCounter(code.length())
+//                      .updateCodeSetCounter(code);
+//                }
+//            } else {
+//                String code = w.getCode();
+//                code = code.substring(0,3) + commonPadding;
+//                w.setCode(code);
+//                addToResult(w);
+//                gv.increaseCodeLengthCounter(code.length())
+//                  .updateCodeSetCounter(code);
+//            }
+//        });
     }
 
     private void processOneAndTwo(List<Word> list) {
@@ -158,6 +178,11 @@ public class MergedMakeShort {
                 gv.addToRemain(w);
             }
         }
+    }
+
+    private void processGroupLevel1(List<Word>... wordList) {
+        List<Word> list = joinList(wordList);
+        processOneAndTwo(list);
     }
 
     private void processGroupLevel2(List<Word>... wordList) {
@@ -192,6 +217,7 @@ public class MergedMakeShort {
                     addToResult(w);
                     gv.increaseCodeLengthCounter(w.getCode().length())
                       .updateCodeSetCounter(w.getCode());
+//                    gv.addToRemain(w);
                 }
             }
 
@@ -217,6 +243,8 @@ public class MergedMakeShort {
 
         processOneAndTwo(list);
         List<Word> remainList = new ArrayList<>(gv.getRemain());
+        remainList.sort(Word::compareTo);
+        gv.getRemain().clear();
         for (Word w : remainList) {
             String code = w.getCode();
             String code3 = code.substring(0,3);
@@ -232,13 +260,14 @@ public class MergedMakeShort {
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
+//                gv.addToRemain(w);
             }
         }
     }
 
-
     private void processOtherGroup(List<Word>... wordList) {
         List<Word> wl = joinList(wordList);
+        wl.sort(Word::compareTo);
         for (int i = 0; i < wl.size(); i++) {
             Word w = wl.get(i);
             Word clone = w.clone();
@@ -255,7 +284,9 @@ public class MergedMakeShort {
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
+//                gv.addToRemain(w);
             }
+
         }
     }
 
@@ -310,7 +341,7 @@ public class MergedMakeShort {
     }
 
     private void postProcess() {
-        fullProcess();
+//        fullProcess();
         printCounter("Post process done!");
 	    statistic();
     }
@@ -326,7 +357,7 @@ public class MergedMakeShort {
 		List<Word> result7 = gv.getResult7();
 		List<Word> words = joinList(result, result2, result3
                 ,result4, result5
-                //, result6, result7
+               // , result6, result7
 		);
 		Map<String, AtomicInteger> stat = new HashMap<>();
 		for (Word w : words) {
@@ -383,7 +414,11 @@ public class MergedMakeShort {
             String hz = w.getWord();
             if (!codes.contains(code)) {
                 w.setLevel(200);
-                gv.addToResult5(w);
+                if (gv.isIn4000Set(code)) {
+                    gv.addToResult5(w);
+                } else {
+                    gv.addToResult6(w);
+                }
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
                 codes.add(code);

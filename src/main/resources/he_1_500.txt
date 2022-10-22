@@ -443,7 +443,6 @@
 感	gjx
 入	rup
 第	div
-直	vq
 机	jim
 理	liw
 者	vet
@@ -487,7 +486,6 @@
 物	wun
 许	xuy
 化	hxr
-制	vd
 火	hod
 性	xkx
 指	vif
@@ -655,7 +653,6 @@
 采	cdv
 养	yhy
 省	ugx
-织	vb
 积	jih
 圆	yrk
 律	lvr
@@ -674,11 +671,6 @@
 酸	sry
 #force encode:
 十	eu
-离	lx
-活	hq
-计	jf
-支	vn
-治	vp
 
 #算法不好处理的简码字
 词	ciy

@@ -13,8 +13,8 @@ import me.asu.word.Word;
 @Slf4j
 public class MergedMakeShort2 {
 
-    GlobalVariables gv         = new GlobalVariables();
-    Set<String>     oneSetColl = new HashSet<>();
+    GlobalVariables2 gv         = new GlobalVariables2();
+    Set<String>      oneSetColl = new HashSet<>();
 
 
     public Map<String, List<Word>> makeSort(List<Word> words,
@@ -124,7 +124,7 @@ public class MergedMakeShort2 {
             String[] codes = {code1, code2, code3};
             boolean accept = false;
             for (String s : codes) {
-                if (gv.isNotInCodeSet(s)) {
+                if (gv.isNotInCodeSet(s) || (s.equals(code3) && gv.getCodeSetCount(s) < 3)) {
                     w.setCode(s);
                     w.setCodeExt("");
                     addToResult(w);
@@ -267,7 +267,7 @@ public class MergedMakeShort2 {
     }
 
      private void postProcess() {
-        fullProcess();
+//        fullProcess();
         printCounter("Post process done!");
          statistic();
      }
