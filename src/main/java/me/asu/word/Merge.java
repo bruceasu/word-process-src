@@ -11,7 +11,7 @@ import me.asu.util.Streams;
 public class Merge {
 
     public static void main(String[] args) throws IOException {
-        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
+        Map<String, List<String>> he = loadAsMapList("k.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-single.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");

@@ -12,10 +12,13 @@ import me.asu.util.Files;
  */
 public class ResourcesFiles {
     public static List<String> readLinesInResources(String name) {
-        String myDIR = OsHelper.getMyDIR();
-        File file = new File(myDIR, name);
+        File file = new File(name);
         if (!file.exists()) {
-            file = new File(myDIR, "resources" + File.separator + name);
+            String myDIR = OsHelper.getMyDIR();
+            file = new File(myDIR, name);
+            if (!file.exists()) {
+                file = new File(myDIR, "resources" + File.separator + name);
+            }
         }
         return Files.readLines(file);
     }
@@ -106,7 +109,7 @@ public class ResourcesFiles {
     }
 
     public static Map<String, List<String>> toMapList(List<String> strings) {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new TreeMap<>();
         for (String line : strings) {
             line = line.trim();
             if (line.isEmpty()) {

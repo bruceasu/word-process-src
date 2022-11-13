@@ -14,18 +14,18 @@ import me.asu.util.Streams;
 import me.asu.word.Word;
 
 /**
- * 主打单字，形音
+ * 主打单字
  */
 public class Hyly3 {
 
     public static void main(String[] args) throws IOException {
-        String name = "he";
+        String name = "s";
 //        Map<String, List<String>> he     = loadAsMapList("he.txt");
 //        Map<String, List<String>> xm      = loadAsMapList("rain.txt");
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
-        List<Word> merged = loadWords("merged-he-s-2.txt", true);
-        List<String> oneSet = readLinesInResources("rain_1.txt");
+        List<Word> merged = loadWords("single.txt", true);
+        List<String> oneSet = readLinesInResources("single_1.txt");
         Map<String, List<Word>> results = new MergedMakeShort3().makeSort(merged, oneSet);
 
         save(name, results);
