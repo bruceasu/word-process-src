@@ -12,16 +12,16 @@ import me.asu.word.ResourcesFiles;
 public class CleanupPhrases {
 
     public static void main(String[] args) throws IOException {
-        Map<String, List<String>> words = ResourcesFiles.loadAsMapList("single.txt");
+        Map<String, List<String>> words = ResourcesFiles.loadAsMapList("single_t.txt");
 
         File out1 = new File("out", "c.txt");
         File out2 = new File("out", "d.txt");
 
-        List<String> nouns = ResourcesFiles.readLinesInResources("名词.txt");
+        List<String> nouns = ResourcesFiles.readLinesInResources("名词_t.txt");
         Set<String> nounsSet = new HashSet<>();
         nounsSet.addAll(nouns);
         Map<String, String> phrases = ResourcesFiles
-                .loadAsMap("out\\he-phrases.txt");
+                .loadAsMap("out\\he-phrases_t.txt");
         List<String> needCode = new ArrayList<>();
         try (FileWriter fw1 = new FileWriter(out1);
              FileWriter fw2 = new FileWriter(out2)) {

@@ -1,4 +1,4 @@
-package me.asu.word.hyly2;
+package me.asu.word.shortern;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,51 +10,51 @@ import me.asu.word.Word;
 
 @Getter
 @Slf4j
-public class GlobalVariables2 {
+public class GlobalVariablesTraditional {
 
     // group
-    List<Word> groupTraditionCommon  = new ArrayList<>();
-    List<Word> groupTradition  = new ArrayList<>();
-    List<Word> groupSimplification   = new ArrayList<>();
-    List<Word> groupJapanese  = new ArrayList<>();
-    List<Word> groupOther = new ArrayList<>();
+    public List<Word> groupTraditionCommon  = new ArrayList<>();
+    public List<Word> groupTradition  = new ArrayList<>();
+    public List<Word> groupSimplification   = new ArrayList<>();
+    public List<Word> groupJapanese  = new ArrayList<>();
+    public List<Word> groupOther = new ArrayList<>();
 
-    Set<String> w500    = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-500.txt"));
-    Set<String> w1000   = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-1000.txt"));
-    Set<String> w2000   = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-2000.txt"));
-    Set<String> wGb2312 = ResourcesFiles.gb2312();
-    Set<String> wBig5_common = ResourcesFiles.big5_common();
-    Set<String> wBig5 = ResourcesFiles.big5();
-    Set<String> wBig5_hkscs = ResourcesFiles.big5_hkscs();
-    Set<String> wJapanese = ResourcesFiles.japanese();
-    Set<String> wGeneralSpecification = ResourcesFiles.generalSpecification();
+    public Set<String> w500    = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-500.txt"));
+    public Set<String> w1000   = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-1000.txt"));
+    public Set<String> w2000   = new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words-2000.txt"));
+    public Set<String> wGb2312 = ResourcesFiles.gb2312();
+    public Set<String> wBig5_common = ResourcesFiles.big5_common();
+    public Set<String> wBig5 = ResourcesFiles.big5();
+    public Set<String> wBig5_hkscs = ResourcesFiles.big5_hkscs();
+    public Set<String> wJapanese = ResourcesFiles.japanese();
+    public Set<String> wGeneralSpecification = ResourcesFiles.generalSpecification();
 
-    List<String> single  = new ArrayList<>();
+    public List<String> single  = new ArrayList<>();
     // 唯一常用字（4000）
-    List<Word>   result  = new ArrayList<>();
+    public List<Word>   result  = new ArrayList<>();
     // 重码常用字（4000）
-    List<Word>   result2 = new ArrayList<>();
+    public List<Word>   result2 = new ArrayList<>();
 
     // 唯一通用字（gb2312group）
-    List<Word> result3 = new ArrayList<>();
+    public List<Word> result3 = new ArrayList<>();
     // 重码通用字（gb2312group）
-    List<Word> result4 = new ArrayList<>();
+    public List<Word> result4 = new ArrayList<>();
     // 唯一罕用字（非gb2312group）
-    List<Word> result5 = new ArrayList<>();
+    public List<Word> result5 = new ArrayList<>();
     // 重码罕用字（非gb2312group）
-    List<Word> result6 = new ArrayList<>();
+    public List<Word> result6 = new ArrayList<>();
     // 占位简码
-    List<Word> result7 = new ArrayList<>();
-    List<Word> full    = new ArrayList<>();
+    public List<Word> result7 = new ArrayList<>();
+    public List<Word> full    = new ArrayList<>();
 
-    List<Word> remain = new ArrayList<>();
+    public  List<Word> remain = new ArrayList<>();
 
     Map<String, AtomicInteger> codeSet  = new HashMap<>();
     Map<String, AtomicInteger> code3Set = new HashMap<>();
 
     int[] codeLenCounter = new int[30];
 
-    public GlobalVariables2() {
+    public GlobalVariablesTraditional() {
         for (int i = 0; i < 30; i++) {
             codeLenCounter[i] = 0;
         }
@@ -128,7 +128,7 @@ public class GlobalVariables2 {
         return single.contains(w);
     }
 
-    public GlobalVariables2 increaseCode3SetCounter(String code) {
+    public GlobalVariablesTraditional increaseCode3SetCounter(String code) {
         AtomicInteger atomicInteger = code3Set.get(code);
         if (atomicInteger == null) {
             atomicInteger = new AtomicInteger();
@@ -146,83 +146,83 @@ public class GlobalVariables2 {
         return atomicInteger.get() > n;
     }
 
-    public GlobalVariables2 increaseCodeLengthCounter(int idx) {
+    public GlobalVariablesTraditional increaseCodeLengthCounter(int idx) {
         codeLenCounter[idx] += 1;
         return this;
     }
 
-    public GlobalVariables2 addToResult(Word w) {
+    public GlobalVariablesTraditional addToResult(Word w) {
         result.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult2(Word w) {
+    public GlobalVariablesTraditional addToResult2(Word w) {
         result2.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult3(Word w) {
+    public GlobalVariablesTraditional addToResult3(Word w) {
         result3.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult4(Word w) {
+    public GlobalVariablesTraditional addToResult4(Word w) {
         result4.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult5(Word w) {
+    public GlobalVariablesTraditional addToResult5(Word w) {
         result5.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult6(Word w) {
+    public GlobalVariablesTraditional addToResult6(Word w) {
         result6.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToResult7(Word w) {
+    public GlobalVariablesTraditional addToResult7(Word w) {
         result7.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToFull(Word w) {
+    public GlobalVariablesTraditional addToFull(Word w) {
         full.add(w);
         return this;
     }
 
 
-    public GlobalVariables2 addToSingle(String w) {
+    public GlobalVariablesTraditional addToSingle(String w) {
         single.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToGroupOther(Word w) {
+    public GlobalVariablesTraditional addToGroupOther(Word w) {
         groupOther.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToSimplification(Word w) {
+    public GlobalVariablesTraditional addToSimplification(Word w) {
         groupSimplification.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToTraditionCommon(Word w) {
+    public GlobalVariablesTraditional addToTraditionCommon(Word w) {
         groupTraditionCommon.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToTradition(Word w) {
+    public GlobalVariablesTraditional addToTradition(Word w) {
         groupTradition.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToJapanese(Word w) {
+    public GlobalVariablesTraditional addToJapanese(Word w) {
         groupJapanese.add(w);
         return this;
     }
 
-    public GlobalVariables2 addToRemain(Word w) {
+    public GlobalVariablesTraditional addToRemain(Word w) {
         remain.add(w);
         return this;
     }
@@ -231,7 +231,7 @@ public class GlobalVariables2 {
         return remain;
     }
 
-    public GlobalVariables2 updateCodeSetCounter(String code) {
+    public GlobalVariablesTraditional updateCodeSetCounter(String code) {
         if (isNotInCodeSet(code)) {
             addCodeSetCounter(code);
         } else {
@@ -245,7 +245,7 @@ public class GlobalVariables2 {
         return !isInCodeSet(code);
     }
 
-    public GlobalVariables2 addCodeSetCounter(String code) {
+    public GlobalVariablesTraditional addCodeSetCounter(String code) {
         codeSet.put(code, new AtomicInteger(1));
         return this;
     }
@@ -256,7 +256,7 @@ public class GlobalVariables2 {
         return c.get();
     }
 
-    public GlobalVariables2 increaseCodeSetCounter(String code) {
+    public GlobalVariablesTraditional increaseCodeSetCounter(String code) {
         codeSet.get(code).incrementAndGet();
         return this;
     }

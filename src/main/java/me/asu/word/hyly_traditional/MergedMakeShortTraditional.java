@@ -1,4 +1,4 @@
-package me.asu.word.hyly2;
+package me.asu.word.hyly_traditional;
 
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
@@ -6,15 +6,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import me.asu.word.Word;
+import me.asu.word.shortern.GlobalVariablesTraditional;
 
 /**
  * 用于顶功模式
  */
 @Slf4j
-public class MergedMakeShort2 {
+public class MergedMakeShortTraditional {
 
-    GlobalVariables2 gv         = new GlobalVariables2();
-    Set<String>      oneSetColl = new HashSet<>();
+    GlobalVariablesTraditional gv         = new GlobalVariablesTraditional();
+    Set<String>                oneSetColl = new HashSet<>();
 
 
     public Map<String, List<Word>> makeSort(List<Word> words,
@@ -78,7 +79,10 @@ public class MergedMakeShort2 {
             } else if (gv.isInBig5Hkscs(hz)) {
                 w.setLevel(20);
                 gv.addToTradition(w);
-            } else if (gv.isInGeneralSpecification(hz)) {
+            } else if (gv.isInBig5(hz)){
+                w.setLevel(25);
+                gv.addToTradition(w);
+            }else if (gv.isInGeneralSpecification(hz)) {
                 w.setLevel(30);
                 gv.addToSimplification(w);
             } else if (gv.isInJapanese(hz)) {
@@ -124,7 +128,9 @@ public class MergedMakeShort2 {
             String[] codes = {code1, code2, code3};
             boolean accept = false;
             for (String s : codes) {
-                if (gv.isNotInCodeSet(s) || (s.equals(code3) && gv.getCodeSetCount(s) < 3)) {
+                if (gv.isNotInCodeSet(s)
+                        ||  (s.length() < 3 && gv.getCodeSetCount(s) < 3)
+                        ||  (s.length() == 3 && gv.getCodeSetCount(s) < 3)) {
                     w.setCode(s);
                     w.setCodeExt("");
                     addToResult(w);
@@ -155,7 +161,8 @@ public class MergedMakeShort2 {
             String code = w.getCode();
             String code1 = code.substring(0,1);
             String code2 = code.substring(0,2);
-            String[] codes = {code1, code2};
+            String code3 = code.substring(0,3);
+            String[] codes = {code1, code2,code3};
             boolean accept = false;
             for (String s : codes) {
                 if (gv.isNotInCodeSet(s)) {
@@ -177,37 +184,15 @@ public class MergedMakeShort2 {
             }
         }
         List<Word> remain = gv.getRemain();
-        Map<String, Set<Word>> m = new TreeMap<>();
+        Collections.sort(remain);
         for (Word w : remain) {
-            String code = w.getCode();
-            w.setCodeExt("");
-            m.computeIfAbsent(code, k -> new HashSet<>());
-            m.get(code).add(w);
+            addToResult(w);
+            gv.increaseCodeLengthCounter(w.getCode().length())
+              .updateCodeSetCounter(w.getCode());
+
         }
+
         remain.clear();
-        m.forEach((k, l) -> {
-            List<Word> wl = new ArrayList<>(l.size());
-            wl.addAll(l);
-            wl.sort(Word::compareTo);
-            int size = wl.size();
-            String code3 = k.substring(0,3);
-            for (int i = 0; i < size; i++) {
-                Word w = wl.get(i);
-                Word clone = w.clone();
-                if (gv.isNotInCodeSet(code3)) {
-                    w.setCode(code3);
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(code3.length())
-                      .updateCodeSetCounter(code3);
-                    clone.setCodeExt("");
-                    gv.addToFull(clone);
-                } else  {
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(k.length())
-                      .updateCodeSetCounter(k);
-                }
-            }
-        });
     }
 
     private void processOtherGroup(List<Word>... wordList) {
@@ -250,18 +235,18 @@ public class MergedMakeShort2 {
             } else {
                 gv.addToResult6(w);
             }
-        } else if (gv.isInGeneralSpecification(hz)){
-            gv.addToResult7(w);
-        } else if (gv.isInJapanese(hz)) {
-            gv.addToResult7(w);
-        }  else if (gv.isInBig5Hkscs(hz)) {
-            // 香港字符集里包含了一些简体字和日文字，放在最最后面比较好。
+        } else if (gv.isInBig5Hkscs(hz)) {
+            // 注意：香港字符集里包含了一些简体字和日文字。
             if (gv.isNotInCodeSet(code)) {
                 gv.addToResult6(w);
             } else {
                 gv.addToResult7(w);
             }
-        } else {
+        } else if (gv.isInGeneralSpecification(hz)){
+            gv.addToResult7(w);
+        } else if (gv.isInJapanese(hz)) {
+            gv.addToResult7(w);
+        }  else {
             gv.addToResult7(w);
         }
     }
@@ -282,7 +267,7 @@ public class MergedMakeShort2 {
         List<Word> result7 = gv.getResult7();
         List<Word> words = joinList(result, result2, result3
                 ,result4, result5
-                //, result6, result7
+                , result6, result7
         );
         Map<String, AtomicInteger> stat = new HashMap<>();
         for (Word w : words) {

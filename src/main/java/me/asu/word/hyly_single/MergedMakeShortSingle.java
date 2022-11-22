@@ -1,4 +1,4 @@
-package me.asu.word.hyly3;
+package me.asu.word.hyly_single;
 
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
@@ -12,7 +12,7 @@ import me.asu.word.shortern.GlobalVariables;
  * 用于顶功模式
  */
 @Slf4j
-public class MergedMakeShort3 {
+public class MergedMakeShortSingle {
 
     GlobalVariables gv         = new GlobalVariables();
     Set<String>     oneSetColl = new HashSet<>();
@@ -92,13 +92,13 @@ public class MergedMakeShort3 {
                 gv.getGroup500().add(w);
             } else if (gv.isIn1000Set(hz)) {
                 w.setLevel(20);
-                gv.addToG1600(w);
+                gv.addToG1000(w);
             } else if (gv.isIn2000Set(hz)) {
                 w.setLevel(30);
-                gv.addToG3800(w);
+                gv.addToG2000(w);
             } else if (gv.isIn4000Set(hz)) {
                 w.setLevel(40);
-                gv.addToG4200(w);
+                gv.addToG4000(w);
             } else {
                 w.setLevel(90);
                 gv.addToGroupOther(w);

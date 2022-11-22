@@ -1,4 +1,4 @@
-package me.asu.word.hyly3;
+package me.asu.word.hyly_single;
 
 
 import static me.asu.word.ResourcesFiles.loadWords;
@@ -16,7 +16,7 @@ import me.asu.word.Word;
 /**
  * 主打单字
  */
-public class Hyly3 {
+public class HylySingleTraditional {
 
     public static void main(String[] args) throws IOException {
         String name = "s";
@@ -24,9 +24,9 @@ public class Hyly3 {
 //        Map<String, List<String>> xm      = loadAsMapList("rain.txt");
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
-        List<Word> merged = loadWords("single.txt", true);
-        List<String> oneSet = readLinesInResources("single_1.txt");
-        Map<String, List<Word>> results = new MergedMakeShort3().makeSort(merged, oneSet);
+        List<Word> merged = loadWords("single_t.txt", true);
+        List<String> oneSet = readLinesInResources("single_t_1.txt");
+        Map<String, List<Word>> results = new MergedMakeShortSingleTraditional().makeSort(merged, oneSet);
 
         save(name, results);
     }

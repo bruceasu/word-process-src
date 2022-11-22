@@ -68,11 +68,11 @@ public class TableMakeShort {
             } else if (gv.isIn500Set(w.getWord())) {
                 gv.getGroup500().add(w);
             } else if (gv.isIn1000Set(w.getWord())) {
-                gv.addToG1600(w);
+                gv.addToG1000(w);
             } else if (gv.isIn2000Set(w.getWord())) {
-                gv.addToG3800(w);
+                gv.addToG2000(w);
             } else if (gv.isIn4000Set(w.getWord())) {
-                gv.addToG4200(w);
+                gv.addToG4000(w);
             } else {
                 w.setLevel(90);
                 gv.addToGroupOther(w);

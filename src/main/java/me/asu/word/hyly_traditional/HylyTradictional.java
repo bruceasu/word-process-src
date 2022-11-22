@@ -1,4 +1,4 @@
-package me.asu.word.hyly2;
+package me.asu.word.hyly_traditional;
 
 
 import static me.asu.word.ResourcesFiles.loadWords;
@@ -14,7 +14,7 @@ import me.asu.word.Word;
 /**
  * 繁体版
  */
-public class Hyly2 {
+public class HylyTradictional {
 
     public static void main(String[] args) throws IOException {
         String name = "he";
@@ -23,7 +23,7 @@ public class Hyly2 {
         List<Word> merged = loadWords("he2.txt", false);
         oneSet = readLinesInResources("he2_ext.txt");
         Map<String, List<Word>> results =
-                new MergedMakeShort2().makeSort(merged, oneSet);
+                new MergedMakeShortTraditional().makeSort(merged, oneSet);
 
         save(name, results);
     }

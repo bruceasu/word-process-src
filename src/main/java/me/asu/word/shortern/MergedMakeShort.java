@@ -94,13 +94,13 @@ public class MergedMakeShort {
 				gv.getGroup500().add(w);
 			} else if (gv.isIn1000Set(hz)) {
 				w.setLevel(20);
-				gv.addToG1600(w);
+				gv.addToG1000(w);
 			} else if (gv.isIn2000Set(hz)) {
 				w.setLevel(30);
-				gv.addToG3800(w);
+				gv.addToG2000(w);
 			} else if (gv.isIn4000Set(hz)) {
 				w.setLevel(40);
-				gv.addToG4200(w);
+				gv.addToG4000(w);
 			} else {
 				w.setLevel(90);
 				gv.addToGroupOther(w);

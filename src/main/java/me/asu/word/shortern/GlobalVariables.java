@@ -17,6 +17,7 @@ public class GlobalVariables {
     List<Word> group1000  = new ArrayList<>();
     List<Word> group2000  = new ArrayList<>();
     List<Word> group4000  = new ArrayList<>();
+    List<Word> group6000  = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
     Set<String> w500    = ResourcesFiles.w500();
@@ -213,17 +214,22 @@ public class GlobalVariables {
         return this;
     }
 
-    public GlobalVariables addToG1600(Word w) {
+    public GlobalVariables addToG6000(Word w) {
+        group6000.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToG1000(Word w) {
         group1000.add(w);
         return this;
     }
 
-    public GlobalVariables addToG3800(Word w) {
+    public GlobalVariables addToG2000(Word w) {
         group2000.add(w);
         return this;
     }
 
-    public GlobalVariables addToG4200(Word w) {
+    public GlobalVariables addToG4000(Word w) {
         group4000.add(w);
         return this;
     }
