@@ -129,8 +129,9 @@ public class MergedMakeShortTraditional {
             boolean accept = false;
             for (String s : codes) {
                 if (gv.isNotInCodeSet(s)
-                        ||  (s.length() < 3 && gv.getCodeSetCount(s) < 3)
-                        ||  (s.length() == 3 && gv.getCodeSetCount(s) < 3)) {
+                //        ||  (s.length() < 3 && gv.getCodeSetCount(s) < 2)
+                //        ||  (s.length() == 3 && gv.getCodeSetCount(s) < 1)
+                ) {
                     w.setCode(s);
                     w.setCodeExt("");
                     addToResult(w);

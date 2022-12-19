@@ -106,8 +106,8 @@ public class MergedMakeShort {
 
     private void processGroups() {
         log.info("Processing groups ...");
-        processGroupLevel1(gv.getGroup500(), gv.getGroup1000(), gv.getGroup2000(),gv.getGroup4000());
-        processGroupLevel2(gv.getGroup6000());
+        processGroupLevel1(gv.getGroup500(), gv.getGroup1000(), gv.getGroup2000());
+        processGroupLevel2(gv.getGroup4000(), gv.getGroup6000());
         processGroupLevel3(gv.getGroupOther());
 //        processOtherGroup();
     }
@@ -124,8 +124,9 @@ public class MergedMakeShort {
             boolean accept = false;
             for (String s : codes) {
                 if (gv.isNotInCodeSet(s)
-                        || (s.length() == 2 && gv.getCodeSetCount(s) < 2)
-                        || (s.length() == 3 && gv.getCodeSetCount(s) < 1)) {
+                        //|| s.length() ==3
+
+                ) {
                     w.setCode(s);
                     w.setCodeExt("");
                     addToResult(w);
