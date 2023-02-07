@@ -89,16 +89,16 @@ public class MergedMakeShortSingle {
 
             if (gv.isIn500Set(hz)) {
                 w.setLevel(10);
-                gv.getGroup500().add(w);
+                gv.getGroup1().add(w);
             } else if (gv.isIn1000Set(hz)) {
                 w.setLevel(20);
-                gv.addToG1000(w);
+                gv.addToGroup2(w);
             } else if (gv.isIn2000Set(hz)) {
                 w.setLevel(30);
-                gv.addToG2000(w);
+                gv.addToGroup3(w);
             } else if (gv.isIn4000Set(hz)) {
                 w.setLevel(40);
-                gv.addToG4000(w);
+                gv.addToGroup4(w);
             } else {
                 w.setLevel(90);
                 gv.addToGroupOther(w);
@@ -108,16 +108,16 @@ public class MergedMakeShortSingle {
             }
         }
         log.info("Processed {} lines.", lines.size());
-        log.info("group500: {}", gv.getGroup500().size());
-        log.info("group1000: {}", gv.getGroup1000().size());
-        log.info("group2000: {}", gv.getGroup2000().size());
-        log.info("group4000: {}", gv.getGroup4000().size());
+        log.info("group500: {}", gv.getGroup1().size());
+        log.info("group1000: {}", gv.getGroup2().size());
+        log.info("group2000: {}", gv.getGroup3().size());
+        log.info("group4000: {}", gv.getGroup4().size());
         log.info("groupOther: {}", gv.getGroupOther().size());
     }
 
     private void processGroups() {
         log.info("Processing groups ...");
-        processGroupLevel1(gv.getGroup500(), gv.getGroup1000(),gv.getGroup2000(),gv.getGroup4000());
+        processGroupLevel1(gv.getGroup1(), gv.getGroup2(),gv.getGroup3(),gv.getGroup4());
         List<Word> remain = new ArrayList<>(gv.getRemain());
         remain.clear();
         processGroupLevel2(remain, gv.getGroupOther());
@@ -273,7 +273,7 @@ public class MergedMakeShortSingle {
 	        gv.addToResult3(w);
         } else if (gv.isInBig5(hz)) {
 	        gv.addToResult4(w);
-        } else if (gv.isInJapanese(hz)) {
+        } else if (gv.isInJp(hz)) {
 	        gv.addToResult5(w);
         } else if (gv.isInBig5Hkscs(hz)) {
             gv.addToResult6(w);

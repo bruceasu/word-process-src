@@ -1,4 +1,4 @@
-package me.asu.word.hyly;
+package me.asu.word.jp;
 
 import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
 
@@ -9,7 +9,7 @@ import me.asu.word.Word;
 import me.asu.word.shortern.GlobalVariables;
 
 @Slf4j
-public class MergedMakeShort {
+public class JpMergedMakeShort {
 
     GlobalVariables gv         = new GlobalVariables();
     Set<String>     oneSetColl = new HashSet<>();
@@ -56,10 +56,9 @@ public class MergedMakeShort {
             return;
         }
         log.info("Group {} lines into groups.", lines.size());
-        lines.sort(Word::compare);
+//        lines.sort(Word::compare);
         for (int i = 0; i < lines.size(); i++) {
             Word w = lines.get(i);
-            //gv.increaseCode3SetCounter(w.getCode() + w.getCodeExt().substring(0, 1));
             String hz = w.getWord();
             if (gv.isInSingleSet(hz)) {
                 boolean found = true;
@@ -73,19 +72,19 @@ public class MergedMakeShort {
                 }
             }
 
-            if (gv.isIn500Set(hz)) {
+            if (gv.isInJpCommon(hz)) {
                 w.setLevel(10);
                 gv.addToGroup1(w);
-            } else if (gv.isIn1000Set(hz)) {
+            } else if (gv.isInJpLevel1(hz)) {
                 w.setLevel(20);
                 gv.addToGroup2(w);
-            } else if (gv.isIn2000Set(hz)) {
+            } else if (gv.isInJpLevel2(hz)) {
                 w.setLevel(30);
                 gv.addToGroup3(w);
-            } else if (gv.isIn4000Set(hz)) {
+            } else if (gv.isInGB2312Set(hz)) {
                 w.setLevel(40);
                 gv.addToGroup4(w);
-            } else if (gv.isInGB2312Set(hz)) {
+            } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
                 w.setLevel(50);
                 gv.addToGroup5(w);
             } else {
@@ -97,19 +96,23 @@ public class MergedMakeShort {
             }
         }
         log.info("Processed {} lines.", lines.size());
-        log.info("group500: {}", gv.getGroup1().size());
-        log.info("group1000: {}", gv.getGroup2().size());
-        log.info("group2000: {}", gv.getGroup3().size());
-        log.info("group4000: {}", gv.getGroup4().size());
+        log.info("group1: {}", gv.getGroup1().size());
+        log.info("group2: {}", gv.getGroup2().size());
+        log.info("group3: {}", gv.getGroup3().size());
+        log.info("group4: {}", gv.getGroup4().size());
+        log.info("group5: {}", gv.getGroup5().size());
         log.info("groupOther: {}", gv.getGroupOther().size());
+        Collections.sort(gv.getGroup4());
+        Collections.sort(gv.getGroup5());
+        Collections.sort(gv.getGroupOther());
     }
 
     private void processGroups() {
         log.info("Processing groups ...");
-        processGroupLevel1(gv.getGroup1(), gv.getGroup2(), gv.getGroup3());
-        processGroupLevel2(gv.getGroup4(), gv.getGroup5());
-        processGroupLevel3(gv.getGroupOther());
-//        processOtherGroup();
+        processGroupLevel1(gv.getGroup2(),gv.getGroup1());
+        processGroupLevel2(gv.getGroup3());
+        //processGroupLevel3(gv.getGroup4(), gv.getGroup5());
+        processOtherGroup(gv.getGroup4(), gv.getGroup5(),gv.getGroupOther());
     }
 
     private void processGroupLevel1(List<Word>... wordList) {
@@ -117,25 +120,17 @@ public class MergedMakeShort {
         for (Word w : list) {
             Word clone = w.clone();
             String code = w.getCode();
-            String code1 = code.substring(0, 1);
-            String code2 = code.substring(0, 2);
             String code3 = code.substring(0, 3);
-            String[] codes = {code1, code2, code3};
             boolean accept = false;
-            for (String s : codes) {
-                if (gv.isNotInCodeSet(s)
-                        //|| s.length() ==3
-
-                ) {
-                    w.setCode(s);
-                    w.setCodeExt("");
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(s.length())
-                      .updateCodeSetCounter(s);
-                    accept = true;
-                    break;
-                }
+            if (gv.getCodeSetCount(code3) < 2) {
+                w.setCode(code3);
+                w.setCodeExt("");
+                addToResult(w);
+                gv.increaseCodeLengthCounter(code3.length())
+                  .updateCodeSetCounter(code3);
+                accept = true;
             }
+
             if (accept) {
                 clone.setCodeExt("");
                 gv.addToFull(clone);
@@ -153,46 +148,19 @@ public class MergedMakeShort {
         for (Word w : list) {
             Word clone = w.clone();
             String code = w.getCode();
-            String code1 = code.substring(0, 1);
-            String code2 = code.substring(0, 2);
-            String code3 = code.substring(0, 3);
-            String[] codes = {code1, code2, code3};
             boolean accept = false;
-            for (String s : codes) {
-                if (gv.isNotInCodeSet(s)) {
-                    w.setCode(s);
-                    w.setCodeExt("");
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(s.length())
-                      .updateCodeSetCounter(s);
-                    accept = true;
-                    break;
-                }
-            }
-            if (accept) {
-                clone.setCodeExt("");
-                gv.addToFull(clone);
-            } else {
-                addToResult(w);
-                gv.increaseCodeLengthCounter(code.length())
-                  .updateCodeSetCounter(code);
-            }
-        }
-    }
-
-    private void processGroupLevel3(List<Word>... wordList) {
-        List<Word> list = joinList(wordList);
-        for (Word w : list) {
-            String code = w.getCode();
-            String code3 = code.substring(0,3);
+            String code3 = code.substring(0, 3);
             if (gv.isNotInCodeSet(code3)) {
-                Word clone = w.clone();
-                clone.setCodeExt("");
-                gv.addToFull(clone);
                 w.setCode(code3);
+                w.setCodeExt("");
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code3.length())
                   .updateCodeSetCounter(code3);
+            }
+
+            if (accept) {
+                clone.setCodeExt("");
+                gv.addToFull(clone);
             } else {
                 addToResult(w);
                 gv.increaseCodeLengthCounter(code.length())
@@ -216,22 +184,16 @@ public class MergedMakeShort {
 
     private void addToResult(Word w) {
         String hz = w.getWord();
-        if (gv.isIn500Set(hz) || gv.isIn1000Set(hz) ) {
+        if (gv.isInJpCommon(hz) || gv.isInJpLevel1(hz)) {
             gv.addToResult(w);
-        }  else if ( gv.isIn2000Set(hz)) {
+        } else if (gv.isInJpLevel2(hz)) {
             gv.addToResult2(w);
-        } else if (gv.isIn4000Set(hz)) {
-            gv.addToResult3(w);
         } else if (gv.isInGB2312Set(hz)) {
+            gv.addToResult3(w);
+        } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
             gv.addToResult4(w);
-        } else if (gv.isInBig5(hz)) {
-	        gv.addToResult6(w);
-        } else if (gv.isInBig5Hkscs(hz)) {
-            gv.addToResult5(w);
-        } else if (gv.isInJp(hz)) {
-	        gv.addToResult7(w);
         }  else {
-	        gv.addToResult6(w);
+	        gv.addToResult5(w);
         }
     }
 
@@ -243,14 +205,20 @@ public class MergedMakeShort {
         }
         List<Word> list = new ArrayList<>(size);
         for (List<Word> wList : wordList) {
-            list.addAll(wList);
+            for (int i = 0, wListSize = wList.size(); i < wListSize; i++) {
+                Word word = wList.get(i);
+//                if ("漢".equals(word.getWord())) { System.out.println(word + ": " +i); }
+//                if ("汗".equals(word.getWord())) { System.out.println(word + ": " +i); }
+                list.add(word);
+            }
+
         }
-        Collections.sort(list, Word::compare);
+//        Collections.sort(list, Word::compare);
         return list;
     }
 
     private void postProcess() {
-//        fullProcess();
+        fullProcess();
         printCounter("Post process done!");
 	    statistic();
     }
@@ -264,9 +232,10 @@ public class MergedMakeShort {
 		List<Word> result5 = gv.getResult5();
 		List<Word> result6 = gv.getResult6();
 		List<Word> result7 = gv.getResult7();
-		List<Word> words = joinList(result, result2, result3
-                ,result4
-               //, result5 , result6, result7
+		List<Word> words = joinList(result, result2
+                 , result3 ,result4 , result5
+                 , result6
+                // , result7
 		);
 		Map<String, AtomicInteger> stat = new HashMap<>();
 		for (Word w : words) {
@@ -323,25 +292,16 @@ public class MergedMakeShort {
             String hz = w.getWord();
             if (!codes.contains(code)) {
                 w.setLevel(200);
-                if (gv.isIn4000Set(code)) {
-                    gv.addToResult5(w);
-                } else {
-                    gv.addToResult6(w);
-                }
+                gv.addToResult6(w);
                 gv.increaseCodeLengthCounter(code.length())
                   .updateCodeSetCounter(code);
                 codes.add(code);
-                iter.remove();
+
             } else {
-//                w.setLevel(300);
-//                if (gv.isIn4200Set(hz)) {
-//                    gv.addToResult2(w);
-//                } else if (gv.isInGB2312Set(hz)) {
-//                    gv.addToResult4(w);
-//                } else {
-//                    gv.addToResult6(w);
-//                }
+                w.setLevel(300);
+                gv.addToResult7(w);
             }
+            iter.remove();
         }
     }
 

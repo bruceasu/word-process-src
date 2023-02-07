@@ -11,7 +11,8 @@ import me.asu.util.Streams;
 public class Merge {
 
     public static void main(String[] args) throws IOException {
-        Map<String, List<String>> he = loadAsMapList("k.txt");
+        Map<String, List<String>> he = loadAsMapList("jp.txt");
+//        Map<String, List<String>> he = loadAsMapList("k.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-single.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");
@@ -41,7 +42,10 @@ public class Merge {
             List<String> val  = kv.getValue();
             List<String> val2 = last.get(key);
             if (val2 == null) {
-                notMatch.add(key);
+                notMatch.add(key+"\t");
+//                for (String s1 : val) {
+//                    notMatch.add(key + "\t" + s1);
+//                }
                 continue;
             }
             for (String s1 : val) {

@@ -91,16 +91,16 @@ public class MergedMakeShort {
 
 			if (gv.isIn500Set(hz)) {
 				w.setLevel(10);
-				gv.getGroup500().add(w);
+				gv.getGroup1().add(w);
 			} else if (gv.isIn1000Set(hz)) {
 				w.setLevel(20);
-				gv.addToG1000(w);
+				gv.addToGroup2(w);
 			} else if (gv.isIn2000Set(hz)) {
 				w.setLevel(30);
-				gv.addToG2000(w);
+				gv.addToGroup3(w);
 			} else if (gv.isIn4000Set(hz)) {
 				w.setLevel(40);
-				gv.addToG4000(w);
+				gv.addToGroup4(w);
 			} else {
 				w.setLevel(90);
 				gv.addToGroupOther(w);
@@ -110,18 +110,18 @@ public class MergedMakeShort {
 			}
 		}
 		log.info("Processed {} lines.", lines.size());
-		log.info("group500: {}", gv.group500.size());
-		log.info("group1000: {}", gv.group1000.size());
-		log.info("group2000: {}", gv.group2000.size());
-		log.info("group4000: {}", gv.group4000.size());
+		log.info("group500: {}", gv.group1.size());
+		log.info("group1000: {}", gv.group2.size());
+		log.info("group2000: {}", gv.group3.size());
+		log.info("group4000: {}", gv.group4.size());
 		log.info("groupOther: {}", gv.groupOther.size());
 	}
 
 	private void processGroups() {
 		log.info("Processing groups ...");
-		processGroupLevel1(gv.group500);
-		processGroupLevel2(gv.group1000);
-		processGroup(gv.group2000, gv.group4000, gv.groupOther);
+		processGroupLevel1(gv.group1);
+		processGroupLevel2(gv.group2);
+		processGroup(gv.group3, gv.group4, gv.groupOther);
 
 	}
 

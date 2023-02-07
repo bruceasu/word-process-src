@@ -13,23 +13,29 @@ import me.asu.word.Word;
 public class GlobalVariables {
 
     // group
-    List<Word> group500   = new ArrayList<>();
-    List<Word> group1000  = new ArrayList<>();
-    List<Word> group2000  = new ArrayList<>();
-    List<Word> group4000  = new ArrayList<>();
-    List<Word> group6000  = new ArrayList<>();
+    List<Word> group1    = new ArrayList<>();
+    List<Word> group2    = new ArrayList<>();
+    List<Word> group3    = new ArrayList<>();
+    List<Word> group4     = new ArrayList<>();
+    List<Word> group5     = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
-    Set<String> w500    = ResourcesFiles.w500();
-    Set<String> w1000   = ResourcesFiles.w1000();
-    Set<String> w2000   = ResourcesFiles.w2000();
-    Set<String> w4000   = ResourcesFiles.w4000();
-    Set<String> wGb2312 = ResourcesFiles.gb2312();
-    Set<String> wBig5_common = ResourcesFiles.big5_common();
-    Set<String> wBig5 = ResourcesFiles.big5();
-    Set<String> wBig5_hkscs = ResourcesFiles.big5_hkscs();
-    Set<String> wJapanese = ResourcesFiles.japanese();
-    Set<String> wGeneralSpecification = ResourcesFiles.generalSpecification();
+    Set<String> w500    = Collections.emptySet(); //ResourcesFiles.w500();
+    Set<String> w1000   = Collections.emptySet(); //ResourcesFiles.w1000();
+    Set<String> w2000   = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> w4000   = Collections.emptySet(); //ResourcesFiles.w4000();
+    Set<String> wGb2312 = Collections.emptySet(); //ResourcesFiles.gb2312();
+
+    Set<String> wBig5_common = Collections.emptySet(); //ResourcesFiles.big5_common();
+    Set<String> wBig5        = Collections.emptySet(); //ResourcesFiles.big5();
+    Set<String> wBig5Hkscs   = Collections.emptySet(); //ResourcesFiles.big5_hkscs();
+
+    Set<String> wJp       = Collections.emptySet(); //ResourcesFiles.japanese();
+    Set<String> wJpCommon = Collections.emptySet(); //ResourcesFiles.japaneseCommon();
+    Set<String> wJpLevel1 = Collections.emptySet(); //ResourcesFiles.japaneseLevel1();
+    Set<String> wJpLevel2 = Collections.emptySet(); //ResourcesFiles.japaneseLevel2();
+
+    Set<String> wGeneralSpecification = Collections.emptySet(); //ResourcesFiles.generalSpecification();
 
     List<String> single  = new ArrayList<>();
     // 唯一常用字（4000）
@@ -94,40 +100,94 @@ public class GlobalVariables {
         log.info("groupBySyllables: {}", groupBySyllables.size());
         return groupBySyllables;
     }
+
     public boolean isInBig5Common(String w) {
+        if(isCollectionEmpty(wBig5_common)) {
+            wBig5_common = ResourcesFiles.big5_common();
+        }
         return wBig5_common.contains(w);
     }
+
     public boolean isInBig5Hkscs(String w) {
-        return wBig5_hkscs.contains(w);
+        if(isCollectionEmpty(wBig5Hkscs)) {
+            wBig5Hkscs =  ResourcesFiles.big5_hkscs();
+        }
+        return wBig5Hkscs.contains(w);
     }
+
     public boolean isInBig5(String w) {
+        if (isCollectionEmpty(wBig5)) {
+            wBig5 =  ResourcesFiles.big5();
+        }
         return wBig5.contains(w);
     }
     public boolean isInGeneralSpecification(String w) {
+        if (isCollectionEmpty(wGeneralSpecification)) {
+            wGeneralSpecification = ResourcesFiles.generalSpecification();
+        }
         return wGeneralSpecification.contains(w);
     }
 
-    public boolean isInJapanese(String w) {
-        return wJapanese.contains(w);
+    public boolean isInJp(String w) {
+        if(isCollectionEmpty(wJp)) {
+            wJp = ResourcesFiles.japanese();
+        }
+        return wJp.contains(w);
+    }
+
+    public boolean isInJpCommon(String w) {
+        if (isCollectionEmpty(wJpCommon)) {
+            wJpCommon = ResourcesFiles.japaneseCommon();
+        }
+        return wJpCommon.contains(w);
+    }
+
+    public boolean isInJpLevel1(String w) {
+        if (isCollectionEmpty(wJpLevel1)) {
+            wJpLevel1 = ResourcesFiles.japaneseLevel1();
+        }
+        return wJpLevel1.contains(w);
+    }
+
+    public boolean isInJpLevel2(String w) {
+        if (isCollectionEmpty(wJpLevel2)) {
+            wJpLevel2 = ResourcesFiles.japaneseLevel2();
+        }
+        return wJpLevel2.contains(w);
     }
 
     public boolean isInGB2312Set(String w) {
+        if (isCollectionEmpty(wGb2312)) {
+            wGb2312 = ResourcesFiles.gb2312();
+        }
         return wGb2312.contains(w);
     }
 
     public boolean isIn4000Set(String w) {
+        if (isCollectionEmpty(w4000)) {
+            w4000 = ResourcesFiles.w4000();
+        }
         return w4000.contains(w);
     }
 
     public boolean isIn2000Set(String w) {
+        if (isCollectionEmpty(w2000)) {
+            w2000 = ResourcesFiles.w2000();
+        }
         return w2000.contains(w);
     }
 
     public boolean isIn1000Set(String w) {
+        if (isCollectionEmpty(w1000)) {
+            w1000 = ResourcesFiles.w1000();
+        }
         return w1000.contains(w);
     }
 
     public boolean isIn500Set(String w) {
+        if (isCollectionEmpty(w500)) {
+            w500 = ResourcesFiles.w500();
+        }
         return w500.contains(w);
     }
 
@@ -204,33 +264,34 @@ public class GlobalVariables {
         return this;
     }
 
+
+    public GlobalVariables addToGroup1(Word w) {
+        group1.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToGroup2(Word w) {
+        group2.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToGroup3(Word w) {
+        group3.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToGroup4(Word w) {
+        group4.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToGroup5(Word w) {
+        group5.add(w);
+        return this;
+    }
+
     public GlobalVariables addToGroupOther(Word w) {
         groupOther.add(w);
-        return this;
-    }
-
-    public GlobalVariables addToG500(Word w) {
-        group500.add(w);
-        return this;
-    }
-
-    public GlobalVariables addToG6000(Word w) {
-        group6000.add(w);
-        return this;
-    }
-
-    public GlobalVariables addToG1000(Word w) {
-        group1000.add(w);
-        return this;
-    }
-
-    public GlobalVariables addToG2000(Word w) {
-        group2000.add(w);
-        return this;
-    }
-
-    public GlobalVariables addToG4000(Word w) {
-        group4000.add(w);
         return this;
     }
 
@@ -283,5 +344,9 @@ public class GlobalVariables {
         } else {
             return 0;
         }
+    }
+
+    private boolean isCollectionEmpty(Collection c) {
+        return c == null || c.isEmpty();
     }
 }

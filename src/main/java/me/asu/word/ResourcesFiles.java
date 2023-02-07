@@ -60,6 +60,16 @@ public class ResourcesFiles {
     public static Set<String> japanese() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准1和水准2.txt"));
     }
+    public static Set<String> japaneseLevel1() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准1.txt"));
+    }
+    public static Set<String> japaneseLevel2() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准2.txt"));
+    }
+    public static Set<String> japaneseCommon() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本常用汉字表.txt"));
+    }
+
     public static Set<String> generalSpecification() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("通用规范字.txt"));
     }

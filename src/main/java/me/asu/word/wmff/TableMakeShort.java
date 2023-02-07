@@ -21,10 +21,10 @@ public class TableMakeShort {
     throws IOException {
         processOneSet(oneSet);
         group(lines);
-        processGroups(gv.getGroup500(), 0, 1, true);
-        processGroups(gv.getGroup1000(), 2, 1, true);
-        processGroups(gv.getGroup2000(), 4, 1, true);
-        processGroups(gv.getGroup4000(), 6, 1, true);
+        processGroups(gv.getGroup1(), 0, 1, true);
+        processGroups(gv.getGroup2(), 2, 1, true);
+        processGroups(gv.getGroup3(), 4, 1, true);
+        processGroups(gv.getGroup4(), 6, 1, true);
         processOther();
         processFull();
         gv.printCounter();
@@ -66,13 +66,13 @@ public class TableMakeShort {
                 w.setLevel(2);
                 gv.addToFull(w);
             } else if (gv.isIn500Set(w.getWord())) {
-                gv.getGroup500().add(w);
+                gv.getGroup1().add(w);
             } else if (gv.isIn1000Set(w.getWord())) {
-                gv.addToG1000(w);
+                gv.addToGroup2(w);
             } else if (gv.isIn2000Set(w.getWord())) {
-                gv.addToG2000(w);
+                gv.addToGroup3(w);
             } else if (gv.isIn4000Set(w.getWord())) {
-                gv.addToG4000(w);
+                gv.addToGroup4(w);
             } else {
                 w.setLevel(90);
                 gv.addToGroupOther(w);
