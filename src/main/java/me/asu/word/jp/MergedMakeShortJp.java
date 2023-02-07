@@ -138,7 +138,7 @@ public class MergedMakeShortJp {
                 accept = true;
             }
             if (!accept) {
-                if (gv.getCodeSetCount(mCode) < 2) {
+                if (gv.isNotInCodeSet(mCode)) {
                     w.setCode(mCode);
                     w.setCodeExt("");
                     addToResult(w);
