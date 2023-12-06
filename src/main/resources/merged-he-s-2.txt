@@ -7842,7 +7842,7 @@
 芣	cxfu
 茀	cafu
 䓛	cefu
-複	rwfu
+複	pwfu
 襆	jnfu
 訃	ydfu
 負	bdfu
@@ -10143,7 +10143,7 @@
 題	oati
 媂	njti
 媞	nrti
-體	kdti
+體	gdti
 鯷	arti
 屜	uvti
 鳀	arti

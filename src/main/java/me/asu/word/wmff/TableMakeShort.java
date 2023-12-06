@@ -137,7 +137,7 @@ public class TableMakeShort {
                           .increaseCodeLengthCounter(code.length());
                         gv.addToResult(w);
                     } else {
-                        if (gv.isInGB2312Set(w.getWord())) {
+                        if (gv.isInGB2312(w.getWord())) {
                             gv.addToResult6(w);
                         } else {
                             gv.addToResult(w);
@@ -164,7 +164,7 @@ public class TableMakeShort {
                           .increaseCodeLengthCounter(code.length());
                         gv.addToResult(w);
                     } else {
-                        if (gv.isInGB2312Set(w.getWord())) {
+                        if (gv.isInGB2312(w.getWord())) {
                             w.setLevel(100);
                             gv.addCodeSetCounter(code)
                               .increaseCodeLengthCounter(code.length())

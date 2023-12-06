@@ -269,7 +269,7 @@ public class MergedMakeShortSingle {
             gv.addToResult(w);
         } else if (gv.isIn4000Set(hz)) {
             gv.addToResult2(w);
-        } else if (gv.isInGB2312Set(hz)) {
+        } else if (gv.isInGB2312(hz)) {
 	        gv.addToResult3(w);
         } else if (gv.isInBig5(hz)) {
 	        gv.addToResult4(w);

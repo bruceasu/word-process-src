@@ -7,16 +7,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
 import org.apache.commons.cli.*;
 
 public class SortFile {
 
-    public static final String simple           = "sort-order.txt";
-    public static final String tradition        = "sort-order-t.txt";
-    public static final String simplePhrases    = "phrases-freq-s.txt";
+    public static final String simple = "sort-order.txt";
+    public static final String cj = "sort-order-cj.txt";
+    public static final String tradition = "sort-order-t.txt";
+    public static final String simplePhrases = "phrases-freq-s.txt";
     public static final String traditionPhrases = "phrases-freq-t.txt";
-    public static final String simpleMixed    = "mixed-freq-s.txt";
-    public static final String traditionMixed    = "mixed-freq-t.txt";
+    public static final String simpleMixed = "mixed-freq-s.txt";
+    public static final String traditionMixed = "mixed-freq-t.txt";
 
     // 定义命令行参数
     private static Options definedOptions() {
@@ -26,12 +28,13 @@ public class SortFile {
         Option opt_p = new Option("p", "phrase", false, "文件是词库。");
         Option opt_m = new Option("m", "mixed", false, "文件是字词库。");
         Option opt_o = Option.builder("o").hasArg().argName("output")
-                             .desc("输出文件").build();
+                .desc("输出文件").build();
         Option opt_t = Option.builder("t").argName("trad").desc("用繁体排序")
-                             .build();
+                .build();
         Option opt_n = Option.builder("c").hasArg().argName("column")
-                             .desc("排序列").build();
-
+                .desc("排序列").build();
+        Option opt_cj = Option.builder("j").argName("chinese-japanese")
+                .desc("用中式日字排序").build();
         Options opts = new Options();
         opts.addOption(opt_h);
         opts.addOption(opt_e);
@@ -41,6 +44,7 @@ public class SortFile {
         opts.addOption(opt_n);
         opts.addOption(opt_p);
         opts.addOption(opt_m);
+        opts.addOption(opt_cj);
 
         return opts;
     }
@@ -67,6 +71,7 @@ public class SortFile {
         boolean isTradition = false;
         boolean isOutputToConsole = false;
         boolean isPhrases = false;
+        boolean isCj = false;
         boolean isMixed = false;
 
         CommandLine cmdLine = parseOptions(args);
@@ -95,6 +100,9 @@ public class SortFile {
         if (cmdLine.hasOption('m')) {
             isMixed = true;
         }
+        if (cmdLine.hasOption('j')) {
+            isCj = true;
+        }
         if (input == null || input.isEmpty()) {
             printUsageAndExit();
         } else {
@@ -106,7 +114,7 @@ public class SortFile {
         if (output == null || output.isEmpty()) {
             isOutputToConsole = true;
         }
-        Map<String, Integer> dict = loadSortDict(isTradition, isPhrases, isMixed);
+        Map<String, Integer> dict = loadSortDict(isTradition, isCj, isPhrases, isMixed);
         Path inPath = Paths.get(input);
         Charset cs = Charset.forName(encoding);
         List<String> lines = Files.readAllLines(inPath, cs);
@@ -156,13 +164,22 @@ public class SortFile {
         System.exit(1);
     }
 
-    public static Map<String, Integer> loadSortDict(boolean isTradition,
+    public static Map<String, Integer> loadSortDict(boolean isTradition, boolean isCj,
                                                     boolean isPhrases,
                                                     boolean isMixed)
-    throws IOException {
+            throws IOException {
         String name = simple;
-
-        if (isTradition) {
+        if (isCj) {
+            if (isPhrases) {
+                if (isMixed) {
+                    name = simpleMixed;
+                } else {
+                    name = simplePhrases;
+                }
+            } else {
+                name = SortFile.cj;
+            }
+        } else if (isTradition) {
 
             if (isPhrases) {
                 if (isMixed) {
@@ -177,7 +194,7 @@ public class SortFile {
 
             if (isPhrases) {
                 if (isMixed) {
-                    name= simpleMixed;
+                    name = simpleMixed;
                 } else {
                     name = simplePhrases;
                 }
@@ -195,7 +212,9 @@ public class SortFile {
         } else {
             // try class Path
             is = SortFile.class.getClassLoader().getResourceAsStream(name);
-            if (is == null) { return ret; }
+            if (is == null) {
+                return ret;
+            }
         }
         try (InputStreamReader r = new InputStreamReader(is,
                 StandardCharsets.UTF_8);

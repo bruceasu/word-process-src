@@ -56,20 +56,42 @@ public class BuildNorthDoublePinyinHe {
                     if (i > 1) {
                         builder.append(' ');
                     }
-                    if (code.length() == 1) {
-                        builder.append(code).append(code);
-                    } else if (code.length() == 2) {
-                        builder.append(code);
-                    } else {
-                        if (mapping.containsKey(code)) {
-                            builder.append(mapping.get(code));
+                    boolean hasTone = code.matches(".+\\d$");
+                    if (hasTone) {
+                        String newCode = code.substring(0, code.length()-1);
+                        String tone = code.substring(code.length()-1);
+                        if (newCode.length() == 1) {
+                            builder.append(code).append(code);
+                        } else if (newCode.length() == 2) {
+                            builder.append(code);
                         } else {
-                            System.out.printf("line %s key not in mapping %s%n",
-                                    cnt, code);
-                            error = true;
-                            break;
+                            if (mapping.containsKey(newCode)) {
+                                builder.append(mapping.get(newCode) + tone);
+                            } else {
+                                System.out.printf("line %s key not in mapping %s%n",
+                                        cnt, code);
+                                error = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (code.length() == 1) {
+                            builder.append(code).append(code);
+                        } else if (code.length() == 2) {
+                            builder.append(code);
+                        } else {
+                            if (mapping.containsKey(code)) {
+                                builder.append(mapping.get(code));
+                            } else {
+                                System.out.printf("line %s key not in mapping %s%n",
+                                        cnt, code);
+                                error = true;
+                                break;
+                            }
                         }
                     }
+
+
                 }
                 if (error) {
                     System.out.printf("line %s:%s has not map code.%n",

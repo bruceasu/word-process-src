@@ -311,7 +311,7 @@ public class MergedMakeShort {
 			gv.addToResult3(w);
 		} else if (gv.isIn4000Set(hz)) {
 			gv.addToResult4(w);
-		} else if (gv.isInGB2312Set(hz)) {
+		} else if (gv.isInGB2312(hz)) {
 			gv.addToResult5(w);
 		} else {
 			gv.addToResult6(w);

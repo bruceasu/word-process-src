@@ -197,7 +197,7 @@
 報	bcty
 聲	ugue
 才	cdap
-體	tikd
+體	tigd
 今	jbrv
 合	gerk
 合	herk
@@ -7689,7 +7689,7 @@
 褘	hvpa
 褕	yupd
 褌	kypi
-複	furw
+複	fupw
 製	viyp
 裯	izpk
 裡	lipt
@@ -7877,7 +7877,8 @@
 総	zsxx
 綵	cdsm
 綳	bgso
-続	xusd
+続	xuse
+辻	uizu
 継	jisv
 絵	hvss
 経	jkst

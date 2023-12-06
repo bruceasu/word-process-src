@@ -11,13 +11,14 @@ import me.asu.util.Streams;
 public class Merge {
 
     public static void main(String[] args) throws IOException {
-        Map<String, List<String>> he = loadAsMapList("jp.txt");
-//        Map<String, List<String>> he = loadAsMapList("k.txt");
+//        Map<String, List<String>> he = loadAsMapList("jp.txt");
+        Map<String, List<String>> he = loadAsMapList("out/b.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-single.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");
-//        Map<String, List<String>> xm = loadAsMapList("cs.txt");
+//        Map<String, List<String>> xm = loadAsMapList("cuksing.txt");
 //        Map<String, List<String>> xm = loadAsMapList("rain.txt");
+//        Map<String, List<String>> xm = loadAsMapList("rain1.txt");
 //        Map<String, List<String>> xm = loadAsMapList("rain-s-t.txt");
         Map<String, List<String>> xm  = loadAsMapList("rain-s-t-all.txt");
         List<Word>                ret = merge(he, xm);

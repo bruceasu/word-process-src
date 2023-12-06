@@ -1410,7 +1410,7 @@
 伏	hukurq
 馥	hukuhw
 復	hukurw
-複	hukurw
+複	hukupw
 瓢	hukubexg
 匏	hukubedv
 瓠	hukubedg
@@ -5325,7 +5325,7 @@
 頭	tuburidb
 拓	tubusefk
 礫	tubuteum
-続	tudukisd
+続	tudukise
 續	tudukisb
 鼓	tudumiuy
 皷	tudumiuy
@@ -5506,7 +5506,7 @@
 汁	tuyudu
 逵	tuzizt
 辻	tuzizu
-続	tuzukisd
+続	tuzukise
 續	tuzukisb
 鼓	tuzumiuy
 皷	tuzumiuy
@@ -6099,7 +6099,7 @@
 族	zokufu
 属	zokuud
 俗	zokurk
-続	zokusd
+続	zokuse
 賊	zokubu
 忠	zonxa
 損	zonfb

@@ -1,6 +1,9 @@
 package me.asu.word.jp;
 
 
+import me.asu.util.Streams;
+import me.asu.word.Word;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -8,38 +11,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import me.asu.util.Streams;
-import me.asu.word.Word;
 
-import static me.asu.word.ResourcesFiles.*;
+import static me.asu.word.ResourcesFiles.loadCantoneseWords;
+import static me.asu.word.ResourcesFiles.loadCjWords;
 
 /**
  * 主打单字，音形
  */
-public class HywyCn {
+public class HywyCantonese {
 
     public static void main(String[] args) throws IOException {
         String name = "jp";
-//        Map<String, List<String>> he     = loadAsMapList("he.txt");
-//        Map<String, List<String>> xm      = loadAsMapList("rain.txt");
-//
-//        List<Word>                merged  = Merge.merge(he, xm);
         List<String> oneSet = new ArrayList<>();
-//        List<Word> merged = loadCjWords("out/c.txt");
-        List<Word> merged = loadCjWords("merged-j-cn2.txt");
-//        List<String> oneSet = readLinesInResources("he_1_500.txt");
-//        List<String> twoSet = readLinesInResources("he_phrases-2.txt");
-//        oneSet.addAll(twoSet);
-
-//        List<String>              oneSet = readLinesInResources("rain_1.txt");
+        List<Word> merged = loadCantoneseWords("merge-cantonese-j.txt");
         Map<String, List<Word>> results =
-                new MergedMakeShortCn().makeShort(merged, oneSet);
+                new MergedMakeShortCantonese().makeShort(merged, oneSet);
 
         save(name, results);
     }
 
     protected static void save(String name, Map<String, List<Word>> results)
-    throws IOException {
+            throws IOException {
         File outdir = new File("out");
         if (!outdir.exists()) {
             outdir.mkdirs();
@@ -95,7 +87,7 @@ public class HywyCn {
     }
 
     protected static void writeTo(List<Word> list, File outFile, int startFreq)
-    throws IOException {
+            throws IOException {
         try (Writer writer = Streams.fileOutw(outFile)) {
 //            Collections.sort(list);
             for (int i = 0; i < list.size(); i++) {
@@ -112,7 +104,7 @@ public class HywyCn {
 
     protected static void writeFullTo(List<Word> list, File outFile,
                                       int startFreq)
-    throws IOException {
+            throws IOException {
         try (Writer writer = Streams.fileOutw(outFile)) {
             Collections.sort(list);
             for (int i = 0; i < list.size(); i++) {
@@ -128,7 +120,7 @@ public class HywyCn {
 
     protected static void writeSpTo(List<Word> list, File outFile,
                                     int startFreq)
-    throws IOException {
+            throws IOException {
         try (Writer writer = Streams.fileOutw(outFile)) {
             Collections.sort(list);
             for (int i = 0; i < list.size(); i++) {

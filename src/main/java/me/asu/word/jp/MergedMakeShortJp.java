@@ -86,7 +86,7 @@ public class MergedMakeShortJp {
             } else if (gv.isInJpLevel2(hz)) {
                 w.setLevel(30);
                 gv.addToGroup3(w);
-            } else if (gv.isInGB2312Set(hz)) {
+            } else if (gv.isInGB2312(hz)) {
                 w.setLevel(40);
                 gv.addToGroup4(w);
             } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
@@ -207,7 +207,7 @@ public class MergedMakeShortJp {
             gv.addToResult(w);
         } else if (gv.isInJpLevel2(hz)) {
             gv.addToResult2(w);
-        } else if (gv.isInGB2312Set(hz)) {
+        } else if (gv.isInGB2312(hz)) {
             gv.addToResult3(w);
         } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
             gv.addToResult4(w);

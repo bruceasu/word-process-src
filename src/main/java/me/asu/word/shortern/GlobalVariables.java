@@ -18,13 +18,21 @@ public class GlobalVariables {
     List<Word> group3    = new ArrayList<>();
     List<Word> group4     = new ArrayList<>();
     List<Word> group5     = new ArrayList<>();
+    List<Word> group6     = new ArrayList<>();
+    List<Word> group7     = new ArrayList<>();
+    List<Word> group8     = new ArrayList<>();
+    List<Word> group9     = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
     Set<String> w500    = Collections.emptySet(); //ResourcesFiles.w500();
     Set<String> w1000   = Collections.emptySet(); //ResourcesFiles.w1000();
     Set<String> w2000   = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> wCj2000   = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> wC2000   = Collections.emptySet(); //ResourcesFiles.w2000();
     Set<String> w4000   = Collections.emptySet(); //ResourcesFiles.w4000();
+    Set<String> wGb = Collections.emptySet(); //ResourcesFiles.gb2312();
     Set<String> wGb2312 = Collections.emptySet(); //ResourcesFiles.gb2312();
+    Set<String> wGb2312_1 = Collections.emptySet(); //ResourcesFiles.gb2312();
 
     Set<String> wBig5_common = Collections.emptySet(); //ResourcesFiles.big5_common();
     Set<String> wBig5        = Collections.emptySet(); //ResourcesFiles.big5();
@@ -34,6 +42,9 @@ public class GlobalVariables {
     Set<String> wJpCommon = Collections.emptySet(); //ResourcesFiles.japaneseCommon();
     Set<String> wJpLevel1 = Collections.emptySet(); //ResourcesFiles.japaneseLevel1();
     Set<String> wJpLevel2 = Collections.emptySet(); //ResourcesFiles.japaneseLevel2();
+    Set<String> wJpLevel3 = Collections.emptySet(); //ResourcesFiles.japaneseLevel2();
+    Set<String> wJpLevel4 = Collections.emptySet(); //ResourcesFiles.japaneseLevel2();
+    Map<String, Integer> jpOrder = Collections.emptyMap();
 
     Set<String> wGeneralSpecification = Collections.emptySet(); //ResourcesFiles.generalSpecification();
 
@@ -53,6 +64,8 @@ public class GlobalVariables {
     List<Word> result6 = new ArrayList<>();
     // 占位简码
     List<Word> result7 = new ArrayList<>();
+    List<Word> result8 = new ArrayList<>();
+    List<Word> result9 = new ArrayList<>();
     List<Word> full    = new ArrayList<>();
 
     List<Word> remain = new ArrayList<>();
@@ -101,16 +114,42 @@ public class GlobalVariables {
         return groupBySyllables;
     }
 
+    public Integer getJpOrder(String w) {
+        if(isMapEmpty(jpOrder)) {
+            jpOrder=new HashMap<>();
+            Map<String, String> m = ResourcesFiles.loadCsvAsMap("jp-words-order.csv");
+            m.forEach((k,v)->{
+                jpOrder.put(v, -1 * Integer.valueOf(k));
+            });
+        }
+        Integer freq = jpOrder.get(w);
+        return freq == null ? Integer.MAX_VALUE : freq;
+    }
+
     public boolean isInBig5Common(String w) {
         if(isCollectionEmpty(wBig5_common)) {
             wBig5_common = ResourcesFiles.big5_common();
         }
         return wBig5_common.contains(w);
     }
+    public boolean isInCj2000(String w) {
+        if(isCollectionEmpty(wCj2000)) {
+            wCj2000 = ResourcesFiles.wCj2000();
+        }
+        return wCj2000.contains(w);
+    }
+    public boolean isInC2000(String w) {
+        if(isCollectionEmpty(wC2000)) {
+            wC2000 = ResourcesFiles.wC2000();
+        }
+        return wC2000.contains(w);
+    }
 
     public boolean isInBig5Hkscs(String w) {
         if(isCollectionEmpty(wBig5Hkscs)) {
+            Set<String> b =  ResourcesFiles.big5();
             wBig5Hkscs =  ResourcesFiles.big5_hkscs();
+            wBig5Hkscs.removeAll(b);
         }
         return wBig5Hkscs.contains(w);
     }
@@ -156,13 +195,36 @@ public class GlobalVariables {
         return wJpLevel2.contains(w);
     }
 
-    public boolean isInGB2312Set(String w) {
+    public boolean isInJpLevel3(String w) {
+        if (isCollectionEmpty(wJpLevel3)) {
+            wJpLevel3 = ResourcesFiles.japaneseLevel3();
+        }
+        return wJpLevel3.contains(w);
+    }
+    public boolean isInJpLevel4(String w) {
+        if (isCollectionEmpty(wJpLevel4)) {
+            wJpLevel4 = ResourcesFiles.japaneseLevel4();
+        }
+        return wJpLevel4.contains(w);
+    }
+    public boolean isInGB2312(String w) {
         if (isCollectionEmpty(wGb2312)) {
             wGb2312 = ResourcesFiles.gb2312();
         }
         return wGb2312.contains(w);
     }
-
+    public boolean isInGB2312_1(String w) {
+        if (isCollectionEmpty(wGb2312_1)) {
+            wGb2312_1 = ResourcesFiles.gb2312_1();
+        }
+        return wGb2312_1.contains(w);
+    }
+    public boolean isInGb(String w) {
+        if (isCollectionEmpty(wGb)) {
+            wGb = ResourcesFiles.gb();
+        }
+        return wGb.contains(w);
+    }
     public boolean isIn4000Set(String w) {
         if (isCollectionEmpty(w4000)) {
             w4000 = ResourcesFiles.w4000();
@@ -289,6 +351,22 @@ public class GlobalVariables {
         group5.add(w);
         return this;
     }
+    public GlobalVariables addToGroup6(Word w) {
+        group6.add(w);
+        return this;
+    }
+    public GlobalVariables addToGroup7(Word w) {
+        group7.add(w);
+        return this;
+    }
+    public GlobalVariables addToGroup8(Word w) {
+        group8.add(w);
+        return this;
+    }
+    public GlobalVariables addToGroup9(Word w) {
+        group9.add(w);
+        return this;
+    }
 
     public GlobalVariables addToGroupOther(Word w) {
         groupOther.add(w);
@@ -347,6 +425,10 @@ public class GlobalVariables {
     }
 
     private boolean isCollectionEmpty(Collection c) {
+        return c == null || c.isEmpty();
+    }
+
+    private boolean isMapEmpty(Map c) {
         return c == null || c.isEmpty();
     }
 }

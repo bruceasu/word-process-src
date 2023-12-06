@@ -5,6 +5,8 @@ import static me.asu.cli.command.cnsort.Orders.searchTraditionalOrder;
 
 import java.io.File;
 import java.util.*;
+
+import me.asu.cli.command.cnsort.CommonSearcher;
 import me.asu.util.Files;
 
 /**
@@ -26,6 +28,12 @@ public class ResourcesFiles {
     public static Set<String> readLinesAsSetInResources(String name) {
         return new HashSet<>(ResourcesFiles.readLinesInResources(name));
     }
+    public static Set<String> wCj2000() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-cj-2000.txt"));
+    }
+    public static Set<String> wC2000() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-c-2000.txt"));
+    }
 
     public static Set<String> w500() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-500.txt"));
@@ -46,7 +54,12 @@ public class ResourcesFiles {
     public static Set<String> gb2312() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-gb2312.txt"));
     }
-
+    public static Set<String> gb2312_1() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-gb2312-1.txt"));
+    }
+    public static Set<String> gb() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-GB.txt"));
+    }
     public static Set<String> big5_hkscs() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("big5-hkscs.txt"));
     }
@@ -65,6 +78,12 @@ public class ResourcesFiles {
     }
     public static Set<String> japaneseLevel2() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准2.txt"));
+    }
+    public static Set<String> japaneseLevel3() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准3.txt"));
+    }
+    public static Set<String> japaneseLevel4() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准4.txt"));
     }
     public static Set<String> japaneseCommon() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本常用汉字表.txt"));
@@ -95,6 +114,57 @@ public class ResourcesFiles {
         }
         return list;
     }
+    public static List<Word> loadCjWords(String file) {
+        List<String> strings = readLinesInResources(file);
+        List<Word> list = new ArrayList<>(strings.size());
+        CjSearcher searcher = new CjSearcher();
+        for (String s : strings) {
+            if (s == null) { continue; }
+            s = s.trim();
+            if (s.startsWith("#")) { continue; }
+            if (s.isEmpty()) { continue; }
+            String[] kv = s.split("\\s+");
+            Word w = new Word();
+            w.setCode(kv[1]);
+            w.setCodeExt("");
+            w.setWord(kv[0]);
+            w.setOrder(searcher.searchOrder(kv[0]));
+            list.add(w);
+        }
+        return list;
+    }
+
+    public static List<Word> loadCantoneseWords(String file) {
+        List<String> strings = readLinesInResources(file);
+        List<Word> list = new ArrayList<>(strings.size());
+        CjSearcher searcher = new CjSearcher();
+        for (String s : strings) {
+            if (s == null) { continue; }
+            s = s.trim();
+            if (s.startsWith("#")) { continue; }
+            if (s.isEmpty()) { continue; }
+            String[] kv = s.split("\\s+");
+            Word w = new Word();
+            String[] split = kv[1].split(":");
+            w.setCode(split[0]);
+            w.setCodeExt(split[1]);
+            w.setWord(kv[0]);
+            w.setOrder(searcher.searchOrder(kv[0]));
+            list.add(w);
+        }
+        return list;
+    }
+    public static class CjSearcher extends CommonSearcher {
+        public CjSearcher() {
+            super(ResourcesFiles.readLinesInResources("sort-order-cj.txt"));
+        }
+
+        public int searchOrder(String w) {
+            Integer integer = (Integer)this.orderMap.get(w);
+            return integer == null ? 2147483647 : integer;
+        }
+    }
+
     public static Map<String, String> loadAsMap(String name) {
         List<String> strings = readLinesInResources(name);
         Map<String, String> map = new HashMap<>();
@@ -108,6 +178,38 @@ public class ResourcesFiles {
                 continue;
             }
             map.put(split[0], split[1]);
+        }
+        return map;
+    }
+    public static Map<String, String> loadAsMapIfAbsent(String name) {
+        List<String> strings = readLinesInResources(name);
+        Map<String, String> map = new HashMap<>();
+        for (String line : strings) {
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] split = line.split("\\s+");
+            if (split.length < 2) {
+                continue;
+            }
+            map.putIfAbsent(split[0], split[1]);
+        }
+        return map;
+    }
+    public static Map<String, String> loadCsvAsMap(String name) {
+        List<String> strings = readLinesInResources(name);
+        Map<String, String> map = new HashMap<>();
+        for (String line : strings) {
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] split = line.split(",");
+            if (split.length < 2) {
+                continue;
+            }
+            map.put(split[0].trim(), split[1].trim());
         }
         return map;
     }

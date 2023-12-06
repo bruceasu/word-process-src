@@ -7883,7 +7883,7 @@
 機	mj
 報	ty
 聲	ue
-體	kd
+體	gd
 總	sx
 結	sk
 東	an
@@ -10361,7 +10361,7 @@
 壪	tg
 殻	uy
 処	wj
-複	rw
+複	pw
 伕	an
 姦	nn
 嬀	nh
@@ -10480,7 +10480,7 @@
 経	st
 絵	ss
 継	sv
-続	sd
+続	se
 緔	sk
 縄	sv
 綳	so
@@ -11033,6 +11033,7 @@
 讃	yb
 谺	by
 賎	bd
+査	mq
 躄	zu
 躰	ua
 躾	ud

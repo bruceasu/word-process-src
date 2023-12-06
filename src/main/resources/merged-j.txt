@@ -2182,7 +2182,7 @@
 覆	rwfu
 後	rwhz
 徽	rwhv
-複	rwfu
+複	pwfu
 倣	rwfh
 優	rwyz
 復	rwfu
@@ -2232,7 +2232,8 @@
 納	sdna
 紛	sdff
 終	sdvs
-続	sdxu
+続	sexu
+辻	zuui
 緑	sdlv
 緑	sdlu
 線	sdxm
@@ -11048,6 +11049,7 @@
 珰	wedh
 璀	wfcv
 雒	wflo
+産	lfij
 產	wfij
 瓤	wgrh
 琰	whyj

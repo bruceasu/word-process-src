@@ -1,11 +1,16 @@
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
 import me.asu.util.Strings;
+import me.asu.word.ResourcesFiles;
+
+import static me.asu.word.ResourcesFiles.*;
 
 /**
  * Created by suk on 2019/7/14.
@@ -13,110 +18,104 @@ import me.asu.util.Strings;
 public class Filter {
 
     public static void main(String[] args) throws IOException {
-//        find1();
-//        find2();
-        merge();
+        find1();
+ //       find2();
+//       test();
     }
 
-    private static void merge() throws IOException {
-        List<String>              he      = Files.readAllLines(Paths.get("out/he3.txt"));
-        Map<String, List<String>> xm     = loadAsMapList("src/main/resources/rain-s-t.txt");
-        Path out = Paths.get("out", "he4.txt");
-        try (BufferedWriter writer = Files.newBufferedWriter(out)) {
-            for (String line : he) {
-                if (Strings.isBlank(line)) { continue; }
-                if (line.startsWith("#")) { continue; }
+    private static void test() throws IOException {
+        List<String> a = ResourcesFiles.readLinesInResources("out/a.txt");
+        String b = "out\\b.txt";
+
+        Map<String,Set<String>> single = new HashMap<>();
+        final List<String> strings = readLinesInResources("he-single.txt");
+        for (String line : strings) {
+            if (Strings.isBlank(line)) {
+                continue;
+            }
+            if (line.startsWith("#")) {
+                continue;
+            }
+
+            String[] split = line.split("\\s+");
+            if (single.containsKey(split[0])) {
+                single.get(split[0]).add(split[1]);
+            } else {
+                final HashSet<String> set = new HashSet<>();
+                set.add(split[1]);
+                single.put(split[0], set);
+            }
+        }
+        try(BufferedWriter writer = Files.newBufferedWriter(Paths.get(b), StandardCharsets.UTF_8)) {
+            for(String line :a) {
+                if (Strings.isBlank(line)) {
+                    continue;
+                }
+                if (line.startsWith("#")) {
+                    continue;
+                }
 
                 String[] split = line.split("\\s+");
-                String   hz   = split[0];
-                if (xm.containsKey(hz)) {
-                    writer.write(line);
-                    writer.write(xm.get(hz).get(0));
-                    writer.write("\n");
-                } else {
-                    System.out.println(line);
+                final Set<String> s = single.get(split[0].substring(split[0].length() - 1));
+                if (s != null) {
+                    for (String c : s) {
+                        writer.write(line);
+                        writer.write(c);
+                        writer.write("#序25000");
+                        writer.write('\n');
+                    }
+
                 }
             }
         }
+
         System.out.println("DONE");
     }
 
     private static void find1() throws IOException {
-        List<String>              he      = Files.readAllLines(Paths.get("src/main/resources/he.txt"));
-        Map<String, List<String>> he2     = loadAsMapList("src/main/resources/he-tone.txt");
-        Path out = Paths.get("out", "he3.txt");
+        Set<String> a = new HashSet<>(Files.readAllLines(Paths.get("out/a.txt")));
+        Set<String> b = new HashSet<>(Files.readAllLines(Paths.get("out/b.txt")));
+        b.removeAll(a);
+        Path out = Paths.get("out", "c.txt");
         try (BufferedWriter writer = Files.newBufferedWriter(out)) {
-            for (String line : he) {
-                if (Strings.isBlank(line)) { continue; }
-                if (line.startsWith("#")) { continue; }
-
-                String[] split = line.split("\\s+");
-                if (!he2.containsKey(split[0])) {
-                    writer.write(line);
-                    writer.write("\n");
+            for (String line : b) {
+                if (Strings.isBlank(line)) {
+                    continue;
                 }
+                if (line.startsWith("#")) {
+                    continue;
+                }
+
+                writer.write(line);
+                writer.write("\n");
             }
         }
         System.out.println("DONE");
     }
 
     private static void find2() throws IOException {
-        List<String>              he      = Files.readAllLines(Paths.get("python-src/py.txt"));
-        Map<String, List<String>> he2     = loadAsMapList("out/he3.txt");
-        Path out = Paths.get("out", "he4.txt");
+        List<String> c = Files.readAllLines(Paths.get("src/main/resources/sort-order-cj.txt"));
+        Map<String, String> map = loadAsMapIfAbsent("src/main/resources/cj-mapping.txt");
+        Path out = Paths.get("out", "tmp-sort-order.txt");
         try (BufferedWriter writer = Files.newBufferedWriter(out)) {
-            for (String line : he) {
-                if (Strings.isBlank(line)) { continue; }
-                if (line.startsWith("#")) { continue; }
+            for (String line : c) {
+                if (Strings.isBlank(line)) {
+                    continue;
+                }
+                if (line.startsWith("#")) {
+                    continue;
+                }
 
-                String[] split = line.split("\\s+");
-                if (he2.containsKey(split[0])) {
-                    List<String> s = he2.get(split[0]);
-                    if (s.size() == 1 && split.length == 2) {
-                        writer.write("1 ");
-                        writer.write(split[0]);
-                        writer.write("\t");
-                        writer.write(s.get(0));
-                        writer.write(line.charAt(line.length()-1));
-                        writer.write("\n");
-                    } else {
-                        writer.write("2 ");
-                        writer.write(split[0]);
-                        writer.write("\t");
-                        for (String l : s) {
-                            writer.write(l);
-                            writer.write(" ");
-                        }
-                        writer.write(line);
-                        writer.write("\n");
-                    }
-
+                if (map.containsKey(line)) {
+                    writer.write(map.get(line));
+                    writer.write("\n");
+                } else {
+                    writer.write(line);
+                    writer.write("\n");
                 }
             }
         }
         System.out.println("DONE");
     }
 
-    private static Map<String, List<String>> loadAsMapList(String s) throws IOException {
-        List<String>        lines = Files.readAllLines(Paths.get(s));
-        Map<String, List<String>> map = new HashMap<>();
-        for (String line : lines) {
-            line = line.trim();
-            if (line.isEmpty()) {
-                continue;
-            }
-            String[] split = line.split("\\s+");
-            if (split.length < 2) {
-                continue;
-            }
-            if (map.containsKey(split[0])) {
-                map.get(split[0]).add(split[1]);
-            } else {
-                List<String> ls = new ArrayList<>();
-                ls.add(split[1]);
-                map.put(split[0], ls);
-            }
-        }
-        return map;
-    }
 }

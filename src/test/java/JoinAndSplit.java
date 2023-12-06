@@ -14,21 +14,25 @@ public class JoinAndSplit {
 
     public static void main(String[] args) throws IOException {
         split("out/a.txt", "split.txt");
-//        join("out/b.txt", "join.txt");
+        // join("out/b.txt", "join.txt");
     }
 
     private static void join(String in, String out) throws IOException {
-        List<String>              he      = Files.readAllLines(Paths.get(in));
+        List<String> he = Files.readAllLines(Paths.get(in));
         Path outPath = Paths.get("out", out);
         Map<String, List<String>> m = new TreeMap<>();
         for (String line : he) {
-            if (Strings.isBlank(line)) { continue; }
-            if (line.startsWith("#")) { continue; }
+            if (Strings.isBlank(line)) {
+                continue;
+            }
+            if (line.startsWith("#")) {
+                continue;
+            }
 
             String[] split = line.split("\\s+");
-            String   hz   = split[0];
-            String   code   = split[1];
-            m.computeIfAbsent(code, k->new LinkedList<>());
+            String hz = split[0];
+            String code = split[1];
+            m.computeIfAbsent(code, k -> new LinkedList<>());
             m.get(code).add(hz);
         }
 
@@ -51,18 +55,20 @@ public class JoinAndSplit {
     }
 
     private static void split(String in, String out) throws IOException {
-        List<String>              inLines      = Files.readAllLines(Paths.get(in));
+        System.out.println("Begin to split the input file: " + in);
+        List<String> inLines = Files.readAllLines(Paths.get(in));
         Path outPath = Paths.get("out", out);
-        Map<String, List<String>> m = new TreeMap<>();
-
-
         try (BufferedWriter writer = Files.newBufferedWriter(outPath)) {
             for (String line : inLines) {
-                if (Strings.isBlank(line)) { continue; }
-                if (line.startsWith("#")) { continue; }
+                if (Strings.isBlank(line)) {
+                    continue;
+                }
+                if (line.startsWith("#")) {
+                    continue;
+                }
 
                 String[] split = line.split("\\s+");
-                String   code   = split[0];
+                String code = split[0];
                 for (int i = 1; i < split.length; i++) {
                     String w = split[i];
                     writer.write(w);
@@ -77,6 +83,5 @@ public class JoinAndSplit {
         }
         System.out.println("DONE! Write to " + outPath);
     }
-
 
 }
