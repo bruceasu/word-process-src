@@ -126,7 +126,7 @@ public class MergedMakeShort {
         processGroupLevel1(gv.getGroup3());
         processGroupLevel2(gv.getGroup4());
         processGroupLevel2(gv.getGroup5());
-        processGroupLevel2(gv.getGroup6());
+        processGroupLevel3(gv.getGroup6());
         processGroupLevel3(gv.getGroup7());
         processGroupLevel3(gv.getGroup8());
         processOtherGroup(gv.getGroupOther());
@@ -237,11 +237,11 @@ public class MergedMakeShort {
         String hz = w.getWord();
         if (gv.isIn500Set(hz) || gv.isIn1000Set(hz) || gv.isIn2000Set(hz)) {
             gv.addToResult(w);
-        } else if (gv.isInGB2312_1(hz)) {
+        } else if (gv.isInGB2312_1(hz)||gv.isIn4000Set(hz)) {
             gv.addToResult2(w);
-        } else if (gv.isIn4000Set(hz)) {
-            gv.addToResult3(w);
         } else if (gv.isInJpCommon(hz)) {
+            gv.addToResult3(w);
+        } else if (gv.isInGb(hz)) {
             gv.addToResult4(w);
         } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
             gv.addToResult5(w);

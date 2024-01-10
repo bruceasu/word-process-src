@@ -6,7 +6,9 @@ import static me.asu.cli.command.cnsort.Orders.searchTraditionalOrder;
 import java.io.File;
 import java.util.*;
 
+import me.asu.cli.command.cnsort.ChineseSearcher;
 import me.asu.cli.command.cnsort.CommonSearcher;
+import me.asu.cli.command.cnsort.SimplifiedChineseSearcher;
 import me.asu.util.Files;
 
 /**
@@ -137,7 +139,7 @@ public class ResourcesFiles {
     public static List<Word> loadCantoneseWords(String file) {
         List<String> strings = readLinesInResources(file);
         List<Word> list = new ArrayList<>(strings.size());
-        CjSearcher searcher = new CjSearcher();
+        ChineseSearcher searcher = new SimplifiedChineseSearcher();
         for (String s : strings) {
             if (s == null) { continue; }
             s = s.trim();

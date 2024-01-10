@@ -2221,7 +2221,7 @@
 納	nasd
 紛	ffsd
 終	vssd
-続	xusd
+続	xuse
 緑	lvsd
 緑	lusd
 線	xmsd
