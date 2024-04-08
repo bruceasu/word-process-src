@@ -7,6 +7,7 @@ import static me.asu.word.ResourcesFiles.readLinesInResources;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,9 @@ public class HylySingle {
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
         List<Word> merged = loadWords("single.txt", true);
+//        List<String> oneSet = readLinesInResources("he_1_2.txt");
         List<String> oneSet = readLinesInResources("single_1.txt");
+//        List<String> oneSet = new ArrayList<>();
         Map<String, List<Word>> results = new MergedMakeShortSingle().makeSort(merged, oneSet);
 
         save(name, results);

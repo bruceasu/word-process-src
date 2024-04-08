@@ -12,7 +12,9 @@ public class Merge {
 
     public static void main(String[] args) throws IOException {
 //        Map<String, List<String>> he = loadAsMapList("jp.txt");
-        Map<String, List<String>> he = loadAsMapList("out/b.txt");
+//        Map<String, List<String>> he = loadAsMapList("out/b.txt");
+//        Map<String, List<String>> he = loadAsMapList("带调拼音-零.txt");
+        Map<String, List<String>> he = loadAsMapList("带调拼音-he.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-single.txt");
 //        Map<String, List<String>> he = loadAsMapList("he-s-t.txt");
 //        Map<String, List<String>> xm = loadAsMapList("kuaishou.txt");

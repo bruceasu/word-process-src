@@ -72,13 +72,30 @@ public class GlobalVariables {
 
     Map<String, AtomicInteger> codeSet  = new HashMap<>();
     Map<String, AtomicInteger> code3Set = new HashMap<>();
+    Set<String> hzSet = new HashSet<>();
 
     int[] codeLenCounter = new int[30];
+
+
 
     public GlobalVariables() {
         for (int i = 0; i < 30; i++) {
             codeLenCounter[i] = 0;
         }
+    }
+
+    public GlobalVariables hz(String hz) {
+        hzSet.add(hz);
+        return this;
+    }
+    public boolean hzExist(String hz) {
+        if (hz == null) return false;
+        return hzSet.contains(hz);
+    }
+
+    public GlobalVariables clearHz() {
+        hzSet.clear();
+        return this;
     }
 
     public void printCounter() {
@@ -382,6 +399,9 @@ public class GlobalVariables {
         return remain;
     }
 
+    public void clearRemain() {
+        remain.clear();
+    }
     public GlobalVariables updateCodeSetCounter(String code) {
         if (isNotInCodeSet(code)) {
             addCodeSetCounter(code);

@@ -13,8 +13,8 @@ import me.asu.util.Strings;
 public class JoinAndSplit {
 
     public static void main(String[] args) throws IOException {
-        split("out/a.txt", "split.txt");
-        // join("out/b.txt", "join.txt");
+        //split("out/a.txt", "split.txt");
+         join("out/a.txt", "join.txt");
     }
 
     private static void join(String in, String out) throws IOException {
@@ -30,8 +30,8 @@ public class JoinAndSplit {
             }
 
             String[] split = line.split("\\s+");
-            String hz = split[0];
-            String code = split[1];
+            String hz = split[1];
+            String code = split[0];
             m.computeIfAbsent(code, k -> new LinkedList<>());
             m.get(code).add(hz);
         }

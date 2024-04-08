@@ -391,7 +391,6 @@
 贼	zw
 走	zz
 
-#try encode:
 道	dcz
 子	ziv
 之	vid
@@ -669,10 +668,9 @@
 革	gec
 矿	klu
 酸	sry
-#force encode:
+
 十	eu
 
-#算法不好处理的简码字
 词	ciy
 句	jug
 奇	qid

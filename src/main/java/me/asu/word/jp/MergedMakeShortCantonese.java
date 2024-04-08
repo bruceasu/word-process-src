@@ -28,20 +28,20 @@ public class MergedMakeShortCantonese {
         return makeResult();
     }
 
-    private void reOrder(List<Word> lines) {
-        for (Word word : lines) {
-            String w = word.getWord();
-            Integer freq = gv.getJpOrder(w);
-            word.setOrder(freq);
-        }
-        lines.sort((a, b) -> {
-            int delta = a.getOrder() - b.getOrder();
-            if (delta != 0) return delta;
-            delta = a.getLevel() - b.getLevel();
-            if (delta != 0) return delta;
-            return a.getCode().compareTo(b.getCode());
-        });
-    }
+//    private void reOrder(List<Word> lines) {
+//        for (Word word : lines) {
+//            String w = word.getWord();
+//            Integer freq = gv.getJpOrder(w);
+//            word.setOrder(freq);
+//        }
+//        lines.sort((a, b) -> {
+//            int delta = a.getOrder() - b.getOrder();
+//            if (delta != 0) return delta;
+//            delta = a.getLevel() - b.getLevel();
+//            if (delta != 0) return delta;
+//            return a.getCode().compareTo(b.getCode());
+//        });
+//    }
 
     protected void processOneSet(List<String> oneSet) {
         if (oneSet == null || oneSet.isEmpty()) {
@@ -139,12 +139,13 @@ public class MergedMakeShortCantonese {
         processLevel1(gv.getGroup2());
         processLevel2(gv.getGroup3());
         processLevel3(gv.getGroup4());
-        processOtherGroup(gv.getGroup5());
-        processOtherGroup(gv.getGroup6());
-        processOtherGroup(gv.getGroup7());
-        processOtherGroup(gv.getGroup8());
-        processOtherGroup(gv.getGroup9());
-        processOtherGroup(gv.getGroupOther());
+        processLevel3(gv.getGroup5());
+        processLevel3(gv.getGroup6());
+        processLevel3(gv.getGroup7());
+        processLevel3(gv.getGroup8());
+        processLevel3(gv.getGroup9());
+        processLevel3(gv.getGroupOther());
+        processOtherGroup(gv.getRemain());
     }
 
     private void processLevel1(List<Word>... wordList) {
@@ -155,7 +156,6 @@ public class MergedMakeShortCantonese {
             String code = w.getCode();
             String ext = w.getCodeExt();
 
-            String codeWithOneExt = code + ext.substring(0, 1);
             boolean accept = false;
             String codeSingle = code.substring(0, 1);
             String[] codes = {codeSingle, code};
@@ -171,16 +171,6 @@ public class MergedMakeShortCantonese {
                     break;
                 }
             }
-//            if (!accept) {
-//                if (gv.isNotInCodeSet(codeWithOneExt)) {
-//                    w.setCode(codeWithOneExt);
-//                    w.setCodeExt("");
-//                    addToResult(w);
-//                    gv.increaseCodeLengthCounter(codeWithOneExt.length())
-//                            .updateCodeSetCounter(codeWithOneExt);
-//                    accept = true;
-//                }
-//            }
 
             if (accept) {
                 clone.setCode(code + ext);
@@ -189,23 +179,22 @@ public class MergedMakeShortCantonese {
             } else {
                 w.setCode(code + ext);
                 w.setCodeExt("");
-                addToResult(w);
-                gv.increaseCodeLengthCounter(w.getCode().length())
-                        .updateCodeSetCounter(w.getCode());
+                gv.addToRemain(w);
+//                addToResult(w);
+//                gv.increaseCodeLengthCounter(w.getCode().length())
+//                        .updateCodeSetCounter(w.getCode());
             }
         }
     }
 
     private void processLevel2(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
-        reOrder(list);
         for (Word w : list) {
             Word clone = w.clone();
 
             String code = w.getCode();
             String ext = w.getCodeExt();
 
-            String codeWithOneExt = code + ext.substring(0, 1);
             boolean accept = false;
             String[] codes = {code};
             for (int i = 0; i < codes.length; i++) {
@@ -227,59 +216,82 @@ public class MergedMakeShortCantonese {
             } else {
                 w.setCode(code + ext);
                 w.setCodeExt("");
-                addToResult(w);
-                gv.increaseCodeLengthCounter(w.getCode().length())
-                        .updateCodeSetCounter(w.getCode());
+                gv.addToRemain(w);
+//                addToResult(w);
+//                gv.increaseCodeLengthCounter(w.getCode().length())
+//                        .updateCodeSetCounter(w.getCode());
             }
         }
     }
 
     private void processLevel3(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
-        reOrder(list);
+//        reOrder(list);
         for (Word w : list) {
-            Word clone = w.clone();
-
             String code = w.getCode();
             String ext = w.getCodeExt();
 
-            String codeWithOneExt = code + ext.substring(0, 1);
-            if (gv.isNotInCodeSet(codeWithOneExt)) {
-                w.setCode(codeWithOneExt);
-                w.setCodeExt("");
-                addToResult(w);
-                gv.increaseCodeLengthCounter(codeWithOneExt.length())
-                        .updateCodeSetCounter(codeWithOneExt);
-
-                clone.setCode(code + ext);
-                clone.setCodeExt("");
-                gv.addToFull(clone);
-            } else {
-                w.setCode(code + ext);
-                w.setCodeExt("");
-                addToResult(w);
-                gv.increaseCodeLengthCounter(w.getCode().length())
-                        .updateCodeSetCounter(w.getCode());
-            }
+            w.setCode(code + ext);
+            w.setCodeExt("");
+            gv.addToRemain(w);
+//            addToResult(w);
+//            gv.increaseCodeLengthCounter(w.getCode().length())
+//                    .updateCodeSetCounter(w.getCode());
         }
     }
 
     private void processOtherGroup(List<Word>... wordList) {
         List<Word> wl = joinList(wordList);
-        wl.sort(Word::compareTo);
-        int c = 0;
-        for (int i = 0; i < wl.size(); i++) {
-            Word w = wl.get(i);
-            String code = w.getCode();
-            String ext = w.getCodeExt();
-            w.setCode(code + ext);
-            w.setCodeExt("");
-            addToResult(w);
-            gv.increaseCodeLengthCounter(w.getCode().length())
-                    .updateCodeSetCounter(w.getCode());
+        Map<String, List<Word>> map = new LinkedHashMap<>();
+        for (Word word : wl) {
+            final String code = word.getCode();
+            final String key =  code.substring(0, code.length()-1) ;
+            map.computeIfAbsent(key, (k)->Collections.synchronizedList(new ArrayList<>())).add(word);
         }
-    }
+        map.forEach((k,list)->{
+            final int size = list.size();
+            if (size == 1) {
+                final Word w = list.get(0);
+                if (gv.isNotInCodeSet(k)) {
+                    if (!w.getCode().equals(k)) {
+                        final Word clone = w.clone();
+                        gv.addToFull(clone);
+                    }
+                    w.setCode(k);
+                    addToResult(w);
+                    gv.increaseCodeLengthCounter(k.length())
+                            .updateCodeSetCounter(k);
+                } else {
+                    addToResult(w);
+                    gv.increaseCodeLengthCounter(w.getCode().length())
+                            .updateCodeSetCounter(w.getCode());
+                }
+            } else {
+                final Word w = list.get(0);
+                int start = 1;
+                if (gv.isNotInCodeSet(k)) {
+                    if (w.getCode().equals(k)) {
+                        final Word clone = w.clone();
+                        gv.addToFull(clone);
+                    }
+                    w.setCode(k);
+                    addToResult(w);
+                    gv.increaseCodeLengthCounter(k.length())
+                            .updateCodeSetCounter(k);
+                } else {
+                    start = 0;
+                }
+                for (int i = start; i < size; i++) {
+                    final Word ww = list.get(i);
+                    addToResult(ww);
+                    gv.increaseCodeLengthCounter(ww.getCode().length())
+                            .updateCodeSetCounter(ww.getCode());
+                }
+            }
 
+        });
+
+    }
     private void addToResult(Word w) {
         String hz = w.getWord();
         if (gv.isInC2000(hz)) {
@@ -340,6 +352,8 @@ public class MergedMakeShortCantonese {
                 result, result2
                 , result3, result4
                 , result5, result6, result7
+                , result8, result9
+
         );
         Map<String, AtomicInteger> stat = new HashMap<>();
         for (Word w : words) {

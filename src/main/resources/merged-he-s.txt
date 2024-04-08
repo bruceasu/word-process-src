@@ -10165,6 +10165,7 @@
 嘆	tjkn
 嘽	tjka
 壇	tjta
+弾	djga
 弾	tjga
 彈	tjga
 惔	tjxh
@@ -11881,3 +11882,4 @@
 鞐	oogd
 顚	oobb
 颪	ooaf
+㚻	jitn

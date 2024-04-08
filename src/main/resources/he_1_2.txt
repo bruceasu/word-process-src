@@ -392,7 +392,7 @@
 走	zz
 
 #算法不好处理的简码字
-词	ciy
-句	jug
-奇	qid
-吓	xxk
+#词	ciy
+#句	jug
+#奇	qid
+#吓	xxk
