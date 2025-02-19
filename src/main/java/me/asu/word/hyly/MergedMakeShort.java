@@ -80,25 +80,25 @@ public class MergedMakeShort {
 
             if (gv.isIn500Set(hz) || gv.isIn1000Set(hz) || gv.isIn2000Set(hz)) {
                 w.setLevel(10);
-                gv.addToGroup1(w);
-            } else if (gv.isInGB2312_1(hz) || gv.isIn4000Set(hz)) {
+                gv.addToGroup1(w); // 最常用字
+            } else if (gv.isInLevel1(hz)) {
                 w.setLevel(20);
-                gv.addToGroup2(w);
-            } else if (gv.isInGb(hz)) {
+                gv.addToGroup2(w); // １级字
+            } else if (gv.isInLevel2(hz)) {
                 w.setLevel(30);
-                gv.addToGroup3(w);
-            } else if (gv.isInJpCommon(hz)) {
-                w.setLevel(40);
+                gv.addToGroup3(w); // ２级字
+            } else if (gv.isInLevel3(hz)) {
+                w.setLevel(40);    // ３级字
                 gv.addToGroup4(w);
-            } else if (gv.isInBig5Common(hz)) {
+            } else if (gv.isInGb(hz)) {
                 w.setLevel(50);
-                gv.addToGroup5(w);
-            } else if (gv.isInBig5Hkscs(hz)) {
-                w.setLevel(60);
-                gv.addToGroup6(w);
+                gv.addToGroup5(w); // 其他简体字
+//            } else if (gv.isInBig5Hkscs(hz)) {
+//                w.setLevel(60);
+//                gv.addToGroup6(w);
             } else {
                 w.setLevel(90);
-                gv.addToGroupOther(w);
+                gv.addToGroupOther(w); // 其他字
             }
 
             if (i % 1000 == 0) {
@@ -120,20 +120,26 @@ public class MergedMakeShort {
 
     private void processGroups() {
         log.info("Processing groups ...");
-        processGroupLevel1(gv.getGroup1());
-        processGroupLevel2(gv.getGroup2());
+        processGroupLevel1(gv.getGroup1(), gv.getGroup2()); // 常用简体字
         List<Word> remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        processGroupLevel3(remain, gv.getGroup3());
-
-        processGroupLevel4(gv.getGroup4()); // 日
-        processGroupLevel4(gv.getGroup5()); // 繁
-        processGroupLevel4(gv.getGroup6()); // 粤
-        processGroupLevel4(gv.getGroup7());
-        processGroupLevel4(gv.getGroup8());
-        processGroupLevel4(gv.getGroup9());
-        processGroupLevel4(gv.getGroupOther());
+        processGroupLevel2(remain, gv.getGroup3());  // 常用：繁,粤,日
+        remain = new ArrayList<>(gv.getRemain());
+        gv.clearRemain();
+        processGroupLevel3(remain, gv.getGroup4() // 其他
+        );
+        remain = new ArrayList<>(gv.getRemain());
+        gv.clearRemain();
+        processGroupLevel4(remain, gv.getGroup5(),
+                gv.getGroup6(), gv.getGroup7(), gv.getGroup8(),
+                gv.getGroup9(), gv.getGroupOther()); // 其他
+//        processGroupLevel4(gv.getGroup6());
+//        processGroupLevel4(gv.getGroup7());
+//        processGroupLevel4(gv.getGroup8());
+//        processGroupLevel4(gv.getGroup9());
+//        processGroupLevel4(gv.getGroupOther());
     }
+
 
     private void processGroupLevel1(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
@@ -143,16 +149,15 @@ public class MergedMakeShort {
             String code1 = code.substring(0, 1);
             String code2 = code.substring(0, 2);
             String code3 = code.substring(0, 3);
-            String[] codes = {code1, code2, code3, };
-
+            String[] codes = {code1, code2,};
             boolean accept = false;
             for (String s : codes) {
-                if (gv.isNotInCodeSet(s)) {
-                    w.setCode(s);
-                    w.setCodeExt("");
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(s.length())
-                            .updateCodeSetCounter(s);
+                if (gv.isNotInCodeSet(s)  || s.length() == 3) {
+                    Word c = w.clone();
+                    c.setCode(s);
+                    c.setCodeExt("");
+                    addToResult(c);
+                    gv.increaseCodeLengthCounter(s.length()).updateCodeSetCounter(s);
                     accept = true;
                     break;
                 }
@@ -162,6 +167,14 @@ public class MergedMakeShort {
                 gv.addToFull(clone);
             } else {
                 gv.addToRemain(w);
+//                Word c = w.clone();
+//                c.setCode(code3);
+//                c.setCodeExt("");
+//                addToResult(c);
+//                gv.increaseCodeLengthCounter(code3.length()).updateCodeSetCounter(code3);
+//
+//                clone.setCodeExt("");
+//                gv.addToFull(clone);
             }
         }
     }
@@ -178,9 +191,10 @@ public class MergedMakeShort {
             boolean accept = false;
             for (String s : codes) {
                 if (gv.isNotInCodeSet(s)) {
-                    w.setCode(s);
-                    w.setCodeExt("");
-                    addToResult(w);
+                    Word c = w.clone();
+                    c.setCode(s);
+                    c.setCodeExt("");
+                    addToResult(c);
                     gv.increaseCodeLengthCounter(s.length())
                             .updateCodeSetCounter(s);
                     accept = true;
@@ -362,15 +376,15 @@ public class MergedMakeShort {
 
     private void addToResult(Word w) {
         String hz = w.getWord();
-        if (gv.isIn500Set(hz) || gv.isIn1000Set(hz) || gv.isIn2000Set(hz)) {
+        if (gv.isInLevel1(hz)) {
             gv.addToResult(w);
-        } else if (gv.isInGB2312_1(hz) || gv.isIn4000Set(hz)) {
+        } else if (gv.isInLevel2(hz)) {
             gv.addToResult2(w);
-        } else if (gv.isInGb(hz)) {
+        } else if (gv.isInLevel3(hz)) {
             gv.addToResult3(w);
-        } else if (gv.isInJpCommon(hz)) {
+        } else if (gv.isInGb(hz)) {
             gv.addToResult4(w);
-        } else if (gv.isInBig5(hz) || gv.isInBig5Hkscs(hz)) {
+        } else if (gv.isInJp(hz)) {
             gv.addToResult5(w);
         } else {
             gv.addToResult6(w);
@@ -392,7 +406,7 @@ public class MergedMakeShort {
     }
 
     private void postProcess() {
-        fullProcess();
+        fullProcess2();
         printCounter("Post process done!");
         statistic();
     }
@@ -406,9 +420,12 @@ public class MergedMakeShort {
         List<Word> result5 = gv.getResult5();
         List<Word> result6 = gv.getResult6();
         List<Word> result7 = gv.getResult7();
-        List<Word> words = joinList(result, result2, result3
-                , result4
-                //, result5 , result6, result7
+        List<Word> words = joinList(result, result2
+                , result3
+                //, result4
+                // , result5
+                // , result6
+                // , result7
         );
         Map<String, AtomicInteger> stat = new HashMap<>();
         for (Word w : words) {
@@ -474,5 +491,21 @@ public class MergedMakeShort {
         }
     }
 
+    private void fullProcess2() {
+        log.info("Processing full ...");
 
+        Iterator<Word> iter = gv.getFull().iterator();
+        while (iter.hasNext()) {
+            Word w = iter.next();
+            String code = w.getCode();
+            final String word = w.getWord();
+            if (gv.isInLevel1(word) || gv.isInLevel2(word)) {
+                w.setLevel(200);
+                gv.addToResult7(w);
+                gv.increaseCodeLengthCounter(code.length())
+                        .updateCodeSetCounter(code);
+                iter.remove();
+            }
+        }
+    }
 }

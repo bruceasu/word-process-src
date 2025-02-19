@@ -9,8 +9,8 @@
     <version>1.0.0-SNAPSHOT</version>
     <properties>
         <!-- MAVEN 配置 -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <maven.test.skip>true</maven.test.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -43,7 +43,10 @@
             </plugin>
             <!-- compiler -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+
                 <configuration>
                     <fork>true</fork>
                     <source>${maven.compiler.source}</source>
@@ -95,15 +98,25 @@
             <artifactId>asu-util</artifactId>
             <groupId>me.asu</groupId>
             <version>1.0.3-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}\lib\asu-util-1.0.3-SNAPSHOT.jar</systemPath>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${project.basedir}\lib\asu-util-1.0.3-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <artifactId>asu-commands</artifactId>
             <groupId>me.asu</groupId>
             <version>1.0.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}\lib\asu-commands-1.0.0-SNAPSHOT.jar</systemPath>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>${project.basedir}\lib\asu-commands-1.0.0-SNAPSHOT.jar</systemPath>-->
+        </dependency>
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>8.11.0</version> <!-- 使用 8.x 版本 -->
         </dependency>
 
         <!-- junit -->

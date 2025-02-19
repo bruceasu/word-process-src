@@ -227,7 +227,7 @@
 并	bkqc
 接	jpfn
 西	xiaa
-马	mava
+吗	makm
 轻	qkig
 四	sike
 关	grqd
@@ -263,7 +263,7 @@
 平	pkau
 东	dsad
 场	ihtp
-吗	makm
+马	mava
 战	vjag
 特	tenc
 万	wjap
@@ -9541,7 +9541,7 @@
 吶	nekr
 奀	nfad
 媆	nfnd
-啱	ngou
+啱	ngku
 饢	nhuy
 膩	niod
 薿	nicr
@@ -9552,7 +9552,7 @@
 暱	niok
 暱	niov
 萳	njcu
-啱	njou
+啱	njku
 難	njcf
 妠	njnr
 婻	njnu
@@ -10838,7 +10838,7 @@
 銑	xije
 錫	xijp
 卌	xiaa
-喺	xiox
+喺	xikx
 噏	xiky
 囍	xiuk
 餼	xium
@@ -11292,7 +11292,7 @@
 厭	yjiq
 厳	yjxw
 厴	yjia
-啱	yjou
+啱	yjku
 閆	yjms
 閹	yjmv
 閻	yjma
@@ -11859,6 +11859,7 @@
 鷭	fjnp
 麿	mamk
 鼈	bpxv
+㚻	jitn
 #不知读音或者不能定音的字
 凩	oojm
 曻	oooa
@@ -11882,4 +11883,3 @@
 鞐	oogd
 顚	oobb
 颪	ooaf
-㚻	jitn

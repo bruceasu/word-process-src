@@ -33,6 +33,9 @@ public class GlobalVariables {
     Set<String> wGb = Collections.emptySet(); //ResourcesFiles.gb2312();
     Set<String> wGb2312 = Collections.emptySet(); //ResourcesFiles.gb2312();
     Set<String> wGb2312_1 = Collections.emptySet(); //ResourcesFiles.gb2312();
+    Set<String> wLevel1 = Collections.emptySet(); //ResourcesFiles.levle1();
+    Set<String> wLevel2 = Collections.emptySet(); //ResourcesFiles.levle2();
+    Set<String> wLevel3 = Collections.emptySet(); //ResourcesFiles.levle3();
 
     Set<String> wBig5_common = Collections.emptySet(); //ResourcesFiles.big5_common();
     Set<String> wBig5        = Collections.emptySet(); //ResourcesFiles.big5();
@@ -176,6 +179,27 @@ public class GlobalVariables {
             wBig5 =  ResourcesFiles.big5();
         }
         return wBig5.contains(w);
+    }
+
+    public boolean isInLevel1(String w) {
+        if (isCollectionEmpty(wLevel1)) {
+            wLevel1 =  ResourcesFiles.level1();
+        }
+        return wLevel1.contains(w);
+    }
+
+    public boolean isInLevel2(String w) {
+        if (isCollectionEmpty(wLevel2)) {
+            wLevel2 =  ResourcesFiles.level2();
+        }
+        return wLevel2.contains(w);
+    }
+
+    public boolean isInLevel3(String w) {
+        if (isCollectionEmpty(wLevel3)) {
+            wLevel3 =  ResourcesFiles.level3();
+        }
+        return wLevel3.contains(w);
     }
     public boolean isInGeneralSpecification(String w) {
         if (isCollectionEmpty(wGeneralSpecification)) {
@@ -421,7 +445,7 @@ public class GlobalVariables {
         return this;
     }
 
-    public int getCostSetCount(String code) {
+    public int getCodeSetCount(String code) {
         AtomicInteger c = codeSet.get(code);
         if (c == null) { return 0; }
         return c.get();
@@ -434,14 +458,6 @@ public class GlobalVariables {
 
     public boolean isInCodeSet(String code) {
         return codeSet.containsKey(code);
-    }
-
-    public int getCodeSetCount(String code) {
-        if (codeSet.containsKey(code)) {
-            return codeSet.get(code).get();
-        } else {
-            return 0;
-        }
     }
 
     private boolean isCollectionEmpty(Collection c) {

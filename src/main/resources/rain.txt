@@ -6901,14 +6901,14 @@
 啩	kd
 啫	ko
 啯	kw
-啱	ou
+啱	ku
 啲	kd
 喎	kk
 喐	ek
 喨	kj
 喫	kd
 喯	kc
-喺	ox
+喺	kx
 嗐	kk
 嗮	ky
 嗰	kk
@@ -7817,7 +7817,7 @@
 泂	dk
 泃	dk
 泇	dk
-泙	du
+泙	dus
 # 将来补齐
 #泚
 #泜

@@ -9541,7 +9541,7 @@
 吶	krne
 奀	adnf
 媆	ndnf
-啱	oung
+啱	kung
 饢	uynh
 膩	odni
 薿	crni
@@ -9552,7 +9552,7 @@
 暱	okni
 暱	ovni
 萳	cunj
-啱	ounj
+啱	kunj
 難	cfnj
 妠	nrnj
 婻	nunj
@@ -10837,7 +10837,7 @@
 銑	jexi
 錫	jpxi
 卌	aaxi
-喺	oxxi
+喺	kxxi
 噏	kyxi
 囍	ukxi
 餼	umxi
@@ -11291,7 +11291,7 @@
 厭	iqyj
 厳	xwyj
 厴	iayj
-啱	ouyj
+啱	kuyj
 閆	msyj
 閹	mvyj
 閻	mayj

@@ -8673,9 +8673,9 @@
 喎	wokk
 啹	kokk
 啲	dikd
-啱	ngou
-啱	njou
-啱	yjou
+啱	ngku
+啱	njku
+啱	yjku
 啫	uiko
 啫	veko
 啩	gxkd
@@ -11597,3 +11597,5 @@
 驺	zzme
 鲰	zzay
 诹	zzyy
+㚻	jitn
+喺	xikx

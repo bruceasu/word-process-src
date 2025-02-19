@@ -250,7 +250,7 @@ public class GlobalVariablesTraditional {
         return this;
     }
 
-    public int getCostSetCount(String code) {
+    public int getCodeSetCount(String code) {
         AtomicInteger c = codeSet.get(code);
         if (c == null) { return 0; }
         return c.get();
@@ -263,13 +263,5 @@ public class GlobalVariablesTraditional {
 
     public boolean isInCodeSet(String code) {
         return codeSet.containsKey(code);
-    }
-
-    public int getCodeSetCount(String code) {
-        if (codeSet.containsKey(code)) {
-            return codeSet.get(code).get();
-        } else {
-            return 0;
-        }
     }
 }

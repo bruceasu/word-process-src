@@ -18,8 +18,8 @@ import me.asu.word.ResourcesFiles;
 public class CompilePhrases {
 
     public static void main(String[] args) throws IOException {
-        File input = new File("out","d.txt");
-        File output = new File("out", "d1.txt");
+        File input = new File("/run/media/suk/Backup","k.txt");
+        File output = new File("/run/media/suk/Backup", "kk.txt");
 
         List<String> list = Files.readLines(input);
         try (FileWriter fw = new FileWriter(output)) {

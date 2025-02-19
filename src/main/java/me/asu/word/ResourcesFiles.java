@@ -15,6 +15,19 @@ import me.asu.util.Files;
  * Created by suk on 2019/6/2.
  */
 public class ResourcesFiles {
+
+    public static List<String> readLinesInResources(String name, String charset) {
+        File file = new File(name);
+        if (!file.exists()) {
+            String myDIR = OsHelper.getMyDIR();
+            file = new File(myDIR, name);
+            if (!file.exists()) {
+                file = new File(myDIR, "resources" + File.separator + name);
+            }
+        }
+        return Files.readLines(file, charset);
+    }
+
     public static List<String> readLinesInResources(String name) {
         File file = new File(name);
         if (!file.exists()) {
@@ -53,6 +66,15 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words.txt"));
     }
 
+    public static Set<String> level1() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("Level1.txt"));
+    }
+    public static Set<String> level2() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("Level2.txt"));
+    }
+    public static Set<String> level3() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("Level3.txt"));
+    }
     public static Set<String> gb2312() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-gb2312.txt"));
     }
@@ -183,8 +205,8 @@ public class ResourcesFiles {
         }
         return map;
     }
-    public static Map<String, String> loadAsMapIfAbsent(String name) {
-        List<String> strings = readLinesInResources(name);
+    public static Map<String, String> loadAsMap(String name, String charset) {
+        List<String> strings = readLinesInResources(name, charset);
         Map<String, String> map = new HashMap<>();
         for (String line : strings) {
             line = line.trim();
@@ -272,14 +294,6 @@ public class ResourcesFiles {
         return map;
     }
 
-    public static List<String> readLinesInResources(String name, String charset) {
-        String myDIR = OsHelper.getMyDIR();
-        File file = new File(myDIR, name);
-        if (!file.exists()) {
-            file = new File(myDIR, "resources" + File.separator + name);
-        }
-        return Files.readLines(file, charset);
-    }
 
 
 }

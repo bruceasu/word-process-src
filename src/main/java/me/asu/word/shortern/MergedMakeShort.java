@@ -150,7 +150,7 @@ public class MergedMakeShort {
 			String[] ls = {code1, code, code3};
 			boolean accept = false;
 			for (String l : ls) {
-				if (gv.getCostSetCount(l) < 2) {
+				if (gv.getCodeSetCount(l) < 2) {
 					accept = procDupCode(w, l, 1);
 					if(accept) {
 						addToResult(w);
@@ -195,7 +195,7 @@ public class MergedMakeShort {
 			String[] ls = {code1, code, code3};
 			boolean accept = false;
 			for (String l : ls) {
-				if (gv.getCostSetCount(l) < 2) {
+				if (gv.getCodeSetCount(l) < 2) {
 					accept = procDupCode(w, l, 1);
 					if(accept) {
 						addToResult(w);
