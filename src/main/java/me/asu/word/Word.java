@@ -1,10 +1,10 @@
 package me.asu.word;
 
-import java.util.Comparator;
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import lombok.Data;
 
 /**
  * Created by suk on 2019/6/2.
@@ -15,8 +15,8 @@ public class Word implements Comparable<Word>
     String word;
     String code;
     String codeExt;
-    int level;
-    int order;
+    int level = 100;
+    int order = 10000;
     Set<String> tags = new HashSet<>();
 
     public static int compare(Word o1, Word o2)

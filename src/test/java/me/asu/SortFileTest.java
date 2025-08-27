@@ -1,7 +1,8 @@
 package me.asu;
 
-import java.io.IOException;
 import junit.framework.TestCase;
+
+import java.io.IOException;
 
 public class SortFileTest extends TestCase {
     public void testSortFileWIthFreq() throws IOException {
@@ -15,7 +16,7 @@ public class SortFileTest extends TestCase {
 //                "-e", "GB18030",
                 "-m",
 //                "-t",
-//                "-p",
+                "-p",
 //                "-j"
         });
     }

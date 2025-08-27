@@ -1,15 +1,15 @@
 package me.asu.word;
 
-import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
-import static me.asu.cli.command.cnsort.Orders.searchTraditionalOrder;
-
-import java.io.File;
-import java.util.*;
-
 import me.asu.cli.command.cnsort.ChineseSearcher;
 import me.asu.cli.command.cnsort.CommonSearcher;
 import me.asu.cli.command.cnsort.SimplifiedChineseSearcher;
 import me.asu.util.Files;
+
+import java.io.File;
+import java.util.*;
+
+import static me.asu.cli.command.cnsort.Orders.searchSimplifiedOrder;
+import static me.asu.cli.command.cnsort.Orders.searchTraditionalOrder;
 
 /**
  * Created by suk on 2019/6/2.
@@ -87,12 +87,20 @@ public class ResourcesFiles {
     public static Set<String> big5_hkscs() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("big5-hkscs.txt"));
     }
+
+    public static Set<String> big5_hkscs_only() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("big5-hkscs-only.txt"));
+    }
     public static Set<String> big5() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("big5.txt"));
     }
     public static Set<String> big5_common() {
 //        return new HashSet<>(ResourcesFiles.readLinesInResources("big5-common.txt"));
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-t-words.txt"));
+    }
+
+    public static Set<String> big5_common_s() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("big5_1_s.txt"));
     }
     public static Set<String> japanese() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本汉字水准1和水准2.txt"));
@@ -113,6 +121,9 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("日本常用汉字表.txt"));
     }
 
+    public static Set<String> japanese_spec() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("日本当用汉字.txt"));
+    }
     public static Set<String> generalSpecification() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("通用规范字.txt"));
     }

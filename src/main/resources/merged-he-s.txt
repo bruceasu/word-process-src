@@ -7490,7 +7490,6 @@
 黲	cjhp
 慘	cjxp
 慚	cjxj
-	cjhp
 殘	cjdg
 燦	cjhm
 穇	cjhp
@@ -7534,7 +7533,6 @@
 韃	dagz
 墶	datz
 憚	daxa
-	dadz
 澾	dadz
 㳠	dadz
 舠	dcvd

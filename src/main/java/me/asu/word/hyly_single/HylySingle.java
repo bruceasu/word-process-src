@@ -1,8 +1,8 @@
 package me.asu.word.hyly_single;
 
 
-import static me.asu.word.ResourcesFiles.loadWords;
-import static me.asu.word.ResourcesFiles.readLinesInResources;
+import me.asu.util.Streams;
+import me.asu.word.Word;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import me.asu.util.Streams;
-import me.asu.word.Word;
+
+import static me.asu.word.ResourcesFiles.loadWords;
 
 /**
  * 主打单字
@@ -26,9 +26,10 @@ public class HylySingle {
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
         List<Word> merged = loadWords("single.txt", true);
+//        List<Word> merged = loadWords("merged-he-s.txt", true);
 //        List<String> oneSet = readLinesInResources("he_1_2.txt");
-        List<String> oneSet = readLinesInResources("single_1.txt");
-//        List<String> oneSet = new ArrayList<>();
+//        List<String> oneSet = readLinesInResources("single_1.txt");
+        List<String> oneSet = new ArrayList<>();
         Map<String, List<Word>> results = new MergedMakeShortSingle().makeSort(merged, oneSet);
 
         save(name, results);
