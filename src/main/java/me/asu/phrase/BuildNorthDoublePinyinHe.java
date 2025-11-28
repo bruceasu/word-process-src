@@ -137,6 +137,7 @@ public class BuildNorthDoublePinyinHe {
         s.put("b", "b");
         s.put("n", "n");
         s.put("m", "m");
+        s.put("ng", "ng");
 
         w.put("iu", "q");
         w.put("ei", "w");
@@ -176,6 +177,7 @@ public class BuildNorthDoublePinyinHe {
         w.put("in", "b");
         w.put("iao", "n");
         w.put("ian", "m");
+        w.put("", "");
 
         s.forEach((k1, v1) -> {
             w.forEach((k2, v2) -> {
@@ -193,5 +195,3 @@ public class BuildNorthDoublePinyinHe {
 
 
 }
-
-

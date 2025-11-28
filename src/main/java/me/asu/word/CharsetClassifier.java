@@ -1,3 +1,5 @@
+package me.asu.word;
+
 import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,14 +22,18 @@ public class CharsetClassifier {
         String inputFile = args[0];
 
         // 定义输出文件（按分类保存）
-        try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), "UTF-8"));
-                PrintWriter outLevel1 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("level1.txt"), "UTF-8"));
-                PrintWriter outLevel2 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("level2.txt"), "UTF-8"));
-                PrintWriter outLevel3 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("level3.txt"), "UTF-8"));
-                PrintWriter outLevel4 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("level4.txt"), "UTF-8"));
-                PrintWriter outOther = new PrintWriter(new OutputStreamWriter(new FileOutputStream("other.txt"), "UTF-8"))
-        ) {
+        try (BufferedReader reader =
+                     new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), "UTF-8"));
+             PrintWriter outLevel1 = new PrintWriter(
+                     new OutputStreamWriter(new FileOutputStream("level1.txt"), "UTF-8"));
+             PrintWriter outLevel2 = new PrintWriter(
+                     new OutputStreamWriter(new FileOutputStream("level2.txt"), "UTF-8"));
+             PrintWriter outLevel3 = new PrintWriter(
+                     new OutputStreamWriter(new FileOutputStream("level3.txt"), "UTF-8"));
+             PrintWriter outLevel4 = new PrintWriter(
+                     new OutputStreamWriter(new FileOutputStream("level4.txt"), "UTF-8"));
+             PrintWriter outOther = new PrintWriter(
+                     new OutputStreamWriter(new FileOutputStream("other.txt"), "UTF-8"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // 跳过空行
@@ -100,12 +106,12 @@ public class CharsetClassifier {
     }
 
     /**
-     * 从指定的文件中加载字符集合。
-     * 每个文件按行存放一个字符，要求文件编码为 UTF-8。
+     * 从指定的文件中加载字符集合。 每个文件按行存放一个字符，要求文件编码为 UTF-8。
      */
     private static Set<String> loadSet(String fileName) {
         Set<String> set = new HashSet<>();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"))) {
+        try (BufferedReader br =
+                     new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();

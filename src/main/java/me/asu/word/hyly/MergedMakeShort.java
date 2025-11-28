@@ -76,23 +76,23 @@ public class MergedMakeShort {
                 }
             }
 
-            if (w.getLevel() < 1) {
+            if (w.getLevel() <= 1) {
                 gv.addToGroup1(w); // 最常用字
-            } else if (w.getLevel() < 2) {
+            } else if (w.getLevel() <= 2) {
                 gv.addToGroup2(w); // １级字
-            } else if (w.getLevel() < 3) {
+            } else if (w.getLevel() <= 3) {
                 gv.addToGroup3(w); // ２级字
-            } else if (w.getLevel() < 4) {
+            } else if (w.getLevel() <= 4) {
                 gv.addToGroup4(w);
             } else if (w.getLevel() < 5) {
                 gv.addToGroup5(w); // 其他简体字
-            } else if (w.getLevel() < 6) {
+            } else if (w.getLevel() <= 6) {
                 gv.addToGroup6(w);
-            } else if (w.getLevel() < 7) {
+            } else if (w.getLevel() <= 7) {
                 gv.addToGroup7(w);
-            } else if (w.getLevel() < 8) {
+            } else if (w.getLevel() <= 8) {
                 gv.addToGroup8(w);
-            } else if (w.getLevel() < 9) {
+            } else if (w.getLevel() <= 9) {
                 gv.addToGroup9(w);
             } else {
                 w.setLevel(90);
@@ -118,19 +118,17 @@ public class MergedMakeShort {
 
     private void processGroups() {
         log.info("Processing groups ...");
-        atMost3chars(gv.getGroup1());
-        atMost3chars(gv.getGroup2());
+        atMost3chars(gv.getGroup1(), gv.getGroup2(), gv.getGroup3());
 //        atMost3chars();
         List<Word> remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        tryMost3chars(remain, gv.getGroup3(), gv.getGroup4());
-        tryMost3chars(gv.getGroup5());
+        tryMost3chars(remain, gv.getGroup4(), gv.getGroup5());
         remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        luckWith3chars(remain, gv.getGroup6(), gv.getGroup7(), gv.getGroup8());
+        luckWith3chars(remain, gv.getGroup6(), gv.getGroup7());
         remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        fullChars(remain, gv.getGroup9(), gv.getGroupOther()); // 其他
+        fullChars(remain, gv.getGroup8(), gv.getGroup9(), gv.getGroupOther()); // 其他
     }
 
 
@@ -268,6 +266,8 @@ public class MergedMakeShort {
                         w.setLevel(99);
                     }
                     addToResult(w);
+                    gv.increaseCodeLengthCounter(code.length())
+                            .updateCodeSetCounter(code);
                 }
             }
         });
@@ -289,21 +289,19 @@ public class MergedMakeShort {
 
 
     private void addToResult(Word w) {
-        if (w.getLevel() < 2) {
+        if (w.getLevel() <= 3) { // gb2312
             gv.addToResult(w);
-        } else if (w.getLevel() < 3) {
+        } else if (w.getLevel() == 4) { // jp hk
             gv.addToResult2(w);
-        } else if (w.getLevel() < 4) {
+        } else if (w.getLevel() == 5) { // other gb
             gv.addToResult3(w);
-        } else if (w.getLevel() < 5) {
+        } else if (w.getLevel() <= 8) { // other big5 common
             gv.addToResult4(w);
-        } else if (w.getLevel() < 10) {
-            gv.addToResult5(w);
         } else {
-            if (w.getLevel() == 99 && (gv.isInGeneralSpecification(w.getWord()) || gv.isInJpCommon(w.getWord()))) {
-                gv.addToResult5(w);
+            if (w.getLevel() == 99 && (gv.isInJpCommon(w.getWord()))) {
+                gv.addToResult5(w); // other with dup
             } else {
-                gv.addToResult6(w);
+                gv.addToResult6(w); // other with dup
             }
 
         }
@@ -324,7 +322,7 @@ public class MergedMakeShort {
     }
 
     private void postProcess() {
-        fullProcess();
+//        fullProcess();
         printCounter("Post process done!");
         statistic();
     }
@@ -341,7 +339,7 @@ public class MergedMakeShort {
         List<Word> words = joinList(result, result2
                 , result3
                 , result4
-                , result5
+//                , result5
 //                 , result6
 //                 , result7
         );

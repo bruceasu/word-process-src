@@ -1,12 +1,13 @@
 package me.asu.word.shortern;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.asu.util.Strings;
 import me.asu.word.ResourcesFiles;
 import me.asu.word.Word;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Slf4j
@@ -452,7 +453,7 @@ public class GlobalVariables {
     }
 
     public GlobalVariables increaseCodeSetCounter(String code) {
-        codeSet.get(code).incrementAndGet();
+        codeSet.computeIfAbsent(code, c -> new AtomicInteger(0)).incrementAndGet();
         return this;
     }
 

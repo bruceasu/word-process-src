@@ -809,7 +809,6 @@
 毒	dufd
 耳	eraa
 座	zogt
-座	zotr
 射	ueuc
 厉	liip
 层	cgus
@@ -2200,7 +2199,7 @@
 链	lmjz
 裹	gowy
 汪	whdw
-靖	qklo
+靖	jklo
 殷	ybpy
 殷	yjpy
 拟	nifr

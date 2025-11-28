@@ -37,13 +37,13 @@ public class Tags {
                 word.setLevel(2);
             } else if (word.tags.contains("GB2312")) {
                 word.setLevel(3);
-            } else if (word.tags.contains("BIG5_COMMON_S")) {
-                word.setLevel(4);
-            } else if (word.tags.contains("BIG5_COMMON")) {
-                word.setLevel(5);
-            } else if (word.tags.contains("GB")) {
-                word.setLevel(6);
             } else if (word.tags.contains("HK_ONLY")) {
+                word.setLevel(4);
+            } else if (word.tags.contains("GB")) {
+                word.setLevel(5);
+            } else if (word.tags.contains("BIG5_COMMON_S")) {
+                word.setLevel(6);
+            } else if (word.tags.contains("BIG5_COMMON")) {
                 word.setLevel(7);
             } else {
                 word.setLevel(8);

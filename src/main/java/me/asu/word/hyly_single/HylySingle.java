@@ -2,17 +2,16 @@ package me.asu.word.hyly_single;
 
 
 import me.asu.util.Streams;
+import me.asu.word.Tags;
 import me.asu.word.Word;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static me.asu.word.ResourcesFiles.loadWords;
+import static me.asu.word.ResourcesFiles.readLinesInResources;
 
 /**
  * 主打单字
@@ -25,12 +24,49 @@ public class HylySingle {
 //        Map<String, List<String>> xm      = loadAsMapList("rain.txt");
 //
 //        List<Word>                merged  = Merge.merge(he, xm);
-        List<Word> merged = loadWords("single.txt", true);
-//        List<Word> merged = loadWords("merged-he-s.txt", true);
-//        List<String> oneSet = readLinesInResources("he_1_2.txt");
-//        List<String> oneSet = readLinesInResources("single_1.txt");
-        List<String> oneSet = new ArrayList<>();
-        Map<String, List<Word>> results = new MergedMakeShortSingle().makeSort(merged, oneSet);
+//        List<Word> merged = loadWords("a.txt", true);
+        List<Word> merged = loadWords("merged-he-s.txt", true);
+        List<String> oneSet = readLinesInResources("he_1_2.txt");
+        List<String> k = readLinesInResources("k.txt");
+        Map<String, Set<String>> symbols = new HashMap<>();
+        for (String s : k) {
+            String[] split = s.split("\\s+");
+            if (split.length == 2) {
+                Set<String> strings = symbols.computeIfAbsent(split[0], key -> new HashSet<>());
+                strings.add(split[1]);
+            } else {
+                System.out.println("Error: " + s);
+            }
+        }
+        // add tones to word
+        List<Word> newList = new ArrayList<>(merged.size() * 2);
+        for (Word word : merged) {
+            String w = word.getWord();
+            if (symbols.containsKey(w)) {
+                Set<String> set = symbols.get(w);
+                String code = word.getCode().substring(0, 2);
+                boolean found = false;
+                for (String s : set) {
+                    if (s.startsWith(code)) {
+                        Word clone = word.clone();
+                        clone.setCode(s + word.getCode().substring(2));
+                        newList.add(clone);
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Couldn't find the tones of word: " + word.toString());
+                    //newList.add(word);
+                }
+            } else {
+                System.out.println("Couldn't find the tones of word: " + word.toString());
+                //newList.add(word);
+            }
+
+        }
+//        List<String> oneSet = new ArrayList<>();
+        Tags.tag(newList);
+        Map<String, List<Word>> results = new MergedMakeShortSingle().makeSort(newList, oneSet);
 
         save(name, results);
     }
