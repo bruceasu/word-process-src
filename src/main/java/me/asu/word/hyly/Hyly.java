@@ -22,10 +22,15 @@ public class Hyly {
 
     public static void main(String[] args) throws IOException {
         String name = "he";
-//        Map<String, List<String>> he     = loadAsMapList("he.txt");
-//        Map<String, List<String>> xm      = loadAsMapList("rain.txt");
-//
+//        Map<String, List<String>> he     = loadAsMapList("he-s-t.txt");
+//        Map<String, List<String>> xm      = loadAsMapList("shouyou.txt");
 //        List<Word>                merged  = Merge.merge(he, xm);
+//        merged.forEach(w->{
+//            String code = w.getCode();
+//            String codeExt = w.getCodeExt();
+//            w.setCode(code + codeExt);
+//            w.setCodeExt("");
+//        });
         List<Word> merged = loadWords("merged-he-s.txt", true);
         Tags.tag(merged);
         List<String> oneSet = readLinesInResources("he_1.txt");
@@ -63,6 +68,12 @@ public class Hyly {
         System.out.printf("保存到： %s, %d lines%n", outFile3.getAbsolutePath(),
                 result3.size());
 
+        File outFile3Supplement = new File(outdir, name + "-out3-supplement.txt");
+        List<Word> result3Supplement = results.get("result3Supplement");
+        writeTo(result3Supplement, outFile3Supplement, 35000);
+        System.out.printf("扩充三简字 %s, %d lines%n", outFile3Supplement.getAbsolutePath(),
+                result3Supplement.size());
+
         File outFile4 = new File(outdir, name + "-out4.txt");
         List<Word> result4 = results.get("result4");
         writeTo(result4, outFile4, 30000);
@@ -87,9 +98,21 @@ public class Hyly {
         System.out.printf("保存到： %s, %d lines%n", outFile7.getAbsolutePath(),
                 result7.size());
 
+        File outFile8 = new File(outdir, name + "-out8.txt");
+        List<Word> result8 = results.get("result8");
+        writeTo(result8, outFile8, 4000);
+        System.out.printf("保存到： %s, %d lines%n", outFile8.getAbsolutePath(),
+                result8.size());
+
+        File outFile9 = new File(outdir, name + "-out9.txt");
+        List<Word> result9 = results.get("result9");
+        writeTo(result9, outFile9, 4000);
+        System.out.printf("保存到： %s, %d lines%n", outFile9.getAbsolutePath(),
+                result8.size());
+
         File outFullFile = new File(outdir, name + "-full.txt");
         List<Word> full = results.get("full");
-        writeFullTo(full, outFullFile, 15000);
+        writeFullTo(full, outFullFile, 2000);
         System.out.printf("保存到： %s, %d lines%n", outFullFile.getAbsolutePath(),
                 full.size());
     }

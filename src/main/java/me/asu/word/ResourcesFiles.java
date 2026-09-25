@@ -58,6 +58,14 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-1000.txt"));
     }
 
+    public static Set<String> w1600() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-1600.txt"));
+    }
+
+    public static Set<String> commonYue() {
+        return new HashSet<>(ResourcesFiles.readLinesInResources("常用粤字.txt"));
+    }
+
     public static Set<String> w2000() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-2000.txt"));
     }
@@ -82,7 +90,8 @@ public class ResourcesFiles {
         return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-gb2312-1.txt"));
     }
     public static Set<String> gb() {
-        return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-GB.txt"));
+//        return new HashSet<>(ResourcesFiles.readLinesInResources("common-words-GB.txt"));
+        return new HashSet<>(ResourcesFiles.readLinesInResources("common-hz-9000.txt"));
     }
     public static Set<String> big5_hkscs() {
         return new HashSet<>(ResourcesFiles.readLinesInResources("big5-hkscs.txt"));

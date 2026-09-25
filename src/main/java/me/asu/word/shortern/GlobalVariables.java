@@ -14,23 +14,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GlobalVariables {
 
     // group
-    List<Word> group1    = new ArrayList<>();
-    List<Word> group2    = new ArrayList<>();
-    List<Word> group3    = new ArrayList<>();
-    List<Word> group4     = new ArrayList<>();
-    List<Word> group5     = new ArrayList<>();
-    List<Word> group6     = new ArrayList<>();
-    List<Word> group7     = new ArrayList<>();
-    List<Word> group8     = new ArrayList<>();
-    List<Word> group9     = new ArrayList<>();
+    List<Word> group1 = new ArrayList<>();
+    List<Word> group2 = new ArrayList<>();
+    List<Word> group3 = new ArrayList<>();
+    List<Word> group4 = new ArrayList<>();
+    List<Word> group5 = new ArrayList<>();
+    List<Word> group6 = new ArrayList<>();
+    List<Word> group7 = new ArrayList<>();
+    List<Word> group8 = new ArrayList<>();
+    List<Word> group9 = new ArrayList<>();
     List<Word> groupOther = new ArrayList<>();
 
-    Set<String> w500    = Collections.emptySet(); //ResourcesFiles.w500();
-    Set<String> w1000   = Collections.emptySet(); //ResourcesFiles.w1000();
-    Set<String> w2000   = Collections.emptySet(); //ResourcesFiles.w2000();
-    Set<String> wCj2000   = Collections.emptySet(); //ResourcesFiles.w2000();
-    Set<String> wC2000   = Collections.emptySet(); //ResourcesFiles.w2000();
-    Set<String> w4000   = Collections.emptySet(); //ResourcesFiles.w4000();
+    Set<String> w500 = Collections.emptySet(); //ResourcesFiles.w500();
+    Set<String> w1000 = Collections.emptySet(); //ResourcesFiles.w1000();
+    Set<String> w2000 = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> wCj2000 = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> wC2000 = Collections.emptySet(); //ResourcesFiles.w2000();
+    Set<String> w4000 = Collections.emptySet(); //ResourcesFiles.w4000();
     Set<String> wGb = Collections.emptySet(); //ResourcesFiles.gb2312();
     Set<String> wGb2312 = Collections.emptySet(); //ResourcesFiles.gb2312();
     Set<String> wGb2312_1 = Collections.emptySet(); //ResourcesFiles.gb2312();
@@ -39,10 +39,10 @@ public class GlobalVariables {
     Set<String> wLevel3 = Collections.emptySet(); //ResourcesFiles.levle3();
 
     Set<String> wBig5_common = Collections.emptySet(); //ResourcesFiles.big5_common();
-    Set<String> wBig5        = Collections.emptySet(); //ResourcesFiles.big5();
-    Set<String> wBig5Hkscs   = Collections.emptySet(); //ResourcesFiles.big5_hkscs();
+    Set<String> wBig5 = Collections.emptySet(); //ResourcesFiles.big5();
+    Set<String> wBig5Hkscs = Collections.emptySet(); //ResourcesFiles.big5_hkscs();
 
-    Set<String> wJp       = Collections.emptySet(); //ResourcesFiles.japanese();
+    Set<String> wJp = Collections.emptySet(); //ResourcesFiles.japanese();
     Set<String> wJpCommon = Collections.emptySet(); //ResourcesFiles.japaneseCommon();
     Set<String> wJpLevel1 = Collections.emptySet(); //ResourcesFiles.japaneseLevel1();
     Set<String> wJpLevel2 = Collections.emptySet(); //ResourcesFiles.japaneseLevel2();
@@ -52,34 +52,25 @@ public class GlobalVariables {
 
     Set<String> wGeneralSpecification = Collections.emptySet(); //ResourcesFiles.generalSpecification();
 
-    List<String> single  = new ArrayList<>();
-    // 唯一常用字（4000）
-    List<Word>   result  = new ArrayList<>();
-    // 重码常用字（4000）
-    List<Word>   result2 = new ArrayList<>();
-
-    // 唯一通用字（gb2312group）
+    List<String> single = new ArrayList<>();
+    List<Word> result = new ArrayList<>();
+    List<Word> result2 = new ArrayList<>();
     List<Word> result3 = new ArrayList<>();
-    // 重码通用字（gb2312group）
     List<Word> result4 = new ArrayList<>();
-    // 唯一罕用字（非gb2312group）
     List<Word> result5 = new ArrayList<>();
-    // 重码罕用字（非gb2312group）
     List<Word> result6 = new ArrayList<>();
-    // 占位简码
     List<Word> result7 = new ArrayList<>();
     List<Word> result8 = new ArrayList<>();
     List<Word> result9 = new ArrayList<>();
-    List<Word> full    = new ArrayList<>();
+    List<Word> full = new ArrayList<>();
 
     List<Word> remain = new ArrayList<>();
 
-    Map<String, AtomicInteger> codeSet  = new HashMap<>();
+    Map<String, AtomicInteger> codeSet = new HashMap<>();
     Map<String, AtomicInteger> code3Set = new HashMap<>();
     Set<String> hzSet = new HashSet<>();
 
     int[] codeLenCounter = new int[30];
-
 
 
     public GlobalVariables() {
@@ -92,6 +83,7 @@ public class GlobalVariables {
         hzSet.add(hz);
         return this;
     }
+
     public boolean hzExist(String hz) {
         if (hz == null) return false;
         return hzSet.contains(hz);
@@ -136,10 +128,10 @@ public class GlobalVariables {
     }
 
     public Integer getJpOrder(String w) {
-        if(isMapEmpty(jpOrder)) {
-            jpOrder=new HashMap<>();
+        if (isMapEmpty(jpOrder)) {
+            jpOrder = new HashMap<>();
             Map<String, String> m = ResourcesFiles.loadCsvAsMap("jp-words-order.csv");
-            m.forEach((k,v)->{
+            m.forEach((k, v) -> {
                 jpOrder.put(v, -1 * Integer.valueOf(k));
             });
         }
@@ -148,28 +140,30 @@ public class GlobalVariables {
     }
 
     public boolean isInBig5Common(String w) {
-        if(isCollectionEmpty(wBig5_common)) {
+        if (isCollectionEmpty(wBig5_common)) {
             wBig5_common = ResourcesFiles.big5_common();
         }
         return wBig5_common.contains(w);
     }
+
     public boolean isInCj2000(String w) {
-        if(isCollectionEmpty(wCj2000)) {
+        if (isCollectionEmpty(wCj2000)) {
             wCj2000 = ResourcesFiles.wCj2000();
         }
         return wCj2000.contains(w);
     }
+
     public boolean isInC2000(String w) {
-        if(isCollectionEmpty(wC2000)) {
+        if (isCollectionEmpty(wC2000)) {
             wC2000 = ResourcesFiles.wC2000();
         }
         return wC2000.contains(w);
     }
 
     public boolean isInBig5Hkscs(String w) {
-        if(isCollectionEmpty(wBig5Hkscs)) {
-            Set<String> b =  ResourcesFiles.big5();
-            wBig5Hkscs =  ResourcesFiles.big5_hkscs();
+        if (isCollectionEmpty(wBig5Hkscs)) {
+            Set<String> b = ResourcesFiles.big5();
+            wBig5Hkscs = ResourcesFiles.big5_hkscs();
             wBig5Hkscs.removeAll(b);
         }
         return wBig5Hkscs.contains(w);
@@ -177,31 +171,32 @@ public class GlobalVariables {
 
     public boolean isInBig5(String w) {
         if (isCollectionEmpty(wBig5)) {
-            wBig5 =  ResourcesFiles.big5();
+            wBig5 = ResourcesFiles.big5();
         }
         return wBig5.contains(w);
     }
 
     public boolean isInLevel1(String w) {
         if (isCollectionEmpty(wLevel1)) {
-            wLevel1 =  ResourcesFiles.level1();
+            wLevel1 = ResourcesFiles.level1();
         }
         return wLevel1.contains(w);
     }
 
     public boolean isInLevel2(String w) {
         if (isCollectionEmpty(wLevel2)) {
-            wLevel2 =  ResourcesFiles.level2();
+            wLevel2 = ResourcesFiles.level2();
         }
         return wLevel2.contains(w);
     }
 
     public boolean isInLevel3(String w) {
         if (isCollectionEmpty(wLevel3)) {
-            wLevel3 =  ResourcesFiles.level3();
+            wLevel3 = ResourcesFiles.level3();
         }
         return wLevel3.contains(w);
     }
+
     public boolean isInGeneralSpecification(String w) {
         if (isCollectionEmpty(wGeneralSpecification)) {
             wGeneralSpecification = ResourcesFiles.generalSpecification();
@@ -210,7 +205,7 @@ public class GlobalVariables {
     }
 
     public boolean isInJp(String w) {
-        if(isCollectionEmpty(wJp)) {
+        if (isCollectionEmpty(wJp)) {
             wJp = ResourcesFiles.japanese();
         }
         return wJp.contains(w);
@@ -243,30 +238,35 @@ public class GlobalVariables {
         }
         return wJpLevel3.contains(w);
     }
+
     public boolean isInJpLevel4(String w) {
         if (isCollectionEmpty(wJpLevel4)) {
             wJpLevel4 = ResourcesFiles.japaneseLevel4();
         }
         return wJpLevel4.contains(w);
     }
+
     public boolean isInGB2312(String w) {
         if (isCollectionEmpty(wGb2312)) {
             wGb2312 = ResourcesFiles.gb2312();
         }
         return wGb2312.contains(w);
     }
+
     public boolean isInGB2312_1(String w) {
         if (isCollectionEmpty(wGb2312_1)) {
             wGb2312_1 = ResourcesFiles.gb2312_1();
         }
         return wGb2312_1.contains(w);
     }
+
     public boolean isInGb(String w) {
         if (isCollectionEmpty(wGb)) {
             wGb = ResourcesFiles.gb();
         }
         return wGb.contains(w);
     }
+
     public boolean isIn4000Set(String w) {
         if (isCollectionEmpty(w4000)) {
             w4000 = ResourcesFiles.w4000();
@@ -357,6 +357,16 @@ public class GlobalVariables {
         return this;
     }
 
+    public GlobalVariables addToResult8(Word w) {
+        result8.add(w);
+        return this;
+    }
+
+    public GlobalVariables addToResult9(Word w) {
+        result9.add(w);
+        return this;
+    }
+
     public GlobalVariables addToFull(Word w) {
         full.add(w);
         return this;
@@ -393,18 +403,22 @@ public class GlobalVariables {
         group5.add(w);
         return this;
     }
+
     public GlobalVariables addToGroup6(Word w) {
         group6.add(w);
         return this;
     }
+
     public GlobalVariables addToGroup7(Word w) {
         group7.add(w);
         return this;
     }
+
     public GlobalVariables addToGroup8(Word w) {
         group8.add(w);
         return this;
     }
+
     public GlobalVariables addToGroup9(Word w) {
         group9.add(w);
         return this;
@@ -427,6 +441,7 @@ public class GlobalVariables {
     public void clearRemain() {
         remain.clear();
     }
+
     public GlobalVariables updateCodeSetCounter(String code) {
         if (isNotInCodeSet(code)) {
             addCodeSetCounter(code);
@@ -448,7 +463,9 @@ public class GlobalVariables {
 
     public int getCodeSetCount(String code) {
         AtomicInteger c = codeSet.get(code);
-        if (c == null) { return 0; }
+        if (c == null) {
+            return 0;
+        }
         return c.get();
     }
 

@@ -14,6 +14,7 @@ public class MergedMakeShortSingle {
 
     GlobalVariables gv = new GlobalVariables();
     Set<String> oneSetColl = new HashSet<>();
+    Set<String> dup = new HashSet<>();
 
     public Map<String, List<Word>> makeSort(List<Word> lines,
             List<String> oneSet) {
@@ -47,6 +48,8 @@ public class MergedMakeShortSingle {
             } else {
                 w.setOrder(0);
             }
+            String s = w.getWord() + w.getCode();
+            dup.add(s);
             gv.addToResult(w);
             gv.updateCodeSetCounter(kv[1])
                     .increaseCodeLengthCounter(kv[1].length())
@@ -76,28 +79,29 @@ public class MergedMakeShortSingle {
                 }
             }
 
-            if (w.getLevel() < 1) {
-                gv.addToGroup1(w); // 最常用字
-            } else if (w.getLevel() < 2) {
-                gv.addToGroup2(w); // １级字
-            } else if (w.getLevel() < 3) {
-                gv.addToGroup3(w); // ２级字
-            } else if (w.getLevel() < 4) {
-                gv.addToGroup4(w);
+            if (w.getLevel() <= 1) {
+                gv.addToGroup1(w); // 1级字
+            } else if (w.getLevel() <= 2) {
+                gv.addToGroup2(w); // 2级字
+            } else if (w.getLevel() <= 3) {
+                gv.addToGroup3(w); // 3 级字
+            } else if (w.getLevel() <= 4) {
+                gv.addToGroup4(w); // 4 级字
             } else if (w.getLevel() < 5) {
-                gv.addToGroup5(w); // 其他简体字
-            } else if (w.getLevel() < 6) {
-                gv.addToGroup6(w);
-            } else if (w.getLevel() < 7) {
-                gv.addToGroup7(w);
-            } else if (w.getLevel() < 8) {
-                gv.addToGroup8(w);
-            } else if (w.getLevel() < 9) {
-                gv.addToGroup9(w);
+                gv.addToGroup5(w); // 非常用字L1
+            } else if (w.getLevel() <= 6) {
+                gv.addToGroup6(w); // 非常用字L2
+            } else if (w.getLevel() <= 7) {
+                gv.addToGroup7(w); // 非常用字L3
+            } else if (w.getLevel() <= 8) {
+                gv.addToGroup8(w); // 非常用字L4
+            } else if (w.getLevel() <= 9) {
+                gv.addToGroup9(w); // 其他字1
             } else {
                 w.setLevel(90);
-                gv.addToGroupOther(w); // 其他字
+                gv.addToGroupOther(w); // 其他字2
             }
+
 
             if (i % 1000 == 0) {
                 log.info("Processed {} lines.", i);
@@ -118,19 +122,13 @@ public class MergedMakeShortSingle {
 
     private void processGroups() {
         log.info("Processing groups ...");
-        atMost3chars(gv.getGroup1());
-        atMost3chars(gv.getGroup2());
-//        atMost3chars();
+        atMost2chars(gv.getGroup1(), gv.getGroup2());
         List<Word> remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        tryMost3chars(remain, gv.getGroup3(), gv.getGroup4());
-        tryMost3chars(gv.getGroup5());
+        atMost3chars(remain, gv.getGroup3(), gv.getGroup4(), gv.getGroup5());
         remain = new ArrayList<>(gv.getRemain());
         gv.clearRemain();
-        luckWith3chars(remain, gv.getGroup6(), gv.getGroup7(), gv.getGroup8());
-        remain = new ArrayList<>(gv.getRemain());
-        gv.clearRemain();
-        fullChars(remain, gv.getGroup9(), gv.getGroupOther()); // 其他
+        fullChars(remain, gv.getGroup6(), gv.getGroup7(), gv.getGroup8(), gv.getGroup9(), gv.getGroupOther()); // 其他
     }
 
 
@@ -138,152 +136,71 @@ public class MergedMakeShortSingle {
         List<Word> list = joinList(wordList);
         for (Word w : list) {
             Word clone = w.clone();
-            String code = w.getCode();
-            String code1 = code.substring(0, 1);
-            String code2 = code.substring(0, 2);
-            String code3 = code.substring(0, 3);
-            String[] codes = {code1, code2, code3};
-            boolean accept = false;
-            for (String s : codes) {
-                if (gv.isNotInCodeSet(s)) {
-                    Word c = w.clone();
-                    c.setCode(s);
-                    c.setCodeExt("");
-                    addToResult(c);
-                    gv.increaseCodeLengthCounter(s.length()).updateCodeSetCounter(s);
-                    accept = true;
-                    break;
-                }
-            }
-            if (accept) {
+            String code3 = w.getCode().substring(0, 3)
+                    .replace('1', 'e')
+                    .replace('2', 'u')
+                    .replace('3', 'i')
+                    .replace('4', 'o')
+                    .replace('5', 'a');
+
+            if (gv.isNotInCodeSet(code3)) {
+                Word c = w.clone();
+                c.setCode(code3);
+                c.setCodeExt("");
+                String s = c.getWord() + c.getCode();
+                if (dup.contains(s)) continue;
+                dup.add(s);
+                addToResult(c);
+                gv.increaseCodeLengthCounter(code3.length()).updateCodeSetCounter(code3);
                 clone.setCodeExt("");
                 gv.addToFull(clone);
-            } else {
-                gv.addToRemain(w);
+                continue;
             }
+
+            gv.addToRemain(w);
         }
     }
 
-    private void tryMost3chars(List<Word>... wordList) {
+    private void atMost2chars(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
-
         for (Word w : list) {
             Word clone = w.clone();
-            String code = w.getCode();
-            String code2 = code.substring(0, 2);
-            String code3 = code.substring(0, 3);
-            String[] codes = {code2, code3};
-            boolean accept = false;
-            for (String s : codes) {
-                if (gv.isNotInCodeSet(s)) {
-                    Word c = w.clone();
-                    c.setCode(s);
-                    c.setCodeExt("");
-                    addToResult(c);
-                    gv.increaseCodeLengthCounter(s.length())
-                            .updateCodeSetCounter(s);
-                    accept = true;
-                    break;
-                }
-            }
-            if (accept) {
+            String code2 = w.getCode().substring(0, 2);
+
+            if (gv.isNotInCodeSet(code2) || gv.getCodeSetCount(code2) < 1) {
+                Word c = w.clone();
+                c.setCode(code2);
+                c.setCodeExt("");
+                String s = c.getWord() + c.getCode();
+                if (dup.contains(s)) continue;
+                dup.add(s);
+                addToResult(c);
+                gv.increaseCodeLengthCounter(code2.length()).updateCodeSetCounter(code2);
                 clone.setCodeExt("");
                 gv.addToFull(clone);
-            } else {
-                gv.addToRemain(w);
+                continue;
             }
-        }
-    }
 
-    private void luckWith3chars(List<Word>... wordList) {
-        List<Word> list = joinList(wordList);
-        Map<String, List<Word>> map = new TreeMap<>();
-        for (Word word : list) {
-            final List<Word> words = map.computeIfAbsent(word.getCode(), k -> new LinkedList<>());
-            words.add(word);
+            gv.addToRemain(w);
         }
-        Iterator<Map.Entry<String, List<Word>>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            final Map.Entry<String, List<Word>> next = iterator.next();
-            final String key = next.getKey();
-            final List<Word> value = next.getValue();
-            if (value.size() == 2) {
-                int start = 0;
-                final String code3 = key.substring(0, 3);
-                if (gv.isNotInCodeSet(code3)) {
-                    final Word word = value.get(0);
-                    final Word clone = word.clone();
-                    word.setCode(code3);
-                    addToResult(word);
-                    gv.addToFull(clone);
-                    gv.increaseCodeLengthCounter(code3.length())
-                            .updateCodeSetCounter(code3);
-                    start = 1;
-                }
-                for (int i = start; i < value.size(); i++) {
-                    Word w = value.get(i);
-                    gv.addToRemain(w);
-                }
-                iterator.remove();
-            }
-        }
-        iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            final Map.Entry<String, List<Word>> next = iterator.next();
-            final String key = next.getKey();
-            final List<Word> value = next.getValue();
-            if (value.size() >= 2) {
-                int start = 0;
-                final String code3 = key.substring(0, 3);
-                if (gv.isNotInCodeSet(code3)) {
-                    final Word word = value.get(0);
-                    final Word clone = word.clone();
-                    word.setCode(code3);
-                    addToResult(word);
-                    gv.addToFull(clone);
-                    gv.increaseCodeLengthCounter(code3.length())
-                            .updateCodeSetCounter(code3);
-                    start = 1;
-                }
-                for (int i = start; i < value.size(); i++) {
-                    Word w = value.get(i);
-                    gv.addToRemain(w);
-                }
-                iterator.remove();
-            }
-        }
-        map.forEach((k, v) -> {
-            for (Word w : v) {
-                Word clone = w.clone();
-                String code = w.getCode();
-                String code3 = code.substring(0, 3);
-                if (gv.isNotInCodeSet(code3)) {
-                    w.setCode(code3);
-                    addToResult(w);
-                    gv.increaseCodeLengthCounter(code3.length())
-                            .updateCodeSetCounter(code3);
-                    gv.addToFull(clone);
-                } else {
-                    if (!gv.isNotInCodeSet(w.getCode())) {
-                        w.setLevel(99);
-                    } else {
-                        gv.increaseCodeLengthCounter(code.length())
-                                .updateCodeSetCounter(code);
-                    }
-                    addToResult(w);
-                }
-            }
-        });
-
     }
 
     private void fullChars(List<Word>... wordList) {
         List<Word> list = joinList(wordList);
         for (Word w : list) {
-            String code = w.getCode();
+            String code = w.getCode().substring(0, 4)
+                    .replace('1', 'e')
+                    .replace('2', 'u')
+                    .replace('3', 'i')
+                    .replace('4', 'o')
+                    .replace('5', 'a');
             if (!gv.isNotInCodeSet(code)) {
                 w.setLevel(99);
             }
+            String s = w.getWord() + w.getCode();
+            if (dup.contains(s)) continue;
+            dup.add(s);
+            w.setCode(code);
             addToResult(w);
             gv.increaseCodeLengthCounter(code.length())
                     .updateCodeSetCounter(code);
